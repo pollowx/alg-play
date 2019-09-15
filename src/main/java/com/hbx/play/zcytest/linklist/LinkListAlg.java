@@ -13,10 +13,20 @@ public class LinkListAlg {
         Node node3 = new Node(3);
         Node node7 = new Node(7);
         Node node9 = new Node(9);
+        Node node10 = new Node(10);
+        Node node13 = new Node(13);
+        Node node14 = new Node(14);
+        Node node15 = new Node(15);
+
+
         head1.next = node2;
         node2.next = node3;
         node3.next = node7;
         node7.next = node9;
+        node9.next = node10;
+        node10.next = node13;
+        node13.next = node14;
+        node14.next = node15;
 
 
         Node head2 = new Node(3);
@@ -25,7 +35,10 @@ public class LinkListAlg {
         head2.next = node2_6;
         node2_6.next = node2_7;
 
-        printTwoLinkListSameEle(head1, head2);
+        //printTwoLinkListSameEle(head1, head2);
+
+        //deleteMiddleNode(head1);
+
     }
 
     /**
@@ -119,10 +132,88 @@ public class LinkListAlg {
                 kNodeNext.last = cur;
             }
 
+            // 下面的逻辑没有问题，只是缺少null的判断
             cur.next = cur.next.next;
             cur.next.last = cur;
         }
+        return head;
+    }
 
+    /**
+     * 删除链表中间节点的函数
+     * @param head
+     * @return
+     */
+    private static Node deleteMiddleNode(Node head) {
+        // 这个题目的思路是这样，如果要删除中间节点，需要先找下中间节点的规律
+        // 链表长度>2后，每增加两个节点，中间节点的位置就加一，所以我们遍历完最后一个节点，
+        // 当最后一个节点的next值为null或者next.next为null, pre节点就是middle的上一个index位置
+        // 1 -> 0
+        //------------
+        // 2 -> 1
+        //------------
+        // 3 -> 2
+        // 4 -> 2
+        //------------
+        // 5 -> 3
+        // 6 -> 3
+        //------------
+        // 7 -> 4
+        // 8 -> 4
+        //------------
+        // 9 -> 5
+        if (null == head || null == head.next) {
+            return head;
+        }
+
+        if (null == head.next.next) {
+            return head.next;
+        }
+
+        Node pre = head;
+        Node cur = head.next.next;
+        while (null != cur.next && null != cur.next.next) {
+            pre = pre.next; // 每次移动一个节点
+            cur = cur.next.next; // 每次移动两个节点
+        }
+        pre.next = pre.next.next;
+        return head;
+    }
+
+    /**
+     * 删除a/b之间的元素，比如3/5处在整个链表的哪个区间上，就删除那个区间的元素
+     * @param head
+     * @param a
+     * @param b
+     * @return
+     */
+    private static Node deleteA0BNodeEle(Node head, int a, int b) {
+        if (null == head || a < 1 || b < 1) {
+            return head;
+        }
+        // 现在我们分析下这个题目，和上面的题目做出对比，我们仍然需要找到要删除元素的前一个位置的元素
+        // 假设链表的长度为N, 要删除的元素位置为K，那么 K / N ~= a / b
+        // 则K = (N * a ) / b
+        int n = 0; // 链表长度
+        Node cur = head;
+        while (null != cur) {
+            n++;
+            cur = cur.next;
+        }
+
+        int k = (int) Math.ceil((double) n * a / (double) b); // 向上取整
+        if (k == 1) {
+            return head.next;
+        }
+
+        if (k > 1) {
+            cur = head;
+            while (--k != 1) {
+                cur = cur.next;
+            }
+            cur.next = cur.next.next;
+        }
+        return head;
     }
 
 
