@@ -188,7 +188,7 @@ public class LinkListAlg {
      * @return
      */
     private static Node deleteA0BNodeEle(Node head, int a, int b) {
-        if (null == head || a < 1 || b < 1) {
+        if (null == head || a < 1 || a > b) {
             return head;
         }
         // 现在我们分析下这个题目，和上面的题目做出对比，我们仍然需要找到要删除元素的前一个位置的元素
