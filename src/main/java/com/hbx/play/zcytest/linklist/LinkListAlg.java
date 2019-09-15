@@ -1,5 +1,7 @@
 package com.hbx.play.zcytest.linklist;
 
+import java.util.Stack;
+
 /**
  * @author danyu.bx
  * @description: TODO
@@ -342,7 +344,7 @@ public class LinkListAlg {
     }
 
     /**
-     * 约瑟夫杀人报数问题，m为要杀的报数代号
+     * 约瑟夫杀人报数问题，m为要杀的报数代号, O(M * N)时间复杂度
      * @param head
      * @param m
      * @return
@@ -369,6 +371,98 @@ public class LinkListAlg {
         return head;
     }
 
+    /**
+     * 判断链表是不是回文结构
+     * @param head
+     * @return
+     */
+    public static boolean judgeLinkListMirror(Node head) {
+        if (null == head) {
+            return false;
+        }
+        // 1 -> 2 -> 1
+        // 1 -> 2 -> 2 -> 1
+        Stack<Integer> helpStack = new Stack<>();
+        while (null != head) {
+            if (!helpStack.empty()) {
+                if (helpStack.peek() == head.value) {
+                    helpStack.pop(); // 直接出栈，然后下一个
+                } else {
+                    if (helpStack.size() > 2) {
+                        int temp = helpStack.pop();
+                        if (helpStack.peek() == head.value) {
+                            helpStack.pop(); // 直接出栈，然后下一个
+                        } else {
+                            return false;
+                        }
+                    }
+                }
+            }
+            helpStack.push(head.value);
+            head = head.next;
+        }
+        return helpStack.isEmpty();
+    }
+
+    /**
+     * 判断链表是不是回文结构, 压栈，然后出栈比对
+     * @param head
+     * @return
+     */
+    public static boolean judgeLinkListMirror1(Node head) {
+        if (null == head) {
+            return false;
+        }
+        Stack<Node> helpStack = new Stack<>();
+        // 压栈，然后出栈比对
+        Node cur = head;
+        while (null != cur) {
+            helpStack.push(cur);
+            cur = cur.next;
+        }
+
+        cur = head;
+        while (null != cur) {
+            if (helpStack.pop().value != cur.value) {
+                return false;
+            }
+            cur = cur.next;
+        }
+        return true;
+    }
+
+    /**
+     * 判断链表是不是回文结构, 压入链表的右侧入栈，和链表的左侧比对就可以了
+     * @param head
+     * @return
+     */
+    public static boolean judgeLinkListMirror2(Node head) {
+        if (null == head || null == head.next) {
+            return true;
+        }
+        Node right = head.next;
+        Node cur = head;
+        while (null != cur.next && null != cur.next.next) {
+            right = right.next;
+            cur = cur.next.next;
+        }
+
+        Stack<Node> helpStack = new Stack<>();
+        // right为链表右侧
+        while (right != null) {
+            helpStack.push(right);
+            right = right.next;
+        }
+
+        // 和链表左侧比较
+        while (!helpStack.isEmpty()) {
+            if (helpStack.pop().value != head.value) {
+                return false;
+            }
+            head = head.next;
+        }
+        return true;
+    }
 
     public static class Node {
         int value;
