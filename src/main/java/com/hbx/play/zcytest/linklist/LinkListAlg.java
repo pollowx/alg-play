@@ -39,6 +39,9 @@ public class LinkListAlg {
 
         //deleteMiddleNode(head1);
 
+        node15.next = head1;
+        josephusKill(head1, 3);
+
     }
 
     /**
@@ -338,6 +341,33 @@ public class LinkListAlg {
         return head;
     }
 
+    /**
+     * 约瑟夫杀人报数问题，m为要杀的报数代号
+     * @param head
+     * @param m
+     * @return
+     */
+    public static Node josephusKill(Node head, int m) {
+        if (null == head || m < 1 || head == head.next) {
+            return head;
+        }
+        Node last = head;
+        while (head != last.next) {
+            last = last.next; // 找到最后一个节点
+        }
+
+        int count = 0;
+        while (head != last) {
+            if (++count == m) { // remove该节点
+                count = 0;
+                last.next = head.next;
+            } else {
+                last = head.next;
+            }
+            head = last.next;
+        }
+        return head;
+    }
 
 
     public static class Node {
