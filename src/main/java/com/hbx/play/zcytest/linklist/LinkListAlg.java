@@ -266,6 +266,79 @@ public class LinkListAlg {
         return pre;
     }
 
+    /**
+     * 反转链表的from ～ to之间的内容
+     * @param head
+     * @param from
+     * @param to
+     * @return
+     */
+    private static Node reverseFromToContentElesLinkList(Node head, int from, int to) {
+        if (null == head || to <= from) {
+            return head; // 不用反转
+        }
+        // 下面开始check 1 <= from <= to <= 是否成立
+        int n = 0;
+        Node fPre = null; // from的前一个节点
+        Node toNext = null; // to的后一个节点
+
+        Node cur = head;
+        while (null != cur) {
+            n++; // 计算元素数量
+            if (n == from - 1) {
+                fPre = cur;
+            }
+            if (n == to + 1) {
+                toNext = cur;
+            }
+            cur = cur.next;
+        }
+
+        if (to > n || from < 1) {
+            return head; // 不用反转
+        }
+
+        // 下面开始反转from 到 to之间的元素
+        Node toHead = fPre == null ? head : fPre.next; // 现在指向to下标的元素
+
+        Node tempNode = toHead.next; // 下一个节点暂存
+
+        toHead.next = toNext; // xiaxia
+
+        Node next = null;
+        // 反转链表
+        while (tempNode != toNext) {
+            next = tempNode.next;
+
+            tempNode.next = toHead;
+
+            toHead = tempNode;
+
+            tempNode = next;
+        }
+
+        // 感觉上面写的不对. 应该这样写
+//        Node toHead = fPre == null ? head : fPre.next;
+//        Node next = null;
+//        // 反转链表
+//        while (toHead != toNext) {
+//            next = toHead.next;
+//
+//            toHead.next = next;
+//
+//            next = toHead;
+//
+//            toHead = next;
+//        }
+        if (null == fPre) {
+            return toHead; // 因为fPre是null，所以反转后的新节点就是头节点
+        }
+
+        fPre.next = toHead;
+        return head;
+    }
+
+
 
     public static class Node {
         int value;
