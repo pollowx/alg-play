@@ -216,6 +216,56 @@ public class LinkListAlg {
         return head;
     }
 
+    /**
+     * 反转单链表
+     * @param head
+     * @return
+     */
+    private static Node reverseSingleLinkList(Node head) {
+        if (null == head) {
+            return null;
+        }
+        Node pre = null;
+        Node next = null;
+
+        while (null != head) {
+            next = head.next; // 暂存head的下一个元素
+
+            head.next = pre; // head的下一个断开，并且，pre如果有值就把当前元素的next指向pre反转后的某段节点了
+
+            pre = head; // 把head 给pre
+
+            head = next;
+        }
+        return pre;
+    }
+
+    /**
+     * 反转双链表
+     * @param head
+     * @return
+     */
+    private static DoubleNode reverseDoubleNodeLinkList(DoubleNode head) {
+        if (null == head) {
+            return null;
+        }
+        DoubleNode pre = null;
+        DoubleNode next = null;
+
+        while (null != head) {
+            next = head.next;
+
+            head.next = pre;
+
+            head.last = next;
+
+            pre = head;
+
+            head = next;
+        }
+        return pre;
+    }
+
 
     public static class Node {
         int value;
