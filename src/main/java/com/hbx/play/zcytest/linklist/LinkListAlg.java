@@ -45,10 +45,11 @@ public class LinkListAlg {
         //node15.next = head1;
         //josephusKill(head1, 3);
 
-        Node node8 = new Node(8);
-        node8.next = head1;
+        //Node node8 = new Node(8);
+        //node8.next = head1;
+        //judgeSwapNodeEleByGivenIndexValue(node8, 7);
 
-        judgeSwapNodeEleByGivenIndexValue(node8, 7);
+        reverseKEleGroup(head1, 3);
     }
 
     /**
@@ -699,35 +700,45 @@ public class LinkListAlg {
         }
         // K个一组，需要记录当前的节点以及，新的头节点
 
-        Node newHead = null; // 新的头节点
-        Node cur = null; // 当前节点的位置
+        Node newHead = head; // 新的头节点
+        Node cur = head; // 当前节点的位置
 
-        int count = 0;
-        Stack<Integer> helpStack = new Stack<>();
+        Node pre = null;
+        Node next = null;
+        Stack<Node> helpStack = new Stack<>();
+
         while (null != cur) {
-            count++;
-            if (count == k) { // 逆序
-                newHead = reverseNodeByStack(helpStack);
-                count = 0;
-                helpStack.clear();
-            }
-            helpStack.push(cur.value);
-            cur = cur.next;
-        }
+            next = cur.next; // 暂存next节点
+            helpStack.push(cur);
+            if (helpStack.size() == k) { // 达到条件，开始反转
+                pre = reverseNodeByStack(helpStack, pre, next);
 
+                newHead = newHead == head ? cur : newHead;
+            }
+            cur = next; // 后移
+        }
         return newHead;
     }
 
-    public static Node reverseNodeByStack(Stack<Integer> stack) {
-        if (null == stack) {
+    public static Node reverseNodeByStack(Stack<Node> stack, Node left, Node right) {
+        // stack为链表的逆序, left是stack对应链表的左侧节点，right是对应链表的右侧节点
+        if (stack.isEmpty()) {
             return null;
         }
-        Node pre = new Node(stack.pop());
-        while (!stack.isEmpty()) {
-            Node node = new Node(stack.pop());
-            pre.next = node;
+        Node cur = stack.pop(); // 头节点，反转后的头节点
+        if (null != left) {
+            left.next = cur; // 左侧节点连接上cur
         }
-        return pre;
+        Node next = null;
+        while (!stack.isEmpty()) {
+            next = stack.pop(); // next节点暂存
+
+            cur.next = next;
+
+            cur = next; // 当前节点指向下一个
+        }
+        cur.next = right;
+        return cur;
     }
 
     public static class Node {
