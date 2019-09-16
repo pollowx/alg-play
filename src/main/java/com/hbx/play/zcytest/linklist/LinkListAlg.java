@@ -1,5 +1,6 @@
 package com.hbx.play.zcytest.linklist;
 
+import java.util.HashMap;
 import java.util.Stack;
 
 /**
@@ -41,9 +42,13 @@ public class LinkListAlg {
 
         //deleteMiddleNode(head1);
 
-        node15.next = head1;
-        josephusKill(head1, 3);
+        //node15.next = head1;
+        //josephusKill(head1, 3);
 
+        Node node8 = new Node(8);
+        node8.next = head1;
+
+        judgeSwapNodeEleByGivenIndexValue(node8, 7);
     }
 
     /**
@@ -464,6 +469,224 @@ public class LinkListAlg {
         return true;
     }
 
+    /**
+     * 把链表的值顺序根据和pivot做比对，小于pivot的放在左边，等于的放在中间，大于地放在右侧
+     * @param head
+     * @param pivot
+     * @return
+     */
+    public static Node judgeSwapNodeEleByGivenIndexValue(Node head, int pivot) {
+        if (null == head) {
+            return head;
+        }
+        Node low = null;
+        Node lowNext = null;
+
+        Node equal = null;
+        Node equalNext = null;
+
+        Node high = null;
+        while (null != head) {
+            if (head.value > pivot) {
+                if (high == null) {
+                    high = head;
+                } else {
+                    high.next = head;
+                }
+            } else if (head.value < pivot){
+                if (low == null) {
+                    low = head;
+                } else {
+                    low.next = head;
+                }
+                lowNext = head;
+            } else {
+                if (equal == null) {
+                    equal = head;
+                } else {
+                    equal.next = head;
+                }
+                equalNext = head;
+            }
+            head = head.next;
+        }
+
+        if (null == low) {
+            if (null == equal) {
+                return high;
+            } else {
+                equalNext.next = high;
+                return equal;
+            }
+        } else {
+            if (null == equal) {
+                lowNext.next = high;
+                return low;
+            } else {
+                lowNext.next = equal;
+                equalNext.next = high;
+                return equal;
+            }
+        }
+    }
+
+    /**
+     * 复制randomNode链表，最优解，时间复杂度O(N) + 空间复杂度O(1)
+     * @param head
+     * @return
+     */
+    public static RandNode copyRandNode(RandNode head) {
+        if (null == head) {
+            return null;
+        }
+        // 1. 增加新的链表表头，把原表的next指针指向下一个新增节点，
+        // 比如 1 -> 2 -> 3 变成 1 -> 1' -> 2 -> 2' -> 3 -> 3'
+        RandNode cur = head;
+        while (null != cur) {
+            RandNode insertNode = new RandNode(cur.value);
+            RandNode nexNode = cur.next;
+
+            insertNode.next = nexNode;
+
+            cur.next = insertNode;
+
+            cur = cur.next;
+        }
+
+        // 2. 把原来的random指向也复制到新增的链表上
+        cur = head;
+        while (null != cur) {
+            if (null != cur.rand) {
+                RandNode curRandNode = cur.rand;
+
+                cur.next.rand = null == curRandNode ? null : curRandNode.next;
+            }
+            cur = cur.next.next;
+        }
+
+        // 3. 拆开链表
+        cur = head;
+        RandNode copyHead = head.next;
+        while (null != cur) {
+            RandNode tempCurrent = cur.next;
+
+            cur.next = tempCurrent.next;
+
+            tempCurrent.next = null == tempCurrent.next ? null : tempCurrent.next.next;
+
+            cur = cur.next;
+
+        }
+        return copyHead;
+    }
+
+    /**
+     * 复制randomNode链表，普通解法解，时间复杂度O(N) + 空间复杂度O(N)
+     * @param head
+     * @return
+     */
+    public static RandNode copyRandNodeByMap(RandNode head) {
+        if (null == head) {
+            return null;
+        }
+        HashMap<RandNode, RandNode> helpMap = new HashMap<>();
+
+        RandNode cur = head;
+        while (null != cur) {
+            helpMap.put(cur, new RandNode(cur.value));
+            cur = cur.next;
+        }
+
+        cur = head;
+        while (null != cur) {
+            helpMap.get(cur).next = helpMap.get(cur.next);
+            helpMap.get(cur).rand = helpMap.get(cur.rand);
+            cur = cur.next;
+        }
+
+        return helpMap.get(head);
+    }
+
+    /**
+     * 求出链表相加的结果，返回结果同样生成对应的链表
+     * @param node
+     * @return
+     */
+    public static Node addNodeEleAndReturn(Node head1, Node head2) {
+        if (null == head1) {
+            return head2;
+        }
+        if (null == head2) {
+            return head1;
+        }
+        // 2 -> 3 -> 7  + 4 -> 3
+        // 237 + 43
+        // 反转链表 7 -> 3 -> 2 + 3 -> 4, 注意进位
+        Node head1Reversed = revrseNodeByEle(head1);
+        Node head2Reversed = revrseNodeByEle(head2);
+
+        Node c1 = head1Reversed;
+        Node c2 = head2Reversed;
+
+        Node addNode = null;
+        Node pre = null;
+
+        int ca = 0; // 进位
+        int n1 = 0;
+        int n2 = 0;
+        int n = 0;
+
+        while (null != c1 || null != c2) {
+            n1 = null == c1 ? 0 : c1.value;
+            n2 = null == c2 ? 0 : c2.value;
+
+            n = n1 + n2 + ca;
+
+            pre = addNode; // pre是上一个计算的结果，放在pre里面，后续挂载到addNode 后面=> addNode -> pre
+
+            addNode = new Node(n % 10);
+
+            addNode.next =  pre;
+
+            ca = n / 10; // 进位
+
+            c1 = c1 == null ? null : c1.next;
+            c2 = c2 == null ? null : c2.next;
+        }
+
+        if (ca == 1) { // 还有进位的话
+            pre = addNode;
+
+            addNode = new Node(1);
+
+            addNode.next = pre;
+        }
+        return addNode;
+    }
+
+    /**
+     * 反转链表
+     * @param head
+     * @return
+     */
+    private static Node revrseNodeByEle(Node head) {
+        if (null == head) {
+            return null;
+        }
+        Node pre = null;
+        Node next = null;
+        while (null != head) {
+            next = head.next;
+
+            head.next = pre;
+
+            pre = head;
+
+            head = next;
+        }
+        return pre;
+    }
+
     public static class Node {
         int value;
         Node next;
@@ -479,6 +702,16 @@ public class LinkListAlg {
         DoubleNode next;
 
         public DoubleNode(int value) {
+            this.value = value;
+        }
+    }
+
+    public static class RandNode {
+        int value;
+        RandNode next;
+        RandNode rand;
+
+        public RandNode(int value) {
             this.value = value;
         }
     }
