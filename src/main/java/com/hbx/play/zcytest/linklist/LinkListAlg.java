@@ -687,6 +687,49 @@ public class LinkListAlg {
         return pre;
     }
 
+    /**
+     * K个一组逆序链表，该方式用栈的结构来实现，时间复杂度O(N) + 空间复杂度O(N)
+     * @param head
+     * @param k
+     * @return
+     */
+    public static Node reverseKEleGroup(Node head, int k) {
+        if (null == head || k <= 1) {
+            return head;
+        }
+        // K个一组，需要记录当前的节点以及，新的头节点
+
+        Node newHead = null; // 新的头节点
+        Node cur = null; // 当前节点的位置
+
+        int count = 0;
+        Stack<Integer> helpStack = new Stack<>();
+        while (null != cur) {
+            count++;
+            if (count == k) { // 逆序
+                newHead = reverseNodeByStack(helpStack);
+                count = 0;
+                helpStack.clear();
+            }
+            helpStack.push(cur.value);
+            cur = cur.next;
+        }
+
+        return newHead;
+    }
+
+    public static Node reverseNodeByStack(Stack<Integer> stack) {
+        if (null == stack) {
+            return null;
+        }
+        Node pre = new Node(stack.pop());
+        while (!stack.isEmpty()) {
+            Node node = new Node(stack.pop());
+            pre.next = node;
+        }
+        return pre;
+    }
+
     public static class Node {
         int value;
         Node next;
