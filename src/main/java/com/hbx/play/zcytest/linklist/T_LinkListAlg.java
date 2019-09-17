@@ -53,6 +53,52 @@ public class T_LinkListAlg {
         return cur;
     }
 
+    public static Node reverseKGroupElement(Node head, int k) {
+        if (null == head || k <= 1) {
+            return head;
+        }
+        Node newHead = head;
+        Node cur = head;
+
+        Stack<Node> helpStack = new Stack<>();
+        Node pre = null;
+        Node next = null;
+
+        while (null != cur) {
+            next = cur.next;
+            helpStack.push(cur);
+            if (helpStack.size() == k) {
+                pre = reverseByStack(helpStack, pre, next);
+                newHead = head == newHead ? cur : newHead;
+            }
+            cur = next;
+        }
+        return newHead;
+    }
+
+    public static Node reverseByStack(Stack<Node> stack, Node left, Node right) {
+        if (stack.isEmpty()) {
+            return null;
+        }
+        Node cur = stack.pop(); // 当前节点
+        if (null != left) {
+            left.next = cur;
+        }
+
+        Node next = null;
+        while(!stack.isEmpty()) {
+            next = stack.pop(); // 节点暂存
+
+            cur.next = next;
+
+            cur = next;
+        }
+
+        cur.next = right;
+
+        return cur;
+    }
+
     public static class Node {
         int value;
         Node next;
