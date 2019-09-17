@@ -50,7 +50,11 @@ public class LinkListAlg {
         //judgeSwapNodeEleByGivenIndexValue(node8, 7);
 
         //reverseKEleGroup(head1, 3);
-        reverseKElementGroup(head1, 3);
+        //reverseKElementGroup(head1, 3);
+
+        Node node8 = new Node(8);
+        node8.next = head1;
+        selectSortLinkList(node8);
     }
 
     /**
@@ -743,7 +747,7 @@ public class LinkListAlg {
     }
 
     /**
-     * K个一组逆序链表，该方式用栈的结构来实现，时间复杂度O(N) + 空间复杂度O(1), 最优解
+     * K个一组逆序链表，该方式是最优解，时间复杂度O(N) + 空间复杂度O(1)
      * @param head
      * @param k
      * @return
@@ -802,6 +806,123 @@ public class LinkListAlg {
         // 1 -> 7 -> 9
         // 7 -> 13 -> 14
         // 13 ->
+    }
+
+    /**
+     * 删除链表中重复的节点，借助了hash表，有额外的O(N)的空间
+     * 如果O(1)的空间复杂度，需要O(N^2)的时间复杂度, 直接每次往后遍历但前的元素，如果存在就删除
+     * @param head
+     * @return
+     */
+    public static Node deleteRepeat(Node head) {
+        // 用hash表来保存, 有过的节点
+        if (null == head) {
+            return null;
+        }
+        HashMap<Node, Node> helpMap = new HashMap<>();
+
+        Node cur = head;
+        Node next = null;
+        while (null != cur) {
+            next = cur.next;
+            if (helpMap.containsKey(cur)) { // 已经存在了，扔掉
+                cur.next = next.next;
+            }
+            helpMap.put(cur, cur);
+            cur = next;
+        }
+        return head;
+    }
+
+    /**
+     * 从链表中删除该值的节点
+     * @param head
+     * @param num
+     * @return
+     */
+    public static Node deleteThisValueFromLinkList(Node head, int num) {
+        if (null == head) {
+            return null;
+        }
+        Stack<Node> helpStack = new Stack<>();
+
+        Node cur = head;
+        Node next = null;
+        while (null != cur) {
+            next = cur.next;
+
+            if (cur.value != num) {
+                helpStack.push(cur);
+            }
+            cur = next;
+        }
+        next = helpStack.pop();
+        while (!helpStack.isEmpty()) {
+            cur = helpStack.pop();
+
+            cur.next = next;
+        }
+        return cur;
+    }
+
+    public static Node selectSortLinkList(Node head) {
+        if (null == head) {
+            return null;
+        }
+        Node tail = null; // 排序好的节点尾部
+        Node small = null; // 最小的节点
+
+        Node smallestPreNode = null; // 最小的节点的pre节点
+
+        // 每次选择最小的放在排序好的头节点后面,然后原链表remove该节点
+        Node cur = head;
+        while (null != cur) {
+            small = cur;
+
+            // 找到最小节点的preNode
+            smallestPreNode = getSmallestPreNode(cur);
+
+            if (null != smallestPreNode) {
+                small = smallestPreNode.next;
+
+                smallestPreNode.next = small == null ? null : small.next;
+            }
+
+            cur = cur == small ? cur.next : cur;
+            if (null == tail) {
+                head = small; // 初始化，最小的节点给head
+            } else {
+                tail.next = small;
+            }
+            tail = small; // 排序好的尾节点，也就是当前找到的samll节点
+        }
+        return head;
+    }
+
+    /**
+     * 找到最小元素的节点的pre节点
+     * @param head
+     * @return
+     */
+    public static Node getSmallestPreNode(Node head) {
+        if (null == head) {
+            return null;
+        }
+        Node smallPre = null;
+
+        Node small = head; // 暂定最小的节点
+
+        Node pre = head;
+        Node cur = head.next;
+        while (null != cur) {
+            if (cur.value < small.value) { // 找到了更小的Node
+                smallPre = pre;
+                small = cur; // 最小节点
+            }
+            pre = cur;
+            cur = cur.next;
+        }
+        return smallPre;
     }
 
     public static class Node {
