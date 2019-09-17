@@ -946,6 +946,39 @@ public class LinkListAlg {
         node.next = next.next;
     }
 
+    /**
+     * 把num插入到环形链表中(不降序)
+     * @param head
+     * @param num
+     * @return
+     */
+    public static Node insertNumToLinkList(Node head, int num) {
+        Node insertNode = new Node(num);
+        if (null == head) { // 如果head是null,num自己组成新节点
+            insertNode.next = insertNode;
+            return insertNode;
+        }
+
+        Node cur = head;
+        Node next = null;
+        while (head != cur.next) {
+            next = cur.next;
+            if (cur != head && next.value < num) { // 不是头节点，insert插入进去
+                cur.next = insertNode;
+                insertNode.next = next;
+            }
+            cur = next;
+        }
+
+        // 这个时候cur的下一个就是head节点，cur是最后一个节点
+        if (head.value < num) { // insertNode 到head节点前
+            cur.next = insertNode;
+            insertNode.next = head;
+            return insertNode;
+        }
+
+        return head;
+    }
 
     public static class Node {
         int value;
