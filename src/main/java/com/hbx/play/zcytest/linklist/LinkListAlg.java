@@ -865,6 +865,11 @@ public class LinkListAlg {
         return cur;
     }
 
+    /**
+     * 链表的选择排序
+     * @param head
+     * @return
+     */
     public static Node selectSortLinkList(Node head) {
         if (null == head) {
             return null;
@@ -924,6 +929,23 @@ public class LinkListAlg {
         }
         return smallPre;
     }
+
+    /**
+     * 删除node节点的一种怪异方式
+     * @param node
+     */
+    public static void deleteOneNodeByWired(Node node) {
+        if (null == node) {
+            return;
+        }
+        Node next = node.next;
+        if (null == next) {
+            return;
+        }
+        node.value = next.value;
+        node.next = next.next;
+    }
+
 
     public static class Node {
         int value;
