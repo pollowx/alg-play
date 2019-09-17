@@ -99,6 +99,59 @@ public class T_LinkListAlg {
         return cur;
     }
 
+    public static Node reverseKElementGroupByNode(Node head, int k) {
+        if (null == head || k <= 1) {
+            return head;
+        }
+
+        Node pre = null;
+        Node start = null;
+        Node next = null;
+        int count = 1;
+
+        Node cur = head;
+
+        while (null != cur) {
+            next = cur.next;
+            if (count == k) {
+                start = pre == null ? head : pre.next;
+
+                head = pre == null ? cur : head;
+
+                revsrseLinkListByNode(pre, start, cur, next);
+
+                pre = start;
+
+                count = 0;
+            }
+            count++;
+            cur = next;
+        }
+        return head;
+    }
+
+    public static void revsrseLinkListByNode(Node left, Node start, Node end, Node right) {
+        Node pre = start;
+        Node cur = start.next;
+
+        Node next = null;
+        while (cur != right) {
+            next = cur.next;
+
+            cur.next = pre;
+
+            pre = cur;
+
+            cur = next;
+        }
+
+        if (null != left) {
+            left.next = end;
+        }
+
+        start.next = right;
+    }
+
     public static class Node {
         int value;
         Node next;

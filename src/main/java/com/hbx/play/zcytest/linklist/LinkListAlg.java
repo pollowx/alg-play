@@ -49,7 +49,8 @@ public class LinkListAlg {
         //node8.next = head1;
         //judgeSwapNodeEleByGivenIndexValue(node8, 7);
 
-        reverseKEleGroup(head1, 3);
+        //reverseKEleGroup(head1, 3);
+        reverseKElementGroup(head1, 3);
     }
 
     /**
@@ -739,6 +740,68 @@ public class LinkListAlg {
         }
         cur.next = right;
         return cur;
+    }
+
+    /**
+     * K个一组逆序链表，该方式用栈的结构来实现，时间复杂度O(N) + 空间复杂度O(1), 最优解
+     * @param head
+     * @param k
+     * @return
+     */
+    public static Node reverseKElementGroup(Node head, int k) {
+        if (null == head || k <= 1) {
+            return head;
+        }
+        Node pre = null;
+        Node start = null;
+        Node next = null;
+
+        int count = 1;
+
+        Node cur = head;
+        while (null != cur) {
+            next = cur.next;
+
+            if (count == k) {
+                start = pre == null ? head : pre.next;
+                head = pre == null ? cur : head; // 这个是头节点，要记录下来，只有一次的机会会有意义赋值
+
+                reverseLinkListByNode(pre, start, cur, next);
+
+                pre = start; // pre实际上是保存每次的反转之后的第一个节点1, 7, 9, 13这种
+                count = 0;
+            }
+            count++;
+            cur = next;
+        }
+        return head;
+    }
+
+    public static void reverseLinkListByNode(Node left, Node start, Node end, Node right) {
+        Node pre = start; // 类似head
+        Node cur = start.next; // head.next
+
+        Node next = null;
+
+        while (cur != right) { // 这个就是反转的标准写法
+            next = cur.next;
+
+            cur.next = pre;
+
+            pre = cur;
+
+            cur = next;
+        }
+
+        if (null != left) {
+            left.next = end; // 左侧节点next连上
+        }
+
+        start.next = right;
+        // start很重要, 每次都需要记录开头的位置
+        // 1 -> 7 -> 9
+        // 7 -> 13 -> 14
+        // 13 ->
     }
 
     public static class Node {
