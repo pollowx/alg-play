@@ -1,5 +1,7 @@
 package com.hbx.play.zcytest.binarytree;
 
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Stack;
 
 /**
@@ -130,11 +132,9 @@ public class BinaryTreeAlg {
         while (!helpStack1.isEmpty()) {
             Node temp = helpStack1.pop();
             helpStack2.push(temp);
-
             if (null != temp.left) {
                 helpStack2.push(temp.left);
             }
-
             if (null != temp.right) {
                 helpStack2.push(temp.right);
             }
@@ -145,7 +145,55 @@ public class BinaryTreeAlg {
         }
     }
 
+    /**
+     * BFS遍历二叉树，广度优先遍历
+     * @param root
+     */
+    private void bfsBinaryTree(Node root) {
+        if (null == root) {
+            return;
+        }
+        LinkedList<Node> helpList = new LinkedList<Node>();
+        helpList.add(root);
 
+        while(!helpList.isEmpty()) {
+            Node temp = helpList.poll();
+            System.out.print(temp.value + "\t");
+            if (null != temp.left) {
+                helpList.add(temp.left);
+            }
+
+            if (null != temp.right) {
+                helpList.add(temp.right);
+            }
+        }
+    }
+
+    /**
+     * DFS遍历二叉树，深度优先遍历
+     * @param root
+     */
+    private void dfsBinaryTree(Node root) {
+        if (null == root) {
+            return;
+        }
+        Stack<Node> helpStack = new Stack<>();
+        helpStack.push(root);
+
+        while (!helpStack.isEmpty()){
+            Node temp = helpStack.pop();
+
+            System.out.print(temp.value + "\t");
+
+            if (null != temp.right) {
+                helpStack.push(temp.right);
+            }
+
+            if (null != temp.left) {
+                helpStack.push(temp.left);
+            }
+        }
+    }
 
     public static class Node {
         int value;
