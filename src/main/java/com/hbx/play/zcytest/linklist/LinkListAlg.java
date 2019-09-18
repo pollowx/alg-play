@@ -52,9 +52,23 @@ public class LinkListAlg {
         //reverseKEleGroup(head1, 3);
         //reverseKElementGroup(head1, 3);
 
-        Node node8 = new Node(8);
-        node8.next = head1;
-        selectSortLinkList(node8);
+//        Node node8 = new Node(8);
+//        node8.next = head1;
+//        selectSortLinkList(node8);
+
+        Node mergeHead1 = new Node(2);
+        Node mergeNode5 = new Node(5);
+        Node mergeNode6 = new Node(6);
+        mergeHead1.next = mergeNode5;
+        mergeNode5.next = mergeNode6;
+
+        Node mergeHead2 = new Node(1);
+        Node mergeNode4 = new Node(4);
+        Node mergeNode7 = new Node(7);
+        mergeHead2.next = mergeNode4;
+        mergeNode4.next = mergeNode7;
+
+        mergeTwoLinkList(mergeHead1, mergeHead2);
     }
 
     /**
@@ -976,8 +990,51 @@ public class LinkListAlg {
             insertNode.next = head;
             return insertNode;
         }
-
         return head;
+    }
+
+    /**
+     * merge两个链表，从小到大排序
+     * @param head1
+     * @param head2
+     * @return
+     */
+    public static Node mergeTwoLinkList(Node head1, Node head2) {
+        if (null == head1) {
+            return head2;
+        }
+        if (null == head2) {
+            return head1;
+        }
+        Node newHead = null;
+        Node current = null;
+
+        while (null != head1 && null != head1) {
+            if (head1.value < head2.value) {
+                if (null == newHead) {
+                    newHead = current = head1;
+                } else {
+                    current.next = head1;
+                    current = current.next; // current指向下一个
+                }
+                head1 = head1.next;
+            } else {
+                if (null == newHead) {
+                    newHead = current = head2;
+                } else {
+                    current.next = head2;
+                    current = current.next;
+                }
+                head2 = head2.next;
+            }
+        }
+        if (null != head1) {
+            current.next = head1;
+        }
+        if (null != head2) {
+            current.next = head2;
+        }
+        return newHead;
     }
 
     public static class Node {
