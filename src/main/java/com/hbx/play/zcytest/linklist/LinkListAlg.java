@@ -1037,6 +1037,67 @@ public class LinkListAlg {
         return newHead;
     }
 
+    /**
+     * 按照左右半区重新merge链表
+     * @param head
+     * @return
+     */
+    public static void relocate(Node head) {
+        if (null == head || head.next == null) {
+            return;
+        }
+        // 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> null
+        // 1 -> 3 -> 5 -> 2 -> 4 -> 6 -> null
+        // 应该先找到中间节点，分为左右半区，然后merge
+        Node mid = head;
+        Node next = head.next;
+        while (next.next == null || next.next.next == null) {
+            mid = mid.next;
+            next = next.next.next;
+        }
+
+        // mid指向了中间节点
+        next = mid.next; // 右侧的第一个节点
+        mid.next = null; // 先断开
+
+        // 现在开始merge两边的链表. 没有大小顺序，只是先连接左侧
+        // 左侧是head, 右侧是next开始
+        connectOneByOne(head, next);
+    }
+
+    public static void connectOneByOne(Node left, Node right) {
+        if (null == left || null == right) {
+            return;
+        }
+        Node head = null;
+        Node current = null;
+        while (null == left && null == right) {
+            if (left.value < right.value) {
+                if (null == head) {
+                    head = current = left;
+                } else {
+                    current.next = left;
+                    current = current.next;
+                }
+                left = left.next;
+            } else {
+                if (null == head) {
+                    head = current = right;
+                } else {
+                    current.next = left;
+                    current = current.next;
+                }
+                right = right.next;
+            }
+        }
+
+        if (null != left) {
+            head.next = left;
+        } else {
+            head.next = right;
+        }
+    }
+
     public static class Node {
         int value;
         Node next;
