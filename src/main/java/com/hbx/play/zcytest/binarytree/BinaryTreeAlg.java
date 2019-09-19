@@ -195,6 +195,38 @@ public class BinaryTreeAlg {
         }
     }
 
+    /**
+     * morris序列
+     * @param head
+     */
+    public static void morris(Node head) {
+        if (null == head) {
+            return;
+        }
+        Node cur = head;
+        Node mostRight = null;
+        while (null != cur) {
+            mostRight = cur.left; // 当前节点的左子树
+            if (null != mostRight) {
+                while (null != mostRight.right && mostRight.right != cur) {
+                    mostRight = mostRight.right; // 找到最右侧的
+                }
+            }
+            // 从while循环出来mostRight已经指向了最右侧的节点
+            if (mostRight.right == null) { // 这是右侧节点的判断，如果是null 代表可能没有，也可能是第一次到达该节点
+                // 赋值
+                mostRight.right = cur;
+                cur = cur.left; // 往左移动
+                continue;
+            } else {
+                mostRight.right = null; // 第二次
+            }
+
+            // 向右移动
+            cur = cur.right;
+        }
+    }
+
     public static class Node {
         int value;
         Node left;
