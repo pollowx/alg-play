@@ -30,6 +30,10 @@ public class BinaryTreeAlg {
         root.left = Node2;
         root.right = Node3;
 
+        //inOrderByNormal(root);
+
+        morrisIn(root);
+        System.out.println(" ");
         inOrderByNormal(root);
     }
 
@@ -223,6 +227,76 @@ public class BinaryTreeAlg {
             }
 
             // 向右移动
+            cur = cur.right;
+        }
+    }
+
+    /**
+     * morris的先序遍历
+     * 对于只遍历一次的节点，遍历到的时候直接打印
+     * 对于遍历两次的节点，只在第一次遍历的时候打印就好
+     * @param head
+     */
+    public static void morrisPre(Node head) {
+        if (null == head) {
+            return;
+        }
+        Node cur = head;
+        Node mostRight = null;
+
+        while (cur != null) {
+            mostRight = cur.left;
+            if (mostRight == null) { // 没有左子树，直接打印跟节点
+                System.out.print(cur.value);
+            } else {
+                while (mostRight.right != null && mostRight.right != cur) {
+                    mostRight = mostRight.right;
+                }
+                if (mostRight.right == null) { // 第一次遍历到
+                    System.out.print(cur.value + "\t");
+
+                    mostRight.right = cur;
+                    cur = cur.left;
+                    continue;
+                } else { // 第二次遍历到
+                    mostRight.right = null;
+                }
+            }
+            cur = cur.right;
+        }
+    }
+
+    /**
+     * morris的中序遍历
+     * 对于只遍历一次的节点，遍历到的时候直接打印
+     * 对于遍历两次的节点，在第二次遍历的时候打印
+     * @param head
+     */
+    public static void morrisIn(Node head) {
+        if (null == head) {
+            return;
+        }
+        Node cur = head;
+        Node mostRight = null;
+
+        while(null != cur) {
+            mostRight = cur.left;
+            if (null == mostRight) {
+                // 没有左子树
+                System.out.print(cur.value + "\t");
+            } else {
+                while (mostRight.right != null && mostRight.right != cur) { // find mostRight
+                    mostRight = mostRight.right;
+                }
+                if (mostRight.right != null) { // 第二次遍历到
+                    System.out.print(mostRight.right.value + "\t");
+                    mostRight.right = null;
+                } else {
+                    mostRight.right = cur;
+                    cur = cur.left;
+                    continue;
+                }
+            }
             cur = cur.right;
         }
     }
