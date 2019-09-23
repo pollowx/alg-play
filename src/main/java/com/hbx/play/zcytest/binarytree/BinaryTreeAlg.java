@@ -359,7 +359,18 @@ public class BinaryTreeAlg {
         root.left = node3;
         root.right = node6;
 
-        getTwoErrorNodes(root);
+        Node root2 = new Node(5);
+
+        Node root2Node3 = new Node(3);
+        Node root2Node6 = new Node(6);
+
+        root2.left = root2Node3;
+        root.right = root2Node6;
+
+        System.out.println(judgeATreeContainsBTree(root, root2));
+        System.out.println(judgeATreeContainsBTreeByRecursive(root, root2));
+
+        //getTwoErrorNodes(root);
     }
 
     /**
@@ -400,6 +411,71 @@ public class BinaryTreeAlg {
             }
         }
         return res;
+    }
+
+    /**
+     * 判断A树是否包含B树的子结构
+     * @param t1
+     * @param t2
+     * @return
+     */
+    public static boolean judgeATreeContainsBTree(Node t1, Node t2) {
+        if (t1 == null || t2 == null) {
+            return false;
+        }
+        // 思路是在T1的每个节点上来找value值是t2的节点，如果没有就直接false了
+
+        Stack<Node> helpStack = new Stack<>();
+        Node cur = t1;
+        while (!helpStack.isEmpty() || null != cur) {
+            if (null != cur) {
+                helpStack.push(cur);
+                cur = cur.left;
+            } else {
+                Node temp = helpStack.pop();
+                if (temp.value == t2.value) { // 寻找t1的子节点
+                    return aTreeEqualbTree(temp, t2);
+                }
+                cur = temp.right;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 判断A树是否包含B树的子结构，递归
+     * @param t1
+     * @param t2
+     * @return
+     */
+    public static boolean judgeATreeContainsBTreeByRecursive(Node t1, Node t2) {
+        if (t2 == null) {
+            return true;
+        }
+        if (t1 == null) {
+            return false;
+        }
+
+        return aTreeEqualbTree(t1, t2) ||
+                judgeATreeContainsBTreeByRecursive(t1.left, t2) ||
+                judgeATreeContainsBTreeByRecursive(t1.right, t2);
+    }
+
+    /**
+     * 看t2是不是完全等于t1
+     * @param t1
+     * @param t2
+     * @return
+     */
+    public static boolean aTreeEqualbTree(Node t1, Node t2) {
+        // 递归的跳出条件
+        if (null == t2) {
+            return true;
+        }
+        if (t1 == null || t1.value != t2.value) {
+            return false;
+        }
+        return aTreeEqualbTree(t1.left, t2.left) && aTreeEqualbTree(t1.right, t2.right);
     }
 
     public static class Node {
