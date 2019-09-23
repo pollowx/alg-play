@@ -11,31 +11,33 @@ import java.util.Stack;
  */
 public class BinaryTreeAlg {
 
-    public static void main(String[] args) {
-        Node root = new Node(1);
-
-        Node Node4 = new Node(4);
-        Node Node5 = new Node(5);
-
-        Node Node6 = new Node(6);
-
-        Node Node2 = new Node(2);
-        Node Node3 = new Node(3);
-
-        Node2.left = Node4;
-        Node2.right = Node5;
-
-        Node3.right = Node6;
-
-        root.left = Node2;
-        root.right = Node3;
-
-        //inOrderByNormal(root);
-
-        morrisIn(root);
-        System.out.println(" ");
-        inOrderByNormal(root);
-    }
+//    public static void main(String[] args) {
+//        Node root = new Node(1);
+//
+//        Node Node4 = new Node(4);
+//        Node Node5 = new Node(5);
+//
+//        Node Node6 = new Node(6);
+//
+//        Node Node2 = new Node(2);
+//        Node Node3 = new Node(3);
+//
+//        Node2.left = Node4;
+//        Node2.right = Node5;
+//
+//        Node3.right = Node6;
+//
+//        root.left = Node2;
+//        root.right = Node3;
+//
+//        //inOrderByNormal(root);
+//
+////        morrisIn(root);
+////        System.out.println(" ");
+////        inOrderByNormal(root);
+//
+//        printBinaryTreeByLevel(root);
+//    }
 
     /**
      * 递归前序遍历
@@ -301,7 +303,104 @@ public class BinaryTreeAlg {
         }
     }
 
+    /**
+     * 按层打印二叉树
+     * @param head
+     */
+    public static void printBinaryTreeByLevel(Node head) {
+        if (null == head) {
+            return;
+        }
+        LinkedList<Node> helpList = new LinkedList<>();
+        helpList.add(head);
 
+        int currentCount = 0;
+        int nextSize = 1;
+        while(!helpList.isEmpty()) {
+            Node temp = helpList.poll();
+
+            System.out.print(temp.value + "\t");
+
+            currentCount++;
+            if (temp.left != null) {
+                helpList.add(temp.left);
+            }
+
+            if (temp.right != null) {
+                helpList.add(temp.right);
+            }
+
+            if (currentCount == nextSize) { // 一层遍历完毕
+                nextSize = helpList.size();
+                currentCount = 0;
+
+                System.out.println(" ");
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        Node root = new Node(5);
+
+        Node node4 = new Node(4);
+        Node node1 = new Node(1);
+
+
+        Node node3 = new Node(3);
+        Node node6 = new Node(6);
+
+        Node node7 = new Node(7);
+
+        node3.left = node4;
+        node3.right = node1;
+
+        node6.right = node7;
+
+        root.left = node3;
+        root.right = node6;
+
+        getTwoErrorNodes(root);
+    }
+
+    /**
+     * 搜索二叉树里面有两个节点放错了左右顺序，请找出这两个节点
+     * @param head
+     * @return
+     */
+    public static Node[] getTwoErrorNodes(Node head) {
+        if (null == head) {
+            return null;
+        }
+        // 思路是：如果有两个节点顺序有问题，那么中序遍历就会有逆序产生，正常的中序遍历是升序，如果两个节点错了顺序那么就会有逆序产生
+        Node[] res = new Node[2];
+
+        // 中序遍历
+        Stack<Node> helpStack = new Stack<>();
+        Node cur = head;
+
+        Node tempPre = null;
+
+        while (!helpStack.isEmpty() || cur != null) {
+            if (cur != null) {
+                helpStack.push(cur);
+                cur = cur.left;
+            } else {
+                Node temp = helpStack.pop();
+                if (tempPre != null &&
+                        temp.value < tempPre.value){
+                    if (res[0] == null) {
+                        res[0] = tempPre;  // 找到第一个
+                    } else {
+                        res[1] = temp;
+                    }
+                }
+                tempPre = temp;
+
+                cur = temp.right;
+            }
+        }
+        return res;
+    }
 
     public static class Node {
         int value;
