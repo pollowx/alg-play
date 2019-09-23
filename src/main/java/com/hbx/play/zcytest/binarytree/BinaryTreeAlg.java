@@ -1,7 +1,6 @@
 package com.hbx.play.zcytest.binarytree;
 
 import java.util.LinkedList;
-import java.util.Queue;
 import java.util.Stack;
 
 /**
@@ -359,16 +358,18 @@ public class BinaryTreeAlg {
         root.left = node3;
         root.right = node6;
 
-        Node root2 = new Node(5);
+        Node root2 = new Node(3);
 
-        Node root2Node3 = new Node(3);
-        Node root2Node6 = new Node(6);
+        Node root2Node4 = new Node(4);
+        Node root2Node1 = new Node(1);
 
-        root2.left = root2Node3;
-        root.right = root2Node6;
+        root2.left = root2Node4;
+        root2.right = root2Node1;
 
         System.out.println(judgeATreeContainsBTree(root, root2));
         System.out.println(judgeATreeContainsBTreeByRecursive(root, root2));
+
+        System.out.println(judgeATreeContainsAllBTree(root, root2));
 
         //getTwoErrorNodes(root);
     }
@@ -476,6 +477,47 @@ public class BinaryTreeAlg {
             return false;
         }
         return aTreeEqualbTree(t1.left, t2.left) && aTreeEqualbTree(t1.right, t2.right);
+    }
+
+    /**
+     * 判断A树是否完全包含B树的结构
+     * @param t1
+     * @param t2
+     * @return
+     */
+    public static boolean judgeATreeContainsAllBTree(Node t1, Node t2) {
+        if (t1 == null || t2 == null) {
+            return false;
+        }
+        Stack<Node> helpStack = new Stack<>();
+        Node cur = t1;
+
+        while(!helpStack.isEmpty() || null != cur) {
+            if (cur != null) {
+                helpStack.push(cur);
+                cur = cur.left;
+            } else {
+                Node temp = helpStack.pop();
+                if (temp.value == t2.value) {
+                    return checkTreeEqual(temp, t2);
+                }
+                cur = temp.right;
+            }
+        }
+        return false;
+    }
+
+    public static boolean checkTreeEqual(Node t1, Node t2) {
+        if (t2 == null) {
+            return true;
+        }
+        if (t1 == null || t1.value != t2.value) {
+            return false;
+        }
+        return checkTreeEqual(t1.left, t2.left) &&
+                checkTreeEqual(t2.left, t1.left) &&
+                checkTreeEqual(t1.right, t2.right) &&
+                checkTreeEqual(t2.right, t1.right);
     }
 
     public static class Node {
