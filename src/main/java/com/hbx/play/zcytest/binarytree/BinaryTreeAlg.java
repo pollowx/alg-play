@@ -338,41 +338,41 @@ public class BinaryTreeAlg {
         }
     }
 
-    public static void main(String[] args) {
-        Node root = new Node(5);
-
-        Node node4 = new Node(4);
-        Node node1 = new Node(1);
-
-
-        Node node3 = new Node(3);
-        Node node6 = new Node(6);
-
-        Node node7 = new Node(7);
-
-        node3.left = node4;
-        node3.right = node1;
-
-        node6.right = node7;
-
-        root.left = node3;
-        root.right = node6;
-
-        Node root2 = new Node(3);
-
-        Node root2Node4 = new Node(4);
-        Node root2Node1 = new Node(1);
-
-        root2.left = root2Node4;
-        root2.right = root2Node1;
-
-        System.out.println(judgeATreeContainsBTree(root, root2));
-        System.out.println(judgeATreeContainsBTreeByRecursive(root, root2));
-
-        System.out.println(judgeATreeContainsAllBTree(root, root2));
-
-        //getTwoErrorNodes(root);
-    }
+//    public static void main(String[] args) {
+//        Node root = new Node(5);
+//
+//        Node node4 = new Node(4);
+//        Node node1 = new Node(1);
+//
+//
+//        Node node3 = new Node(3);
+//        Node node6 = new Node(6);
+//
+//        Node node7 = new Node(7);
+//
+//        node3.left = node4;
+//        node3.right = node1;
+//
+//        node6.right = node7;
+//
+//        root.left = node3;
+//        root.right = node6;
+//
+//        Node root2 = new Node(3);
+//
+//        Node root2Node4 = new Node(4);
+//        Node root2Node1 = new Node(1);
+//
+//        root2.left = root2Node4;
+//        root2.right = root2Node1;
+//
+//        System.out.println(judgeATreeContainsBTree(root, root2));
+//        System.out.println(judgeATreeContainsBTreeByRecursive(root, root2));
+//
+//        System.out.println(judgeATreeContainsAllBTree(root, root2));
+//
+//        //getTwoErrorNodes(root);
+//    }
 
     /**
      * 搜索二叉树里面有两个节点放错了左右顺序，请找出这两个节点
@@ -507,6 +507,12 @@ public class BinaryTreeAlg {
         return false;
     }
 
+    /**
+     * 判断两个树完全相等
+     * @param t1
+     * @param t2
+     * @return
+     */
     public static boolean checkTreeEqual(Node t1, Node t2) {
         if (t2 == null) {
             return true;
@@ -518,6 +524,118 @@ public class BinaryTreeAlg {
                 checkTreeEqual(t2.left, t1.left) &&
                 checkTreeEqual(t1.right, t2.right) &&
                 checkTreeEqual(t2.right, t1.right);
+    }
+
+    /**
+     * 判断B树是否完全属于A树的一部分
+     * @param t1
+     * @param t2
+     * @return
+     */
+    public static boolean judgeATreeContainsBTreeByKMP(Node t1, Node t2) {
+        if (t1 == null || t2 == null) {
+            return false;
+        }
+
+        // 序列化A树和B树
+        String str1 = serialPreTreeToString(t1);
+
+        String str2 = serialPreTreeToString(t2);
+
+        return getIndexOf(str1, str2) != -1;
+    }
+
+    /**
+     * 前序遍历序列化二叉树
+     * @param head
+     * @return
+     */
+    public static String serialPreTreeToString(Node head) {
+        if (null == head) {
+            return "#!";
+        }
+
+        String res = head.value + "!";
+        res += serialPreTreeToString(head.left);
+        res += serialPreTreeToString(head.right);
+        return res;
+    }
+
+    public static void main(String[] args) {
+
+        getIndexOf("BBC ABCDAB ABCDABCDABDE", "ABCDABD");
+
+    }
+
+    /**
+     * str里是否含有match
+     * @param str
+     * @param match
+     * @return
+     */
+    public static int getIndexOf(String str, String match){
+        if (null == str || null == match || match.length() < 1 || str.length() < match.length()) {
+            return -1;
+        }
+        char[] strChars = str.toCharArray();
+        char[] matchChars = match.toCharArray();
+        int si = 0; // 指向strChars
+        int mi = 0; // 指向matchChars
+
+        int[] next = getNextArray(matchChars); // matchChars数组的next匹配，也就是match没匹配到的时候，str的下一个要跳转的index条件
+
+        while (si < strChars.length && mi < matchChars.length) {
+            if (strChars[si] == matchChars[mi]) { // 相等就继续下一个
+                si++;
+                mi++;
+            } else if (next[mi] == -1) { // -1代表是next数组的第一个位置，当前的mi -> next为-1，就str[]下一个
+                si++;
+            } else {
+                mi = next[mi]; // mi的指针往后跳next[mi]个, 而且是可能往回跳的
+            }
+        }
+        return mi == matchChars.length ?
+                si - mi // 在si开始0 -> mi位置上
+                : -1; // 没找到
+    }
+
+//    public static void main(String[] args) {
+//        //String str = "ABCDABD";
+//        String str = "ACDA";
+//
+//        getNextArray(str.toCharArray());
+//    }
+
+    /**
+     * 找matchChars的前缀和后缀匹配的next数组
+     * @param matchChars
+     * @return
+     */
+    public static int[] getNextArray(char[] matchChars) {
+        if (null == matchChars) {
+            return null;
+        }
+        if (matchChars.length == 1) {
+            return new int[] {-1};
+        }
+
+        int[] next = new int[matchChars.length];
+        next[0] = -1; // next 0 就是-1
+        next[1] = 0; // next 1 是0, 空串
+
+        int pos = 2; // 从下标2开始
+        int cn = 0; //
+
+        while (pos < matchChars.length) {
+            if (matchChars[pos - 1] == matchChars[cn]) {  // 找到了匹配, 从下标1开始和下标0比
+                next[pos++] = ++cn;
+            } else if (cn > 0) { // 找到了至少一个匹配
+                cn = next[cn]; // cn赋值发生变化
+            } else {
+                next[pos++] = 0; // 没找到
+            }
+        }
+        return next;
     }
 
     public static class Node {
