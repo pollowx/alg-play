@@ -739,6 +739,85 @@ public class BinaryTreeAlg {
         return isPost(arr, start, middlePre) && isPost(arr, middleNext, end - 1);
     }
 
+    /**
+     * 重建二叉树
+     * @param arr
+     * @return
+     */
+    public static Node rebuildNodeTreeByPostArray(int[] arr) {
+        if (null == arr || arr.length == 0) {
+            return null;
+        }
+        return buildNodeTree(arr, 0, arr.length - 1);
+    }
+
+    public static Node buildNodeTree(int arr[], int start, int end) {
+        if (start > end) {
+            return null;
+        }
+
+        int middlePre = -1;
+        int middleNext = end;
+
+        for (int i = start; i < end; i++) {
+            if (arr[end] > arr[i]) {
+                middlePre = i;
+            } else {
+                middleNext = middleNext == end ? i : middleNext;
+            }
+        }
+        Node root = new Node(arr[arr.length - 1]);
+
+        root.left = buildNodeTree(arr, start, middlePre);
+        root.right = buildNodeTree(arr, middleNext, end - 1);
+
+        return root;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * 判断二叉树是否是搜索二叉树
+     * @param head
+     * @return
+     */
+    public static boolean isBTS(Node head) {
+        if (null == head) {
+            return true;
+        }
+        boolean res = true;
+        Node pre = null;
+
+        Node cur = head;
+        Node mostRight = null;
+
+        while (cur != null) {
+            mostRight = cur.left;
+
+            if (mostRight != null) {
+                while (mostRight.right != null && mostRight.right != cur) {
+                    mostRight = mostRight.right;
+                }
+            }
+
+            if (mostRight.right == null) {
+                mostRight.right = cur;
+                cur = cur.left;
+                continue;
+            } else {
+                mostRight.right = null;
+            }
+
+            if (null != pre && pre.value > cur.value) { // 到这里的时候pre实际上是左子树，所以和cur当前的节点比较下
+                res = false;
+            }
+
+            pre = cur;
+            cur = cur.right;
+        }
+        return res;
+    }
+
     public static class Node {
         int value;
         Node left;
