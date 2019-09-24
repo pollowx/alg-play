@@ -374,6 +374,8 @@ public class BinaryTreeAlg {
 //        //getTwoErrorNodes(root);
 //    }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     /**
      * 搜索二叉树里面有两个节点放错了左右顺序，请找出这两个节点
      * @param head
@@ -414,6 +416,8 @@ public class BinaryTreeAlg {
         return res;
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     /**
      * 判断A树是否包含B树的子结构
      * @param t1
@@ -442,6 +446,8 @@ public class BinaryTreeAlg {
         }
         return false;
     }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * 判断A树是否包含B树的子结构，递归
@@ -478,6 +484,8 @@ public class BinaryTreeAlg {
         }
         return aTreeEqualbTree(t1.left, t2.left) && aTreeEqualbTree(t1.right, t2.right);
     }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * 判断A树是否完全包含B树的结构
@@ -526,6 +534,8 @@ public class BinaryTreeAlg {
                 checkTreeEqual(t2.right, t1.right);
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     /**
      * 判断B树是否完全属于A树的一部分，KMP算法，时间复杂度O(N)
      * @param t1
@@ -561,11 +571,11 @@ public class BinaryTreeAlg {
         return res;
     }
 
-    public static void main(String[] args) {
-
-        getIndexOf("BBC ABCDAB ABCDABCDABDE", "ABCDABD");
-
-    }
+//    public static void main(String[] args) {
+//
+//        getIndexOf("BBC ABCDAB ABCDABCDABDE", "ABCDABD");
+//
+//    }
 
     /**
      * str里是否含有match
@@ -638,6 +648,97 @@ public class BinaryTreeAlg {
         return next;
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * 判断树是否是平衡树二叉树
+     * @param head
+     * @return
+     */
+    public static boolean isBalanceTree(Node head) {
+        return processIsBalanceTree(head).isBalance;
+    }
+
+    /**
+     * 递归判断是否是平衡树二叉树
+     * @param head
+     * @return
+     */
+    public static ReturnType processIsBalanceTree(Node head) {
+        if (null == head) {
+            return new ReturnType(true, 0); // 递归跳出的条件
+        }
+
+        ReturnType leftReturn = processIsBalanceTree(head.left);
+        if (!leftReturn.isBalance) {
+            return leftReturn;
+        }
+
+        ReturnType rightReturn = processIsBalanceTree(head.right);
+        if (!rightReturn.isBalance) {
+            return rightReturn;
+        }
+        int treeHight = Math.max(leftReturn.height, rightReturn.height) + 1;
+
+        int hightJu = Math.abs(leftReturn.height - rightReturn.height);
+
+        return new ReturnType(hightJu <= 1, treeHight);
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+        int[] arr = {2, 1, 3, 6, 5, 7, 4};
+
+        isPostArray(arr);
+
+    }
+
+    /**
+     * check一个数组是否是搜索二叉树的后续遍历
+     * @param arr
+     * @return
+     */
+    public static boolean isPostArray(int[] arr) {
+        if (null == arr || arr.length  == 0) {
+            return false;
+        }
+        return isPost(arr, 0, arr.length - 1);
+    }
+
+    /**
+     * 递归判断是否是后续遍历序列
+     * @param arr
+     * @param start
+     * @param end
+     * @return
+     */
+    public static boolean isPost(int[] arr, int start, int end) {
+        // 首先是递归跳出的条件
+        if (start == end) {
+            return true;
+        }
+        int middlePre = -1;
+        int middleNext = end;
+        for (int i = start; i < end; i++) {
+            if (arr[end] > arr[i]) {
+                middlePre = i;
+            } else {
+                middleNext = middleNext == end ? i : middleNext;
+            }
+        }
+
+        if (middlePre == -1 || middleNext == end) {
+            return isPost(arr, start, end - 1);
+        }
+
+        if (middlePre != middleNext - 1) { // 不符合条件, 他俩相距甚远，大于1
+            return false;
+        }
+
+        return isPost(arr, start, middlePre) && isPost(arr, middleNext, end - 1);
+    }
+
     public static class Node {
         int value;
         Node left;
@@ -645,6 +746,19 @@ public class BinaryTreeAlg {
 
         public Node(int value) {
             this.value = value;
+        }
+    }
+
+    /**
+     * 是否是平衡二叉树
+     */
+    public static class ReturnType{
+        boolean isBalance;
+        int height;
+
+        public ReturnType(boolean isBalance, int height) {
+            this.isBalance = isBalance;
+            this.height = height;
         }
     }
 
