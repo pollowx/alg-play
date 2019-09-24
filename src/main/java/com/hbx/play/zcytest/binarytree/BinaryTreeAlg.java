@@ -527,7 +527,7 @@ public class BinaryTreeAlg {
     }
 
     /**
-     * 判断B树是否完全属于A树的一部分
+     * 判断B树是否完全属于A树的一部分，KMP算法，时间复杂度O(N)
      * @param t1
      * @param t2
      * @return
