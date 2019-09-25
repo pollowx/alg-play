@@ -1,7 +1,6 @@
 package com.hbx.play.zcytest.binarytree;
 
 import java.util.LinkedList;
-import java.util.Queue;
 import java.util.Stack;
 
 /**
@@ -869,12 +868,36 @@ public class BinaryTreeAlg {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
-     * 生成
+     * 根据数组中序生成平衡搜索二叉树
      * @param arr
      * @return
      */
-    public static Node generateAVLSearchTreeByArray(int[] arr) {
+    public static Node generateAVLSearchTreeByArray(int[] sortArr) {
+        if (null == sortArr) {
+            return null;
+        }
+        return generateAVLSearchTree(sortArr, 0, sortArr.length - 1);
+    }
 
+    /**
+     * 生成AVLSearchTree
+     * @param sortArr
+     * @param start
+     * @param end
+     * @return
+     */
+    public static Node generateAVLSearchTree(int[] sortArr, int start, int end) {
+        if (start > end) {
+            return null;
+        }
+
+        int middleIndex = (start + end) / 2;
+        Node head = new Node(sortArr[middleIndex]);
+
+        head.left = generateAVLSearchTree(sortArr, start, middleIndex - 1);
+        head.right = generateAVLSearchTree(sortArr, middleIndex + 1, end);
+
+        return head;
     }
 
     public static class Node {
