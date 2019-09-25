@@ -1,5 +1,7 @@
 package com.hbx.play.zcytest.binarytree;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Stack;
 
@@ -687,12 +689,12 @@ public class BinaryTreeAlg {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-        int[] arr = {2, 1, 3, 6, 5, 7, 4};
-
-        isPostArray(arr);
-
-    }
+//    public static void main(String[] args) {
+//        int[] arr = {2, 1, 3, 6, 5, 7, 4};
+//
+//        isPostArray(arr);
+//
+//    }
 
     /**
      * check一个数组是否是搜索二叉树的后续遍历
@@ -900,6 +902,147 @@ public class BinaryTreeAlg {
         return head;
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * 如果节点有指针指向parent节点，且后续节点是中序遍历的下一个节点，那么找到后续节点
+     * @param head
+     * @return
+     */
+    public static NodeAndParent findNextNode(NodeAndParent node) {
+        // 有O(N)的时间复杂度，需要找到root节点，然后遍历一遍，找到某个节点的下一个就好了
+        // 最优解是需要O(L)的复杂度，且O(1)的额外空间
+        if (null == node) {
+            return null;
+        }
+        // 有三种情况，需要分析下
+        // 1. 如果当前节点有右孩子，那么next就是右孩子
+        // 2. 如果当前节点没有右子树，他是父亲节点的左子树，那么next节点就是父节点
+        // 3. 如果当前节点没有右子树，他是父亲节点的右子树，需要继续往上找，找到当前的节点是父亲节点的左孩子，那么next节点就是该节点
+        // 4. 如果当前节点没有右子树，他是父亲节点的右子树，需要继续往上找，如果找完parent都是null, 那么next节点就是null
+
+        // case1
+        if (node.right != null) {
+            return node.right;
+        }
+
+        // case2
+        NodeAndParent parent = node.parent;
+        if (parent.left == node) {
+            return parent;
+        }
+
+        // case3
+        if (parent.right == node) {
+
+            NodeAndParent pre = node;
+            while (parent != null) {
+                if (parent.left == pre) {
+                    return parent;
+                }
+                pre = parent;
+                parent = parent.parent;
+            }
+        }
+
+        // case4
+        return null;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+        Node root = new Node(1);
+
+        Node node2 = new Node(2);
+        Node node3 = new Node(3);
+
+        Node node4 = new Node(4);
+        Node node5 = new Node(5);
+
+        Node node6 = new Node(6);
+        Node node7 = new Node(7);
+
+        Node node8 = new Node(8);
+
+        root.left = node2;
+        root.right = node3;
+
+        node2.left = node4;
+        node2.right = node5;
+
+        node3.left = node6;
+        node3.right = node7;
+
+        node7.left = node8;
+
+        //nearestParentNode(root, node6, node8);
+        nearestParentNodeByHashMap(root, node6, node8);
+    }
+
+    /**
+     * 找寻两个节点的最近的公共祖先
+     * @param head
+     * @param o1
+     * @param o2
+     * @return
+     */
+    public static Node nearestParentNode(Node head, Node o1, Node o2) {
+        if (null == head || head == o1 || head == o2) {
+            return head;
+        }
+        Node left = nearestParentNode(head.left, o1, o2);
+
+        Node right = nearestParentNode(head.right, o1, o2);
+
+        if (left != null && right != null) {
+            return head;
+        }
+        return left != null ? left : right;
+    }
+
+    /**
+     * 找寻两个节点的最近的公共祖先-By HashMap
+     * @param head
+     * @param o1
+     * @param o2
+     * @return
+     */
+    public static Node nearestParentNodeByHashMap(Node head, Node o1, Node o2) {
+        // 先创建hashMap, 保存所有节点的父节点，先序遍历
+        HashMap<Node, Node> map = new HashMap<>();
+
+        // 初始化
+        Stack<Node> helpStack = new Stack<>();
+        helpStack.push(head);
+        map.put(head, null);
+
+        while (!helpStack.isEmpty()) {
+            Node temp = helpStack.pop();
+
+            if (temp.left != null) {
+                helpStack.push(temp.left);
+                map.put(temp.left, temp);
+            }
+            if (temp.right != null) {
+                helpStack.push(temp.right);
+                map.put(temp.right, temp);
+            }
+        }
+
+        HashSet<Node> path = new HashSet<>();
+        while (map.containsKey(o1)) {
+            path.add(o1);
+            o1 = map.get(o1);
+        }
+
+        while (!path.contains(o2)) {
+            o2 = map.get(o2);
+        }
+        return o2;
+    }
+
+
     public static class Node {
         int value;
         Node left;
@@ -920,6 +1063,17 @@ public class BinaryTreeAlg {
         public ReturnType(boolean isBalance, int height) {
             this.isBalance = isBalance;
             this.height = height;
+        }
+    }
+
+    public static class NodeAndParent {
+        int value;
+        NodeAndParent left;
+        NodeAndParent right;
+        NodeAndParent parent;
+
+        public NodeAndParent(int value) {
+            this.value = value;
         }
     }
 
