@@ -1,6 +1,7 @@
 package com.hbx.play.zcytest.binarytree;
 
 import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Stack;
 
 /**
@@ -816,6 +817,64 @@ public class BinaryTreeAlg {
             cur = cur.right;
         }
         return res;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * 判断一棵树是否是完全二叉树
+     * @return
+     */
+    public static boolean judgeTreeIsCBT(Node head) {
+        if (null == head) {
+            return false;
+        }
+        // 思路是：完全二叉树的定义，只要不符合条件就直接返回false
+        // 1. 如果一个节点有右节点，但是没有左节点，就直接是false
+        // 2. 如果一个节点不是左右孩子都有，那么后续的节点必须都是叶子节点
+
+        LinkedList<Node> helpList = new LinkedList<>();
+        helpList.offer(head);
+
+        boolean mustNextLeaf = false;
+
+        while (!helpList.isEmpty()) {
+            Node temp = helpList.poll();
+
+            Node tempLeft = temp.left;
+            Node tempRight = temp.right;
+            if (tempRight!= null && tempLeft == null) { // 没有左侧节点
+                return false;
+            }
+
+            if (tempLeft == null || tempRight == null) {
+                mustNextLeaf = true;
+            }
+
+            if (mustNextLeaf && (tempLeft != null || tempRight != null)) {
+                return false;
+            }
+
+            // 加入后续节点
+            if (null != tempLeft) {
+                helpList.add(tempLeft);
+            }
+            if (null != tempRight) {
+                helpList.add(tempRight);
+            }
+        }
+        return true;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * 生成
+     * @param arr
+     * @return
+     */
+    public static Node generateAVLSearchTreeByArray(int[] arr) {
+
     }
 
     public static class Node {
