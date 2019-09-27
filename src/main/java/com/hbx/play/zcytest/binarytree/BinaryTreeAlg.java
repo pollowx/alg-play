@@ -42,6 +42,7 @@ public class BinaryTreeAlg {
 
     /**
      * 递归前序遍历
+     *
      * @param head
      */
     public static void preOrder(Node head) {
@@ -55,6 +56,7 @@ public class BinaryTreeAlg {
 
     /**
      * 递归中序遍历
+     *
      * @param head
      */
     public static void inOrder(Node head) {
@@ -68,6 +70,7 @@ public class BinaryTreeAlg {
 
     /**
      * 递归后序遍历
+     *
      * @param head
      */
     public static void posOrder(Node head) {
@@ -81,6 +84,7 @@ public class BinaryTreeAlg {
 
     /**
      * 前序普通方式遍历
+     *
      * @param head
      */
     public static void preOrderByNormal(Node head) {
@@ -105,9 +109,10 @@ public class BinaryTreeAlg {
 
     /**
      * 中序遍历二叉树
+     *
      * @param head
      */
-    public static void inOrderByNormal(Node head){
+    public static void inOrderByNormal(Node head) {
         if (null == head) {
             return;
         }
@@ -126,9 +131,10 @@ public class BinaryTreeAlg {
 
     /**
      * 后续遍历，用两个栈
+     *
      * @param head
      */
-    public static void posOrderByNormalTwoStack(Node head){
+    public static void posOrderByNormalTwoStack(Node head) {
         if (null == head) {
             return;
         }
@@ -154,6 +160,7 @@ public class BinaryTreeAlg {
 
     /**
      * BFS遍历二叉树，广度优先遍历
+     *
      * @param root
      */
     private void bfsBinaryTree(Node root) {
@@ -163,7 +170,7 @@ public class BinaryTreeAlg {
         LinkedList<Node> helpList = new LinkedList<Node>();
         helpList.add(root);
 
-        while(!helpList.isEmpty()) {
+        while (!helpList.isEmpty()) {
             Node temp = helpList.poll();
             System.out.print(temp.value + "\t");
             if (null != temp.left) {
@@ -178,6 +185,7 @@ public class BinaryTreeAlg {
 
     /**
      * DFS遍历二叉树，深度优先遍历
+     *
      * @param root
      */
     private void dfsBinaryTree(Node root) {
@@ -187,7 +195,7 @@ public class BinaryTreeAlg {
         Stack<Node> helpStack = new Stack<>();
         helpStack.push(root);
 
-        while (!helpStack.isEmpty()){
+        while (!helpStack.isEmpty()) {
             Node temp = helpStack.pop();
 
             System.out.print(temp.value + "\t");
@@ -204,6 +212,7 @@ public class BinaryTreeAlg {
 
     /**
      * morris序列
+     *
      * @param head
      */
     public static void morris(Node head) {
@@ -235,9 +244,8 @@ public class BinaryTreeAlg {
     }
 
     /**
-     * morris的先序遍历
-     * 对于只遍历一次的节点，遍历到的时候直接打印
-     * 对于遍历两次的节点，只在第一次遍历的时候打印就好
+     * morris的先序遍历 对于只遍历一次的节点，遍历到的时候直接打印 对于遍历两次的节点，只在第一次遍历的时候打印就好
+     *
      * @param head
      */
     public static void morrisPre(Node head) {
@@ -270,9 +278,8 @@ public class BinaryTreeAlg {
     }
 
     /**
-     * morris的中序遍历
-     * 对于只遍历一次的节点，遍历到的时候直接打印
-     * 对于遍历两次的节点，在第二次遍历的时候打印
+     * morris的中序遍历 对于只遍历一次的节点，遍历到的时候直接打印 对于遍历两次的节点，在第二次遍历的时候打印
+     *
      * @param head
      */
     public static void morrisIn(Node head) {
@@ -282,7 +289,7 @@ public class BinaryTreeAlg {
         Node cur = head;
         Node mostRight = null;
 
-        while(null != cur) {
+        while (null != cur) {
             mostRight = cur.left;
             if (null == mostRight) {
                 // 没有左子树
@@ -306,6 +313,7 @@ public class BinaryTreeAlg {
 
     /**
      * 按层打印二叉树
+     *
      * @param head
      */
     public static void printBinaryTreeByLevel(Node head) {
@@ -317,7 +325,7 @@ public class BinaryTreeAlg {
 
         int currentCount = 0;
         int nextSize = 1;
-        while(!helpList.isEmpty()) {
+        while (!helpList.isEmpty()) {
             Node temp = helpList.poll();
 
             System.out.print(temp.value + "\t");
@@ -380,6 +388,7 @@ public class BinaryTreeAlg {
 
     /**
      * 搜索二叉树里面有两个节点放错了左右顺序，请找出这两个节点
+     *
      * @param head
      * @return
      */
@@ -403,7 +412,7 @@ public class BinaryTreeAlg {
             } else {
                 Node temp = helpStack.pop();
                 if (tempPre != null &&
-                        temp.value < tempPre.value){
+                        temp.value < tempPre.value) {
                     if (res[0] == null) {
                         res[0] = tempPre;  // 找到第一个
                     } else {
@@ -422,6 +431,7 @@ public class BinaryTreeAlg {
 
     /**
      * 判断A树是否包含B树的子结构
+     *
      * @param t1
      * @param t2
      * @return
@@ -453,6 +463,7 @@ public class BinaryTreeAlg {
 
     /**
      * 判断A树是否包含B树的子结构，递归
+     *
      * @param t1
      * @param t2
      * @return
@@ -472,6 +483,7 @@ public class BinaryTreeAlg {
 
     /**
      * 看t2是不是完全等于t1
+     *
      * @param t1
      * @param t2
      * @return
@@ -491,6 +503,7 @@ public class BinaryTreeAlg {
 
     /**
      * 判断A树是否完全包含B树的结构
+     *
      * @param t1
      * @param t2
      * @return
@@ -502,7 +515,7 @@ public class BinaryTreeAlg {
         Stack<Node> helpStack = new Stack<>();
         Node cur = t1;
 
-        while(!helpStack.isEmpty() || null != cur) {
+        while (!helpStack.isEmpty() || null != cur) {
             if (cur != null) {
                 helpStack.push(cur);
                 cur = cur.left;
@@ -519,6 +532,7 @@ public class BinaryTreeAlg {
 
     /**
      * 判断两个树完全相等
+     *
      * @param t1
      * @param t2
      * @return
@@ -540,6 +554,7 @@ public class BinaryTreeAlg {
 
     /**
      * 判断B树是否完全属于A树的一部分，KMP算法，时间复杂度O(N)
+     *
      * @param t1
      * @param t2
      * @return
@@ -559,6 +574,7 @@ public class BinaryTreeAlg {
 
     /**
      * 前序遍历序列化二叉树
+     *
      * @param head
      * @return
      */
@@ -581,11 +597,12 @@ public class BinaryTreeAlg {
 
     /**
      * str里是否含有match
+     *
      * @param str
      * @param match
      * @return
      */
-    public static int getIndexOf(String str, String match){
+    public static int getIndexOf(String str, String match) {
         if (null == str || null == match || match.length() < 1 || str.length() < match.length()) {
             return -1;
         }
@@ -620,6 +637,7 @@ public class BinaryTreeAlg {
 
     /**
      * 找matchChars的前缀和后缀匹配的next数组
+     *
      * @param matchChars
      * @return
      */
@@ -628,7 +646,7 @@ public class BinaryTreeAlg {
             return null;
         }
         if (matchChars.length == 1) {
-            return new int[] {-1};
+            return new int[]{-1};
         }
 
         int[] next = new int[matchChars.length];
@@ -654,6 +672,7 @@ public class BinaryTreeAlg {
 
     /**
      * 判断树是否是平衡树二叉树
+     *
      * @param head
      * @return
      */
@@ -663,6 +682,7 @@ public class BinaryTreeAlg {
 
     /**
      * 递归判断是否是平衡树二叉树
+     *
      * @param head
      * @return
      */
@@ -698,11 +718,12 @@ public class BinaryTreeAlg {
 
     /**
      * check一个数组是否是搜索二叉树的后续遍历
+     *
      * @param arr
      * @return
      */
     public static boolean isPostArray(int[] arr) {
-        if (null == arr || arr.length  == 0) {
+        if (null == arr || arr.length == 0) {
             return false;
         }
         return isPost(arr, 0, arr.length - 1);
@@ -710,6 +731,7 @@ public class BinaryTreeAlg {
 
     /**
      * 递归判断是否是后续遍历序列
+     *
      * @param arr
      * @param start
      * @param end
@@ -743,6 +765,7 @@ public class BinaryTreeAlg {
 
     /**
      * 重建二叉树
+     *
      * @param arr
      * @return
      */
@@ -780,6 +803,7 @@ public class BinaryTreeAlg {
 
     /**
      * 判断二叉树是否是搜索二叉树
+     *
      * @param head
      * @return
      */
@@ -824,6 +848,7 @@ public class BinaryTreeAlg {
 
     /**
      * 判断一棵树是否是完全二叉树
+     *
      * @return
      */
     public static boolean judgeTreeIsCBT(Node head) {
@@ -844,7 +869,7 @@ public class BinaryTreeAlg {
 
             Node tempLeft = temp.left;
             Node tempRight = temp.right;
-            if (tempRight!= null && tempLeft == null) { // 没有左侧节点
+            if (tempRight != null && tempLeft == null) { // 没有左侧节点
                 return false;
             }
 
@@ -871,6 +896,7 @@ public class BinaryTreeAlg {
 
     /**
      * 根据数组中序生成平衡搜索二叉树
+     *
      * @param arr
      * @return
      */
@@ -883,6 +909,7 @@ public class BinaryTreeAlg {
 
     /**
      * 生成AVLSearchTree
+     *
      * @param sortArr
      * @param start
      * @param end
@@ -906,6 +933,7 @@ public class BinaryTreeAlg {
 
     /**
      * 如果节点有指针指向parent节点，且后续节点是中序遍历的下一个节点，那么找到后续节点
+     *
      * @param head
      * @return
      */
@@ -951,37 +979,38 @@ public class BinaryTreeAlg {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-        Node root = new Node(1);
-
-        Node node2 = new Node(2);
-        Node node3 = new Node(3);
-
-        Node node4 = new Node(4);
-        Node node5 = new Node(5);
-
-        Node node6 = new Node(6);
-        Node node7 = new Node(7);
-
-        Node node8 = new Node(8);
-
-        root.left = node2;
-        root.right = node3;
-
-        node2.left = node4;
-        node2.right = node5;
-
-        node3.left = node6;
-        node3.right = node7;
-
-        node7.left = node8;
-
-        //nearestParentNode(root, node6, node8);
-        nearestParentNodeByHashMap(root, node6, node8);
-    }
+//    public static void main(String[] args) {
+//        Node root = new Node(1);
+//
+//        Node node2 = new Node(2);
+//        Node node3 = new Node(3);
+//
+//        Node node4 = new Node(4);
+//        Node node5 = new Node(5);
+//
+//        Node node6 = new Node(6);
+//        Node node7 = new Node(7);
+//
+//        Node node8 = new Node(8);
+//
+//        root.left = node2;
+//        root.right = node3;
+//
+//        node2.left = node4;
+//        node2.right = node5;
+//
+//        node3.left = node6;
+//        node3.right = node7;
+//
+//        node7.left = node8;
+//
+//        //nearestParentNode(root, node6, node8);
+//        nearestParentNodeByHashMap(root, node6, node8);
+//    }
 
     /**
      * 找寻两个节点的最近的公共祖先
+     *
      * @param head
      * @param o1
      * @param o2
@@ -1003,6 +1032,7 @@ public class BinaryTreeAlg {
 
     /**
      * 找寻两个节点的最近的公共祖先-By HashMap
+     *
      * @param head
      * @param o1
      * @param o2
@@ -1042,6 +1072,97 @@ public class BinaryTreeAlg {
         return o2;
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * 找到整个二叉树的叶子节点的最大距离值
+     *
+     * @param head
+     * @return
+     */
+    public static int findBinaryTreeLeafMaxDistance(Node head) {
+        // 树形DP
+        return findBinaryTreeLeafMaxDistanceProcess(head).maxDistance;
+    }
+
+    public static MaxDisReturnType findBinaryTreeLeafMaxDistanceProcess(Node head) {
+        // 1. 最大距离在左子树上
+        // 2. 最大距离在右子树上
+        // 3. 最大距离是左子树上 +  右子树上的距离
+        if (null == head) {
+            return new MaxDisReturnType(0, 0);
+        }
+        MaxDisReturnType left = findBinaryTreeLeafMaxDistanceProcess(head.left);
+
+        MaxDisReturnType right = findBinaryTreeLeafMaxDistanceProcess(head.right);
+
+        int height = Math.max(left.height, right.height) + 1; // 当前树的高度
+
+        int treeLRHeight = left.height + right.height + 1; // 整个树的LR距离高度和
+
+        int maxDistance = Math.max(treeLRHeight, Math.max(left.maxDistance, right.maxDistance)); // 最大值在1,2,3中
+
+        return new MaxDisReturnType(maxDistance, height);
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+        int[] pre = {1, 2, 4, 5, 3, 6, 7};
+        int[] in = {4, 2, 5, 1, 6, 3, 7};
+
+        generatePostArraryByPreAndIn(pre, in);
+    }
+
+    /**
+     * 根据二叉树的前序和中序生成后续，不需要重建二叉树
+     *
+     * @param pre
+     * @param in
+     * @return
+     */
+    public static int[] generatePostArraryByPreAndIn(int[] pre, int[] in) {
+        if (null == pre || null == in) {
+            return null;
+        }
+        int len = pre.length;
+        int[] pos = new int[len];
+
+        HashMap<Integer, Integer> inMapValueToIndex = new HashMap<>();
+        for (int i = 0; i < in.length; i++) {
+            inMapValueToIndex.put(in[i], i);
+        }
+
+        setPos(pre, 0, len - 1,
+                in, 0, len - 1,
+                pos, len - 1, inMapValueToIndex);
+
+        return pos;
+    }
+
+    public static int setPos(int[] pre, int pi, int pj,
+                             int[] n, int ni, int nj,
+                             int[] s, int si, HashMap<Integer, Integer> inMapValueToIndex) {
+        if (pi > pj) {
+            return si;
+        }
+        s[si--] = pre[pi]; // 后续的最后一个位置是前序的第一个index, 后续的index--
+
+        int i = inMapValueToIndex.get(pre[pi]); // 根节点在中序中的index
+        si = setPos(
+                pre, pj - nj + i + 1, pj, // pi的位置很重要，需要找到下一个的规律
+                n, i + 1, nj,
+                s, si, inMapValueToIndex);
+
+        return setPos(
+                pre, pi + 1, pi + i - ni,
+                n, ni, i - 1,
+                s, si, inMapValueToIndex);
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
     public static class Node {
         int value;
@@ -1056,12 +1177,25 @@ public class BinaryTreeAlg {
     /**
      * 是否是平衡二叉树
      */
-    public static class ReturnType{
+    public static class ReturnType {
         boolean isBalance;
         int height;
 
         public ReturnType(boolean isBalance, int height) {
             this.isBalance = isBalance;
+            this.height = height;
+        }
+    }
+
+    /**
+     * 节点之间的距离最大值返回体
+     */
+    public static class MaxDisReturnType {
+        int maxDistance;
+        int height;
+
+        public MaxDisReturnType(int maxDistance, int height) {
+            this.maxDistance = maxDistance;
             this.height = height;
         }
     }
