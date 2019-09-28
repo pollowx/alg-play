@@ -135,15 +135,15 @@ public class RescurAndDP {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-
-        System.out.println(findRobotWalkWays(7, 4, 9, 5));
-
-        System.out.println(robotWalkByDP(7, 4, 9, 5));
-
-        System.out.println(robotWalkByDPAndZip(7, 4, 9, 5));
-
-    }
+//    public static void main(String[] args) {
+//
+//        System.out.println(findRobotWalkWays(7, 4, 9, 5));
+//
+//        System.out.println(robotWalkByDP(7, 4, 9, 5));
+//
+//        System.out.println(robotWalkByDPAndZip(7, 4, 9, 5));
+//
+//    }
 
     /**
      * @param N, 一共多少位置
@@ -254,6 +254,74 @@ public class RescurAndDP {
             }
         }
         return dp[M];
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+
+        int[] arr = {5, 10, 25, 1};
+
+        System.out.println(findCoinWays(arr, 1000));
+
+        System.out.println(findCoinWaysByMap(arr, 1000));
+
+    }
+
+    /**
+     * 找钱的方式，arr个零钱种类，求aim的找钱方式 每张面额任意张
+     *
+     * @param arr
+     * @param aim
+     * @return
+     */
+    public static int findCoinWays(int[] arr, int aim) {
+        if (null == arr || arr.length < 1 || aim < 1) {
+            return 0;
+        }
+        return findCoinWaysFeb(arr, 0, aim);
+    }
+
+    public static int findCoinWaysFeb(int[] arr, int index, int aim) {
+        int res = 0;
+        if (index == arr.length) {
+            return aim == 0 ? 1 : 0;
+        } else {
+            for (int i = 0; arr[index] * i <= aim; i++) {
+                res += findCoinWaysFeb(arr, index + 1, aim - arr[index] * i);
+            }
+        }
+        return res;
+    }
+
+    public static int findCoinWaysByMap(int[] arr, int aim) {
+        if (null == arr || arr.length < 1 || aim < 1) {
+            return 0;
+        }
+
+        int[][] map = new int[arr.length + 1][aim + 1];
+
+        return findCoinWaysFebByMap(arr, 0, aim, map);
+    }
+
+    public static int findCoinWaysFebByMap(int[] arr, int index, int aim, int[][] map) {
+        int res = 0;
+
+        if (index == arr.length) {
+            return aim == 0 ? 1 : 0;
+        } else {
+            int mapValue = 0;
+            for (int i = 0; arr[index] * i <= aim; i++) {
+                mapValue = map[index + 1][aim - arr[index] * i];
+                if (mapValue != 0) { // 有值
+                    res += mapValue == -1 ? 0 : mapValue;
+                } else {
+                    res += findCoinWaysFebByMap(arr, index + 1, aim - arr[index] * i, map);
+                }
+            }
+        }
+        map[index][aim] = res == 0 ? -1 : res;
+        return res;
     }
 
 }
