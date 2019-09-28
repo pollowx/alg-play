@@ -58,14 +58,14 @@ public class RescurAndDP {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-
-        int[][] m = {{1, 3, 5, 9}, {8, 1, 3, 4}, {5, 0, 6, 1}, {8, 8, 4, 0}};
-
-        System.out.println(getMinPathByNormal(m));
-        System.out.println(getMinPathBest(m));
-
-    }
+//    public static void main(String[] args) {
+//
+//        int[][] m = {{1, 3, 5, 9}, {8, 1, 3, 4}, {5, 0, 6, 1}, {8, 8, 4, 0}};
+//
+//        System.out.println(getMinPathByNormal(m));
+//        System.out.println(getMinPathBest(m));
+//
+//    }
 
     /**
      * Dynamic programing 经典问题 寻找矩阵的最小路径和
@@ -133,5 +133,127 @@ public class RescurAndDP {
         return arr[less - 1];
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+
+        System.out.println(findRobotWalkWays(7, 4, 9, 5));
+
+        System.out.println(robotWalkByDP(7, 4, 9, 5));
+
+        System.out.println(robotWalkByDPAndZip(7, 4, 9, 5));
+
+    }
+
+    /**
+     * @param N, 一共多少位置
+     * @param M, 初始位置
+     * @param K, 走K步
+     * @param P, 最终的位置
+     * @return
+     */
+    public static int findRobotWalkWays(int N, int M, int K, int P) {
+        if (N <= 1 || M < 1 || K < 1 || P < 1 || P > N) {
+            return 0;
+        }
+        return robotWalk(N, M, K, P);
+    }
+
+    /**
+     * 机器人走路经典问题， 1 -> 2 | N-1 <- N
+     *
+     * @param N,    一共多少位置
+     * @param cur,  当前的位置
+     * @param rest, 剩余多少步骤
+     * @param P,    最终停下来的位置
+     * @return
+     */
+    public static int robotWalk(int N, int cur, int rest, int P) {
+        // 先判断短路的条件
+        if (rest == 0) {
+            return cur == P ? 1 : 0;
+        }
+
+        // 当前位置在1
+        if (cur == 1) {
+            return robotWalk(N, 2, rest - 1, P);
+        }
+
+        // 当前位置在N
+        if (cur == N) {
+            return robotWalk(N, N - 1, rest - 1, P);
+        }
+
+        // 当前位置在1 ~ N之间的位置
+        return robotWalk(N, cur - 1, rest - 1, P) +
+                robotWalk(N, cur + 1, rest - 1, P);
+    }
+
+    /**
+     * 机器人走路经典问题-DP， 1 -> 2 | N-1 <- N
+     *
+     * @param N, 一共的位置
+     * @param M, 初始位置
+     * @param K, K步数
+     * @param P, 最终的位置
+     * @return
+     */
+    public static int robotWalkByDP(int N, int M, int K, int P) {
+        if (N <= 1 || M < 1 || K < 1 || P < 1 || P > N) {
+            return 0;
+        }
+        // 先找到固定的规律，无后效行才能用动态规划，就是未来的决策不受历史的决定所影响
+        // 找到不变的参数，N，P不变
+        // 找到可变的参数，M，K是变化的(rest & K). 几个可变的参数就生成几维的数组
+
+        int[][] dp = new int[K + 1][N + 1];
+        dp[0][P] = 1; // 初始值
+
+        for (int i = 1; i <= K; i++) {
+            for (int j = 1; j <= N; j++) {
+                if (j == 1) {
+                    dp[i][j] = dp[i - 1][j + 1];
+                } else if (j == N) {
+                    dp[i][j] = dp[i - 1][j - 1];
+                } else {
+                    dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j + 1];
+                }
+            }
+        }
+        return dp[K][M]; // 答案可以理解成就是从当前位置逆向回去
+    }
+
+    /**
+     * 机器人走路经典问题-DP & 空间压缩算法， 1 -> 2 | N-1 <- N
+     *
+     * @param N
+     * @param M
+     * @param K
+     * @param P
+     * @return
+     */
+    public static int robotWalkByDPAndZip(int N, int M, int K, int P) {
+        if (N <= 1 || M < 1 || K < 1 || P < 1 || P > N) {
+            return 0;
+        }
+        int[] dp = new int[N + 1];
+        dp[P] = 1;
+
+        for (int i = 1; i <= K; i++) {
+            int leftUp = dp[1]; // 左上角的值
+            for (int j = 1; j <= N; j++) {
+                int temp = dp[j];
+                if (j == 1) {
+                    dp[j] = dp[j + 1];
+                } else if (j == N) {
+                    dp[j] = leftUp;
+                } else {
+                    dp[j] = leftUp + dp[j + 1];
+                }
+                leftUp = temp;
+            }
+        }
+        return dp[M];
+    }
 
 }
