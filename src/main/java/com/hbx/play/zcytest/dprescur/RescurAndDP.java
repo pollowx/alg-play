@@ -261,6 +261,8 @@ public class RescurAndDP {
 
         System.out.println(findCoinWaysByDP(arr, 1000));
 
+        System.out.println(findCoinWaysByDPAndZip(arr, 1000));
+
     }
 
     /**
@@ -345,17 +347,6 @@ public class RescurAndDP {
         for (int j = 1; arr[0] * j <= aim; j++) {
             dp[0][arr[0] * j] = 1;
         }
-
-//        int num = 0;
-//        for (int i = 1; i < arr.length; i++) {
-//            for (int j = 1; arr[i] * j <= aim; j++) {
-//                num = 0;
-//                for (int k = 0; j - arr[i] * k >= 0; k++) {
-//                    num += dp[i - 1][j - k * arr[i]];
-//                }
-//                dp[i][j] = num;
-//            }
-//        }
         for (int i = 1; i < arr.length; i++) {
             for (int j = 1; j <= aim; j++) {
                 dp[i][j] = dp[i - 1][j];
@@ -365,6 +356,34 @@ public class RescurAndDP {
         }
 
         return dp[arr.length - 1][aim];
+    }
+
+    /**
+     * 找钱 - DP压缩算法
+     * @param arr
+     * @param aim
+     * @return
+     */
+    public static int findCoinWaysByDPAndZip(int[] arr, int aim) {
+        if (null == arr || arr.length < 1 || aim < 0) {
+            return 0;
+        }
+        int[] dp = new int[aim + 1]; // 一维数组
+
+        // 初始化第一行
+        for (int i = 0; i * arr[0] <= aim; i++) {
+            dp[i * arr[0]] = 1;
+        }
+
+        for (int i = 1; i < arr.length; i++) {
+            for (int j = 1; j <= aim; j++) { // j是剩余的金额
+                dp[j] = dp[j] +
+                        ((j - arr[i] >= 0) ?
+                                dp[j - arr[i]] :
+                                0);
+            }
+        }
+        return dp[aim];
     }
 
 }
