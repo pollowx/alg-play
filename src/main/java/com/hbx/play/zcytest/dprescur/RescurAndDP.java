@@ -15,7 +15,6 @@ public class RescurAndDP {
 
     /**
      * 斐波那契数列-递归
-     *
      * @param n
      * @return
      */
@@ -31,7 +30,6 @@ public class RescurAndDP {
 
     /**
      * 斐波那契数列 - 保存中间变量
-     *
      * @param n
      * @return
      */
@@ -69,7 +67,6 @@ public class RescurAndDP {
 
     /**
      * Dynamic programing 经典问题 寻找矩阵的最小路径和
-     *
      * @param m
      * @return
      */
@@ -102,7 +99,6 @@ public class RescurAndDP {
 
     /**
      * Dynamic programing 经典问题 - 最优解(压缩空间算法) 寻找矩阵的最小路径和
-     *
      * @param m
      * @return
      */
@@ -161,7 +157,6 @@ public class RescurAndDP {
 
     /**
      * 机器人走路经典问题， 1 -> 2 | N-1 <- N
-     *
      * @param N,    一共多少位置
      * @param cur,  当前的位置
      * @param rest, 剩余多少步骤
@@ -191,7 +186,6 @@ public class RescurAndDP {
 
     /**
      * 机器人走路经典问题-DP， 1 -> 2 | N-1 <- N
-     *
      * @param N, 一共的位置
      * @param M, 初始位置
      * @param K, K步数
@@ -225,7 +219,6 @@ public class RescurAndDP {
 
     /**
      * 机器人走路经典问题-DP & 空间压缩算法， 1 -> 2 | N-1 <- N
-     *
      * @param N
      * @param M
      * @param K
@@ -266,11 +259,12 @@ public class RescurAndDP {
 
         System.out.println(findCoinWaysByMap(arr, 1000));
 
+        System.out.println(findCoinWaysByDP(arr, 1000));
+
     }
 
     /**
      * 找钱的方式，arr个零钱种类，求aim的找钱方式 每张面额任意张
-     *
      * @param arr
      * @param aim
      * @return
@@ -285,7 +279,7 @@ public class RescurAndDP {
     public static int findCoinWaysFeb(int[] arr, int index, int aim) {
         int res = 0;
         if (index == arr.length) {
-            return aim == 0 ? 1 : 0;
+            return aim == 0 ? 1 : 0; //
         } else {
             for (int i = 0; arr[index] * i <= aim; i++) {
                 res += findCoinWaysFeb(arr, index + 1, aim - arr[index] * i);
@@ -294,6 +288,12 @@ public class RescurAndDP {
         return res;
     }
 
+    /**
+     * 找钱的方式-记忆搜索法
+     * @param arr
+     * @param aim
+     * @return
+     */
     public static int findCoinWaysByMap(int[] arr, int aim) {
         if (null == arr || arr.length < 1 || aim < 1) {
             return 0;
@@ -322,6 +322,49 @@ public class RescurAndDP {
         }
         map[index][aim] = res == 0 ? -1 : res;
         return res;
+    }
+
+    /**
+     * 找钱的方式-DP
+     * @param arr
+     * @param aim
+     * @return
+     */
+    public static int findCoinWaysByDP(int[] arr, int aim) {
+        if (null == arr || arr.length < 1 || aim < 0) {
+            return 0;
+        }
+        int[][] dp = new int[arr.length][aim + 1];
+
+        // 第一列，dp[index][0] -> index的下标arr[index]组成aim = 0的方式
+        for (int i = 0; i < arr.length; i++) {
+            dp[i][0] = 1;
+        }
+
+        // 第一行，dp[0][aim] -> 用arr[0]组成aim的方式数量
+        for (int j = 1; arr[0] * j <= aim; j++) {
+            dp[0][arr[0] * j] = 1;
+        }
+
+//        int num = 0;
+//        for (int i = 1; i < arr.length; i++) {
+//            for (int j = 1; arr[i] * j <= aim; j++) {
+//                num = 0;
+//                for (int k = 0; j - arr[i] * k >= 0; k++) {
+//                    num += dp[i - 1][j - k * arr[i]];
+//                }
+//                dp[i][j] = num;
+//            }
+//        }
+        for (int i = 1; i < arr.length; i++) {
+            for (int j = 1; j <= aim; j++) {
+                dp[i][j] = dp[i - 1][j];
+
+                dp[i][j] += j - arr[i] >= 0 ? dp[i][j - arr[i]] : 0;
+            }
+        }
+
+        return dp[arr.length - 1][aim];
     }
 
 }
