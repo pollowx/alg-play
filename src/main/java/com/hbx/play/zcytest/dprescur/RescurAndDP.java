@@ -388,13 +388,13 @@ public class RescurAndDP {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-
-        int[] arr = {5, 2, 3};
-
-        System.out.println(findCoinLeastCountWaysEnter(arr, 3));
-
-    }
+//    public static void main(String[] args) {
+//
+//        int[] arr = {5, 2, 3};
+//
+//        System.out.println(findCoinLeastCountWaysEnter(arr, 3));
+//
+//    }
 
     public static int findCoinLeastCountWaysEnter(int[] arr, int aim) {
         if (null == arr || arr.length == 0 || aim <= 0) {
@@ -427,6 +427,109 @@ public class RescurAndDP {
         return res;
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+        int[] arr = {2, 1, 5, 3, 6, 4, 8, 9, 7};
+
+        generateFinalMaxLengthChildSequence(arr, generateDPMaxLengthChildSequenceBest(arr));
+    }
+
+    /**
+     * 最大增长子序列-寻找DP数组, 时间复杂度非常高 O(N^2)
+     * @param arr
+     * @return
+     */
+    public static int[] generateDPMaxLengthChildSequence(int[] arr) {
+        if (null == arr || arr.length == 0) {
+            return null;
+        }
+        int[] dp = new int[arr.length];
+        for (int i = 0; i < arr.length; i++) {
+            dp[i] = 1;
+            for (int j = 0; j < i; j++) {
+                if (arr[i] > arr[j]) {
+                    dp[i] = Math.max(dp[i], dp[j] + 1); // 比当前值小就把index的最大数组 + 1复制给当前值
+                }
+            }
+        }
+        return dp;
+    }
+
+    /**
+     * 最大增长子序列-寻找DP数组, 时间复杂度 O(N * logN)
+     * @param arr
+     * @return
+     */
+    public static int[] generateDPMaxLengthChildSequenceBest(int[] arr) {
+        if (null == arr || arr.length == 0) {
+            return null;
+        }
+        // ends数组，表示有效区的概念
+        int[] ends = new int[arr.length];
+        int[] dp = new int[arr.length]; // dp数组,0 ~ i位置最大子序列的长度
+
+        ends[0] = arr[0]; // 初始化index = 0的元素
+        dp[0] = 1;
+
+        int endRight = 0;
+
+        int l = 0;
+        int r = 0;
+        int middle = 0;
+
+        for (int i = 0; i < arr.length; i++) {
+            l = 0;
+            r = endRight;
+
+            while (l <= r) {
+                middle = (l + r) / 2;
+
+                if (ends[middle] < arr[i]) { //右侧移动
+                    l = middle + 1;
+                } else {
+                    r = middle - 1;
+                }
+            }
+            endRight = Math.max(endRight, l); // 新的有效元素出现
+            ends[l] = arr[i]; // l是ends的小的一侧，把当前的元素加入加入有效区
+            dp[i] = l + 1;
+        }
+        return dp;
+    }
+
+    /**
+     * 最大增长子序列，生成序列
+     * @param arr
+     * @param dp
+     * @return
+     */
+    public static int[] generateFinalMaxLengthChildSequence(int[] arr, int[] dp) {
+        if (null == arr || arr.length == 0 || null == dp || dp.length == 0) {
+            return null;
+        }
+        // 找到dp中的最大值的index位置和dp的长度
+        int index = 0;
+        int length = 0;
+        for (int i = 0; i < dp.length; i++) {
+            if (dp[i] > length) {
+                index = i;
+                length = dp[i];
+            }
+        }
+
+        // 给最后一个赋值
+        int[] res = new int[length];
+        res[--length] = arr[index];
+
+        for (int i = index - 1; i >= 0; i--) {
+            if (arr[i] < arr[index] && dp[i] == dp[index] - 1) {
+                res[--length] = arr[i];
+                index = i;
+            }
+        }
+        return res;
+    }
 
 
 }
