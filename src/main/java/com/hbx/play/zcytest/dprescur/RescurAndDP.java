@@ -251,19 +251,19 @@ public class RescurAndDP {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-
-        int[] arr = {5, 10, 25, 1};
-
-        System.out.println(findCoinWays(arr, 1000));
-
-        System.out.println(findCoinWaysByMap(arr, 1000));
-
-        System.out.println(findCoinWaysByDP(arr, 1000));
-
-        System.out.println(findCoinWaysByDPAndZip(arr, 1000));
-
-    }
+//    public static void main(String[] args) {
+//
+//        int[] arr = {5, 10, 25, 1};
+//
+//        System.out.println(findCoinWays(arr, 1000));
+//
+//        System.out.println(findCoinWaysByMap(arr, 1000));
+//
+//        System.out.println(findCoinWaysByDP(arr, 1000));
+//
+//        System.out.println(findCoinWaysByDPAndZip(arr, 1000));
+//
+//    }
 
     /**
      * 找钱的方式，arr个零钱种类，求aim的找钱方式 每张面额任意张
@@ -385,5 +385,48 @@ public class RescurAndDP {
         }
         return dp[aim];
     }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+
+        int[] arr = {5, 2, 3};
+
+        System.out.println(findCoinLeastCountWaysEnter(arr, 3));
+
+    }
+
+    public static int findCoinLeastCountWaysEnter(int[] arr, int aim) {
+        if (null == arr || arr.length == 0 || aim <= 0) {
+            return -1;
+        }
+
+        return findCoinLeastCountWays(arr, 0, aim);
+    }
+
+    /**
+     * 找钱-最少张数
+     * @param arr
+     * @param i
+     * @param rest
+     * @return
+     */
+    public static int findCoinLeastCountWays(int[] arr, int i, int rest) {
+        if (i == arr.length) {
+            return rest == 0 ? 0 : -1;
+        }
+
+        int res = -1;
+        for (int j = 0; j * arr[i] <= rest; j++) {
+            int next = findCoinLeastCountWays(arr, i + 1, rest - j * arr[i]);
+
+            if (next != -1) {
+                res = res == -1 ? next + j : Math.min(res, next + j);
+            }
+        }
+        return res;
+    }
+
+
 
 }
