@@ -405,7 +405,7 @@ public class RescurAndDP {
     }
 
     /**
-     * 找钱-最少张数
+     * 找钱 - 最少张数
      * @param arr
      * @param i
      * @param rest
