@@ -621,10 +621,42 @@ public class RescurAndDP {
         String str2 = "12345EF";
 
         System.out.println(generateMaxLengthChildString(str1, str2));
+
+        System.out.println(generateMaxLengthChildStringBest(str1, str2));
+
+//        int[][] array = {{1, 2, 3, 4, 5}, {6, 7, 8, 9, 10}, {11, 12, 13, 14, 15}, {16, 17, 18, 19, 20}, {21, 22, 23, 24, 25}};
+//
+//        int row = 0;
+//        int col = array[0].length - 1;
+//
+//        while (row < array.length) {
+//            int i = row;
+//            int j = col;
+//
+//            int eleCount = 0;
+//            while (i < array.length && j < array[0].length) {
+//                for (int k = 0; k < eleCount; k++) {
+//                    System.out.print(" ↘ ");
+//                }
+//                System.out.print(array[i][j]);
+//                System.out.println("");
+//                i++;
+//                j++;
+//                eleCount++;
+//            }
+//            System.out.println("-------------------------------");
+//
+//            if (col > 0) {
+//                col--;
+//            } else {
+//                row++;
+//            }
+//        }
+
     }
 
     /**
-     * 最长公共子串 - DP
+     * 最长公共子串 - DP 时间复杂度O(M * N), 空间复杂度O(M * N)
      * @param str1
      * @param str2
      * @return
@@ -678,6 +710,53 @@ public class RescurAndDP {
             }
         }
         return dp;
+    }
+
+    /**
+     * 最长公共子串 - DP 时间复杂度O(M * N), 空间复杂度O(1)
+     * @param str1
+     * @param str2
+     * @return
+     */
+    public static String generateMaxLengthChildStringBest(String str1, String str2) {
+        if (StringUtils.isEmpty(str1) || StringUtils.isEmpty(str2)) {
+            return null;
+        }
+        char[] chars1 = str1.toCharArray();
+        char[] chars2 = str2.toCharArray();
+
+        int maxLength = 0; // 最大长度
+        int endRowIndex = 0; // 找到最大长度时的行index是多少
+
+        int row = 0;
+        int col = chars2.length - 1;
+        while (row < chars1.length) {
+            int i = row;
+            int j = col;
+            int len = 0;
+
+            while (i < chars1.length && j < chars2.length) {
+                // 条件
+                if (chars1[i] != chars2[j]) {
+                    len = 0;
+                } else {
+                    len++;
+                }
+                if (len > maxLength) {
+                    maxLength = len;
+                    endRowIndex = i;
+                }
+                i++;
+                j++;
+            }
+
+            if (col > 0) {
+                col--;
+            } else {
+                row++;
+            }
+        }
+        return str1.substring(endRowIndex - maxLength + 1, endRowIndex + 1);
     }
 
 
