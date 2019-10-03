@@ -535,12 +535,12 @@ public class RescurAndDP {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-        String str1 = "1A2C3D4B56";
-        String str2 = "B1D23CA45B6A";
-
-        System.out.println(generateMaxLengthSequenceString(str1, str2));
-    }
+//    public static void main(String[] args) {
+//        String str1 = "1A2C3D4B56";
+//        String str2 = "B1D23CA45B6A";
+//
+//        System.out.println(generateMaxLengthSequenceString(str1, str2));
+//    }
 
     /**
      * 最大公共子序列 - DP
@@ -613,5 +613,72 @@ public class RescurAndDP {
         }
         return dp;
     }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+        String str1 = "1AB2345CD";
+        String str2 = "12345EF";
+
+        System.out.println(generateMaxLengthChildString(str1, str2));
+    }
+
+    /**
+     * 最长公共子串 - DP
+     * @param str1
+     * @param str2
+     * @return
+     */
+    public static String generateMaxLengthChildString(String str1, String str2) {
+        if (StringUtils.isEmpty(str1) || StringUtils.isEmpty(str2)) {
+            return null;
+        }
+        char[] chars1 = str1.toCharArray();
+        char[] chars2 = str2.toCharArray();
+
+        int[][] dp = generateMaxLengthChildStringDP(chars1, chars2);
+        if (null == dp) {
+            return null;
+        }
+
+        int endRowIndex = 0;
+        int maxLength = 0;
+
+        for (int i = 0; i < chars1.length; i++) {
+            for (int j = 0; j < chars2.length; j++) {
+                if (dp[i][j] > maxLength) {
+                    maxLength = dp[i][j];
+                    endRowIndex = i;
+                }
+            }
+        }
+        return str1.substring(endRowIndex - maxLength + 1, endRowIndex + 1);
+    }
+
+    public static int[][] generateMaxLengthChildStringDP(char[] chars1, char[] chars2) {
+        if (null == chars1 || null == chars2) {
+            return null;
+        }
+        int[][] dp = new int[chars1.length][chars2.length];
+        // 第一行
+        for (int j = 0; j < chars2.length; j++) {
+            dp[0][j] = chars1[0] == chars2[j] ? 1 : 0;
+        }
+
+        // 第一列
+        for (int i = 0; i < chars1.length; i++) {
+            dp[i][0] = chars1[i] == chars2[0] ? 1 : 0;
+        }
+
+        for (int i = 1; i < chars1.length; i++) {
+            for (int j = 1; j < chars2.length; j++) {
+                dp[i][j] = chars1[i] == chars2[j] ?
+                        dp[i - 1][j - 1] + 1 :
+                        0;
+            }
+        }
+        return dp;
+    }
+
 
 }
