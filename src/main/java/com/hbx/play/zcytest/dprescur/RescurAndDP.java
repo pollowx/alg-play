@@ -1,5 +1,7 @@
 package com.hbx.play.zcytest.dprescur;
 
+import org.springframework.util.StringUtils;
+
 /**
  * @Auther: bingxin
  * @Date: 2019-09-27 14:22
@@ -429,11 +431,11 @@ public class RescurAndDP {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-        int[] arr = {2, 1, 5, 3, 6, 4, 8, 9, 7};
-
-        generateFinalMaxLengthChildSequence(arr, generateDPMaxLengthChildSequenceBest(arr));
-    }
+//    public static void main(String[] args) {
+//        int[] arr = {2, 1, 5, 3, 6, 4, 8, 9, 7};
+//
+//        generateFinalMaxLengthChildSequence(arr, generateDPMaxLengthChildSequenceBest(arr));
+//    }
 
     /**
      * 最大增长子序列-寻找DP数组, 时间复杂度非常高 O(N^2)
@@ -531,5 +533,85 @@ public class RescurAndDP {
         return res;
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+        String str1 = "1A2C3D4B56";
+        String str2 = "B1D23CA45B6A";
+
+        System.out.println(generateMaxLengthSequenceString(str1, str2));
+    }
+
+    /**
+     * 最大公共子序列 - DP
+     * @param str1
+     * @param str2
+     * @return
+     */
+    public static String generateMaxLengthSequenceString(String str1, String str2) {
+        if (StringUtils.isEmpty(str1) || StringUtils.isEmpty(str2)) {
+            return "";
+        }
+
+        char[] charsStr1 = str1.toCharArray();
+        char[] charsStr2 = str2.toCharArray();
+
+        // 生成dp数组
+        int[][] dp = getMaxLengthSequenceDP(charsStr1, charsStr2);
+
+        int m = charsStr1.length - 1;
+        int n = charsStr2.length - 1;
+        char[] res = new char[dp[m][n]];
+
+        int index = res.length - 1; // 最大子序列的长度多少
+
+        // 逆向解析DP数组，生成字符串
+        while (index >= 0) {
+            if (n > 0 && dp[m][n] == dp[m][n - 1]) { // 上面来的
+                n--;
+            } else if (m > 0 && dp[m][n] == dp[m - 1][n]) {  // 左边来的
+                m--;
+            } else {
+                res[index--] = charsStr1[m]; // 或者charsStr2[n] // 来自左上角
+                m--;
+                n--;
+            }
+        }
+        return String.valueOf(res);
+    }
+
+    public static int[][] getMaxLengthSequenceDP(char[] str1, char[] str2) {
+        if (null == str1 || null == str2) {
+            return null;
+        }
+        int[][] dp = new int[str1.length][str2.length]; // 动态规划二纬表, 表示从0到i和从0到j的最大子序列的长度
+        dp[0][0] = str1[0] == str2[0] ? 1 : 0; // 赋值第一个
+
+        // 第一行
+        for (int i = 1; i < str1.length; i++) {
+            int currentMax = str1[i] == str2[0] ? 1 : 0;
+            dp[i][0] = Math.max(currentMax, dp[i - 1][0]);
+        }
+
+        // 第一列
+        for (int j = 1; j < str2.length; j++) {
+            int currentMax = str1[0] == str2[j] ? 1 : 0;
+            dp[0][j] = Math.max(currentMax, dp[0][j - 1]);
+        }
+
+        // 除此之外的dp[i][j]，可能来自3个位置, Max(1, 2, 3)的一个
+        // 1. dp[i-1][j]
+        // 2. dp[i][j-1]
+        // 3. dp[i-1][j-1] + 1
+        for (int i = 1; i < str1.length; i++) {
+            for (int j = 1; j < str2.length; j++) {
+                dp[i][j] = Math.max(dp[i][j - 1], dp[i - 1][j]);
+                if (str1[i] == str2[j]) {
+                    dp[i][j] = Math.max(dp[i - 1][j - 1] + 1, dp[i][j]);
+                }
+            }
+        }
+        return dp;
+    }
 
 }
