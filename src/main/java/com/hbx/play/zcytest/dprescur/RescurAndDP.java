@@ -805,16 +805,16 @@ public class RescurAndDP {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-        int[][] m = {
-                {-5, -1, -20},
-                {-2, -3,  3},
-                {-5, -10, 1},
-                {0,  30, -5}};
-
-        System.out.println(setupNeedMinHp(m));
-        System.out.println(setupNeedMinHpByZip(m));
-    }
+//    public static void main(String[] args) {
+//        int[][] m = {
+//                {-5, -1, -20},
+//                {-2, -3,  3},
+//                {-5, -10, 1},
+//                {0,  30, -5}};
+//
+//        System.out.println(setupNeedMinHp(m));
+//        System.out.println(setupNeedMinHpByZip(m));
+//    }
 
     /**
      * 龙与地下城游戏问题，初始值需要的最小血量
@@ -895,6 +895,62 @@ public class RescurAndDP {
             }
         }
         return dp[0];
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+        int[] arr = {4, 70, 90, 5, 23, 542, 55, 3, 55, 6, 777, 54, 1, 4};
+        System.out.println(winGame(arr));
+    }
+
+    /**
+     * 纸牌游戏，最后赢得游戏的人获得的分数
+     * A/B玩家都非常聪明，都会选择当前的最优解
+     * @param arr
+     * @return
+     */
+    public static int winGame(int[] arr) {
+        if (null == arr || arr.length == 0) {
+            return 0;
+        }
+        return Math.max(
+                winGameF(arr, 0, arr.length - 1),
+                winGameS(arr, 0, arr.length - 1));
+    }
+
+    /**
+     * 先手拿牌
+     * @param arr
+     * @param i
+     * @param j
+     * @return
+     */
+    public static int winGameF(int[] arr, int i, int j) {
+        if (i == j) { // 最后一张
+            return arr[i];
+        }
+        return Math.max(
+                arr[i] + winGameS(arr, i + 1, j),
+                arr[j] + winGameS(arr, i, j - 1)
+        );
+    }
+
+    /**
+     * 后手拿牌
+     * @param arr
+     * @param i
+     * @param j
+     * @return
+     */
+    public static int winGameS(int[] arr, int i, int j) {
+        if (i == j) { // 最后一张
+            return 0;
+        }
+        return Math.min(
+                winGameF(arr, i + 1, j),
+                winGameF(arr, i, j - 1)
+        );
     }
 
 }
