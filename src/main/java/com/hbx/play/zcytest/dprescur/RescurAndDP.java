@@ -763,10 +763,10 @@ public class RescurAndDP {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-        int[] arr = {3, 2, 1, 9, 0, 7, 0, 2, 1, 3};
-        System.out.println(arrayMostEOR(arr));
-    }
+//    public static void main(String[] args) {
+//        int[] arr = {3, 2, 1, 9, 0, 7, 0, 2, 1, 3};
+//        System.out.println(arrayMostEOR(arr));
+//    }
 
     /**
      * 最多子数组异或的划分
@@ -801,6 +801,100 @@ public class RescurAndDP {
         }
 
         return dp[arr.length - 1];
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+        int[][] m = {
+                {-5, -1, -20},
+                {-2, -3,  3},
+                {-5, -10, 1},
+                {0,  30, -5}};
+
+        System.out.println(setupNeedMinHp(m));
+        System.out.println(setupNeedMinHpByZip(m));
+    }
+
+    /**
+     * 龙与地下城游戏问题，初始值需要的最小血量
+     * @param m
+     * @return
+     */
+    public static int setupNeedMinHp(int[][] m) {
+        if (null == m || m.length == 0 || null == m[0] || m[0].length == 0) {
+            return 1;
+        }
+        // 要求走到每一个位置都需要留下1点血，走到最右下角的位置时，先赋值初始的值，然后从右往左，从下往上
+        int row = m.length;
+        int col = m[0].length;
+
+        // dp
+        int[][] dp = new int[row--][col--]; // row--, col--
+        dp[row][col] = m[row][col] > 0 ? 1 : -m[row][col] + 1; // 右下角
+
+        // 从右往左，最后一行
+        for (int i = col - 1; i >= 0; i--) {
+            dp[row][i] = Math.max(dp[row][i + 1] - m[row][i], 1);
+        }
+
+        int right = 0;
+        int down = 0;
+        for (int i = row - 1; i >= 0; i--) { // 倒数第二行开始
+            dp[i][col] = Math.max(dp[i + 1][col] - m[i][col], 1); // 倒数第一列
+            for (int j = col - 1; j >= 0; j--) { // 倒数第二列开始
+                right = Math.max(dp[i][j + 1] - m[i][j], 1);
+                down = Math.max(dp[i + 1][j] - m[i][j], 1);
+
+                dp[i][j] = Math.min(right, down);
+            }
+        }
+        return dp[0][0];
+    }
+
+    /**
+     * 龙与地下城游戏问题，初始值需要的最小血量 - 空间压缩
+     * @param m
+     * @return
+     */
+    public static int setupNeedMinHpByZip(int[][] m) {
+        if (null == m || m.length == 0 || null == m[0] || m[0].length == 0) {
+            return 1;
+        }
+        int more = Math.max(m.length, m[0].length);
+        int less = Math.min(m.length, m[0].length);
+
+        int[] dp = new int[less];
+        dp[less - 1] = m[m.length - 1][m[0].length - 1] > 0 ? 1 : -m[m.length - 1][m[0].length - 1] + 1;
+
+        int row = 0;
+        int col = 0;
+        boolean rowMore = m.length > m[0].length;
+        for (int i = less - 2; i >= 0; i--) { // 先赋值最后一列
+            row = rowMore ? more - 1 : i;
+            col = rowMore ? i : more - 1;
+
+            dp[i] = Math.max(dp[i + 1] - m[row][col], 1);
+        }
+
+        int c1 = 0;
+        int c2 = 0;
+        for (int i = more - 2; i >= 0; i--) {
+            row = rowMore ? i : less - 1;
+            col = rowMore ? less - 1 : i;
+            dp[less - 1] = Math.max(dp[less - 1] - m[row][col], 1);
+
+            for (int j = less - 2; j >= 0; j--) {
+                row = rowMore ? i : j;
+                col = rowMore ? j : i;
+
+                c1 = Math.max(dp[j] - m[row][col], 1); // down侧
+                c2 = Math.max(dp[j + 1] - m[row][col], 1); // right侧
+
+                dp[j] = Math.min(c1, c2);
+            }
+        }
+        return dp[0];
     }
 
 }
