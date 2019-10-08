@@ -901,12 +901,14 @@ public class RescurAndDP {
 
     public static void main(String[] args) {
         int[] arr = {4, 70, 90, 5, 23, 542, 55, 3, 55, 6, 777, 54, 1, 4};
-        System.out.println(winGame(arr));
+        int[] arrA = {1, 2, 100, 4};
+
+        System.out.println(winGame(arrA));
+        System.out.println(winGameDP(arrA));
     }
 
     /**
-     * 纸牌游戏，最后赢得游戏的人获得的分数
-     * A/B玩家都非常聪明，都会选择当前的最优解
+     * 纸牌游戏，最后赢得游戏的人获得的分数 A/B玩家都非常聪明，都会选择当前的最优解
      * @param arr
      * @return
      */
@@ -951,6 +953,28 @@ public class RescurAndDP {
                 winGameF(arr, i + 1, j),
                 winGameF(arr, i, j - 1)
         );
+    }
+
+    /**
+     * 纸牌游戏，最后赢得游戏的人获得的分数 - DP A/B玩家都非常聪明，都会选择当前的最优解
+     * @param arr
+     * @return
+     */
+    public static int winGameDP(int[] arr) {
+        if (null == arr || arr.length == 0) {
+            return 0;
+        }
+        int[][] f = new int[arr.length][arr.length];
+        int[][] s = new int[arr.length][arr.length];
+
+        for (int j = 0; j < arr.length; j++) {
+            f[j][j] = arr[j]; // 对角线，先手拿的先赋值
+            for (int i = j - 1; i >= 0; i--) {
+                f[i][j] = Math.max(arr[i] + s[i + 1][j], arr[j] + s[i][j - 1]);
+                s[i][j] = Math.min(f[i + 1][j], f[i][j - 1]);
+            }
+        }
+        return Math.max(f[0][arr.length - 1], s[0][arr.length - 1]);
     }
 
 }
