@@ -2,6 +2,9 @@ package com.hbx.play.zcytest.dprescur;
 
 import org.springframework.util.StringUtils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @Auther: bingxin
  * @Date: 2019-09-27 14:22
@@ -616,16 +619,15 @@ public class RescurAndDP {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-        String str1 = "1AB2345CD";
-        String str2 = "12345EF";
-
-        System.out.println(generateMaxLengthChildString(str1, str2));
-
-        System.out.println(generateMaxLengthChildStringBest(str1, str2));
+//    public static void main(String[] args) {
+//        String str1 = "1AB2345CD";
+//        String str2 = "12345EF";
+//
+//        System.out.println(generateMaxLengthChildString(str1, str2));
+//
+//        System.out.println(generateMaxLengthChildStringBest(str1, str2));
 
 //        int[][] array = {{1, 2, 3, 4, 5}, {6, 7, 8, 9, 10}, {11, 12, 13, 14, 15}, {16, 17, 18, 19, 20}, {21, 22, 23, 24, 25}};
-//
 //        int row = 0;
 //        int col = array[0].length - 1;
 //
@@ -653,7 +655,7 @@ public class RescurAndDP {
 //            }
 //        }
 
-    }
+//    }
 
     /**
      * 最长公共子串 - DP 时间复杂度O(M * N), 空间复杂度O(M * N)
@@ -759,5 +761,46 @@ public class RescurAndDP {
         return str1.substring(endRowIndex - maxLength + 1, endRowIndex + 1);
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+        int[] arr = {3, 2, 1, 9, 0, 7, 0, 2, 1, 3};
+        System.out.println(arrayMostEOR(arr));
+    }
+
+    /**
+     * 最多子数组异或的划分
+     * @param arr
+     * @return
+     */
+    public static int arrayMostEOR(int[] arr) {
+        if (null == arr || arr.length == 0) {
+            return 0;
+        }
+        // 分析，生成dp[]数组，dp[i]代表i之前的0 ～ i元素划分成的最大数组数量
+        // dp[i]的情况有两个:
+        // A. array[i]异或值不等于0，那么dp[i] = dp[i-1]
+        // B. array[i]异或值等于0，那么在0~i之间假设存在k, dp[i] = dp[k-1] + 1, k-1的位置是上一次使得异或和为0的位置，那么找到k的位置就可以找到所有元素
+        int[] dp = new int[arr.length];
+        dp[0] = arr[0] == 0 ? 1 : 0;
+
+        Map<Integer, Integer> map = new HashMap<>();
+        map.put(0, -1);
+        map.put(arr[0], 0); // value -> arr的index
+
+        int eor = 0;
+        for (int i = 1; i < arr.length; i++) {
+            eor = eor ^ arr[i];
+
+            if (map.containsKey(eor)) {
+                int preEorIndex = map.get(eor);
+                dp[i] = preEorIndex == -1 ? 1 : (dp[preEorIndex] + 1);
+            }
+            dp[i] = Math.max(dp[i - 1], dp[i]);
+            map.put(eor, i);
+        }
+
+        return dp[arr.length - 1];
+    }
 
 }
