@@ -899,13 +899,13 @@ public class RescurAndDP {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-        int[] arr = {4, 70, 90, 5, 23, 542, 55, 3, 55, 6, 777, 54, 1, 4};
-        int[] arrA = {1, 2, 100, 4};
-
-        System.out.println(winGame(arrA));
-        System.out.println(winGameDP(arrA));
-    }
+//    public static void main(String[] args) {
+//        int[] arr = {4, 70, 90, 5, 23, 542, 55, 3, 55, 6, 777, 54, 1, 4};
+//        int[] arrA = {1, 2, 100, 4};
+//
+//        System.out.println(winGame(arrA));
+//        System.out.println(winGameDP(arrA));
+//    }
 
     /**
      * 纸牌游戏，最后赢得游戏的人获得的分数 A/B玩家都非常聪明，都会选择当前的最优解
@@ -975,6 +975,38 @@ public class RescurAndDP {
             }
         }
         return Math.max(f[0][arr.length - 1], s[0][arr.length - 1]);
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+        int[] arr = {3, 2, 3, 1, 1, 4};
+
+        System.out.println(needJumpGame(arr));
+    }
+
+    /**
+     * 跳步数游戏
+     * 数组每一个位置都代表能跳的步数范围，返回最少跳的步数能到最后的位置上
+     * @param arr
+     * @return
+     */
+    public static int needJumpGame(int[] arr) {
+        if (null == arr || arr.length == 0) {
+            return 0;
+        }
+        int cur = 0;
+        int jump = 0;
+        int next = 0;
+
+        for (int i = 0; i < arr.length; i++) {
+            if (cur < i) {
+                jump++;
+                cur = next;
+            }
+            next = Math.max(next, i + arr[i]);
+        }
+        return jump;
     }
 
 }
