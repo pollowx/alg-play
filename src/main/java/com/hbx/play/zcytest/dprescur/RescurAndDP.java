@@ -979,15 +979,14 @@ public class RescurAndDP {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-        int[] arr = {3, 2, 3, 1, 1, 4};
-
-        System.out.println(needJumpGame(arr));
-    }
+//    public static void main(String[] args) {
+//        int[] arr = {3, 2, 3, 1, 1, 4};
+//
+//        System.out.println(needJumpGame(arr));
+//    }
 
     /**
-     * 跳步数游戏
-     * 数组每一个位置都代表能跳的步数范围，返回最少跳的步数能到最后的位置上
+     * 跳步数游戏 数组每一个位置都代表能跳的步数范围，返回最少跳的步数能到最后的位置上
      * @param arr
      * @return
      */
@@ -1007,6 +1006,60 @@ public class RescurAndDP {
             next = Math.max(next, i + arr[i]);
         }
         return jump;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+        int[] arr = {100, 4, 200, 1, 3, 2};
+
+        System.out.println(generateLongestSquence(arr));
+    }
+
+    /**
+     * 最长的连续子序列
+     * @param arr
+     * @return
+     */
+    public static int generateLongestSquence(int[] arr) {
+        if (null == arr || arr.length == 0) {
+            return 0;
+        }
+
+        Map<Integer, Integer> map = new HashMap<>();
+        int max = 1;
+
+        for (int i = 0; i < arr.length; i++) {
+            if (!map.containsKey(arr[i])) {
+                map.put(arr[i], 1); // 每个元素都是长度为1的子序列
+                if (map.containsKey(arr[i] - 1)) {
+                    max = Math.max(max, mergeLongestSquenceMax(map, arr[i] - 1, arr[i]));
+                }
+                if (map.containsKey(arr[i] + 1)) {
+                    max = Math.max(max, mergeLongestSquenceMax(map, arr[i], arr[i] + 1));
+                }
+            }
+        }
+        return max;
+    }
+
+    /**
+     * merge len的长度
+     * @param map
+     * @param less
+     * @param more
+     * @return
+     */
+    public static int mergeLongestSquenceMax(Map<Integer, Integer> map, int less, int more) {
+        int left = less - map.get(less) + 1;
+        int right = more + map.get(more) - 1; // 扩大差距，len的差距
+
+        int len = right - left + 1;
+
+        map.put(left, len);
+        map.put(right, len);
+
+        return len;
     }
 
 }
