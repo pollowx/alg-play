@@ -1010,11 +1010,11 @@ public class RescurAndDP {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-        int[] arr = {100, 4, 200, 1, 3, 2};
-
-        System.out.println(generateLongestSquence(arr));
-    }
+//    public static void main(String[] args) {
+//        int[] arr = {100, 4, 200, 1, 3, 2};
+//
+//        System.out.println(generateLongestSquence(arr));
+//    }
 
     /**
      * 最长的连续子序列
@@ -1062,6 +1062,61 @@ public class RescurAndDP {
         return len;
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    public static void main(String[] args) {
+
+        System.out.println(findNEmpressNormal(4));
+
+        System.out.println(~1);
+
+    }
+
+    /**
+     * N皇后问题
+     * @param n
+     * @return
+     */
+    public static int findNEmpressNormal(int n) {
+        if (n < 1) {
+            return 0;
+        }
+        int[] records = new int[n];
+
+        return processNEmpressNormal(records, 0, n);
+    }
+
+    public static int processNEmpressNormal(int[] records, int i, int n) {
+        if (i == n) {
+            return 1;
+        }
+
+        int res = 0;
+
+        for (int j = 0; j < n; j++) {
+            if (validNEmpressLoc(records, i, j)) {
+                records[i] = j;
+                res += processNEmpressNormal(records, i + 1, n);
+            }
+        }
+
+        return res;
+    }
+
+    /**
+     * check N皇后位置是否有效
+     * @param records
+     * @param i
+     * @param j
+     * @return
+     */
+    public static boolean validNEmpressLoc(int[] records, int i, int j) {
+        for (int k = 0; k < i; k++) {
+            if (j == records[k] || Math.abs(records[k] - j) == Math.abs(i - k)) {
+                return false;
+            }
+        }
+        return true;
+    }
 
 }
