@@ -2,6 +2,9 @@ package com.hbx.play.zcytest.varchar;
 
 import org.springframework.util.StringUtils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @Auther: bingxin
  * @Date: 2019-10-09 10:59
@@ -68,11 +71,11 @@ public class VarcharTB {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-        String str1 = "acaacbccd";
-
-        System.out.println(getCountStringAppear(str1));
-    }
+//    public static void main(String[] args) {
+//        String str1 = "acaacbccd";
+//
+//        System.out.println(getCountStringAppear(str1));
+//    }
 
     /**
      * 统计每个char出现的次数，词频
@@ -103,6 +106,37 @@ public class VarcharTB {
             res = res + "_" + chars[chars.length - 1] + "_" + num;
         }
         return res;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+
+        char[] arr = {'1','a','2','b','3','f','4','2','h'};
+
+        System.out.println(judgeArrayEleAppearOnce(arr));
+
+    }
+
+    /**
+     * char数组里面的元素都只出现过一次
+     * @param arr
+     * @return
+     */
+    public static boolean judgeArrayEleAppearOnce(char[] arr) {
+        if (null == arr || arr.length == 0) {
+            return false;
+        }
+        Map<Character, Integer> map = new HashMap<>();
+
+        for (int i = 0; i < arr.length; i++) {
+            if (map.containsKey(Character.valueOf(arr[i]))) {
+                return false;
+            } else {
+                map.put(Character.valueOf(arr[i]), 1);
+            }
+        }
+        return true;
     }
 
 
