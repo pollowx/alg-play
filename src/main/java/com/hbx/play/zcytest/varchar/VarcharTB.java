@@ -36,7 +36,7 @@ public class VarcharTB {
             map[chars1[i]]++;
         }
         for (int j = 0; j < chars2.length; j++) {
-            if ( map[chars2[j]]-- <= 0) {
+            if (map[chars2[j]]-- <= 0) {
                 return false;
             }
         }
@@ -45,12 +45,12 @@ public class VarcharTB {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-        String str1 = "cdab";
-        String str2 = "abcd";
-
-        System.out.println(judgeTwoWordsXuanzhuan(str1, str2));
-    }
+//    public static void main(String[] args) {
+//        String str1 = "cdab";
+//        String str2 = "abcd";
+//
+//        System.out.println(judgeTwoWordsXuanzhuan(str1, str2));
+//    }
 
     /**
      * 判断两个次互为旋转词
@@ -66,6 +66,44 @@ public class VarcharTB {
         return b2.contains(a);
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+        String str1 = "acaacbccd";
+
+        System.out.println(getCountStringAppear(str1));
+    }
+
+    /**
+     * 统计每个char出现的次数，词频
+     * @param str
+     * @return
+     */
+    public static String getCountStringAppear(String str) {
+        if (StringUtils.isEmpty(str)) {
+            return "";
+        }
+        char[] chars = str.toCharArray();
+
+        String res = "";
+
+        int num = 1;
+        for (int i = 0; i < chars.length - 1; i++) {
+            if (chars[i + 1] == chars[i]) {
+                num++;
+            } else {
+                // 开始连接
+                String sp = i == 0 ? "" : "_";
+                res = res + sp + chars[i] + "_" + num;
+                num = 1;
+            }
+        }
+
+        if (num >= 1) {
+            res = res + "_" + chars[chars.length - 1] + "_" + num;
+        }
+        return res;
+    }
 
 
 }
