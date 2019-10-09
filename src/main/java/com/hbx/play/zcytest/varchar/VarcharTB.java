@@ -142,14 +142,14 @@ public class VarcharTB {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-
-        String[] stringArray = {null, "a", "b", "b", null, null, null, null, "d", "d"};
-
-        System.out.println(findFirstIndexOfAppearInArray(stringArray, "b"));
-
-        System.out.println(findFirstIndexOfAppearInArray(stringArray, "d"));
-    }
+//    public static void main(String[] args) {
+//
+//        String[] stringArray = {null, "a", "b", "b", null, null, null, null, "d", "d"};
+//
+//        System.out.println(findFirstIndexOfAppearInArray(stringArray, "b"));
+//
+//        System.out.println(findFirstIndexOfAppearInArray(stringArray, "d"));
+//    }
 
 
     /**
@@ -184,7 +184,7 @@ public class VarcharTB {
                 }
             } else { // 中间的为null, 需要往左往右找
                 i = middle;
-                while (stringArray[i] == null && --i >= left); // 默认往左找，因为左边小，其实往右找也可以
+                while (stringArray[i] == null && --i >= left) ; // 默认往左找，因为左边小，其实往右找也可以
 
                 if (i < left || stringArray[i].compareTo(str) < 0) { // 说明要找的在右侧，left挪到middle + 1的位置
                     left = middle + 1;
@@ -197,213 +197,35 @@ public class VarcharTB {
         return res;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+        String str = "*ab*c**d";
+
+        modifyArrayEdit(str.toCharArray());
+    }
+
+    /**
+     * char数组中的*号都转移到最左侧
+     * @param chas
+     */
+    public static void modifyArrayEdit(char[] chas) {
+        if (null == chas || chas.length == 0) {
+            return;
+        }
+
+        int splitIndex = chas.length - 1;
+        for (int i = splitIndex; i >= 0; i--) {
+            if (chas[i] != '*') {
+                chas[splitIndex--] = chas[i];
+            }
+        }
+
+        // 处理完非*, 开始处理*
+        for (; splitIndex >= 0; splitIndex--) {
+            chas[splitIndex] = '*';
+        }
+    }
 
 
 }
