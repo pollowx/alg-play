@@ -199,11 +199,11 @@ public class VarcharTB {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-        String str = "*ab*c**d";
-
-        modifyArrayEdit(str.toCharArray());
-    }
+//    public static void main(String[] args) {
+//        String str = "*ab*c**d";
+//
+//        modifyArrayEdit(str.toCharArray());
+//    }
 
     /**
      * char数组中的*号都转移到最左侧
@@ -227,5 +227,44 @@ public class VarcharTB {
         }
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+        String str = "ABCDE";
+
+        rotatePartStringByIndex(str, 3);
+
+    }
+
+    /**
+     * 整体旋转字符串
+     * 当size = 3时ABCDE -> DEABC
+     * @param str
+     * @param size
+     */
+    public static void rotatePartStringByIndex(String str, int size) {
+        if (StringUtils.isEmpty(str) || size == 0) {
+            return;
+        }
+        char[] chars = str.toCharArray();
+        reverseAllString(chars, 0, size - 1);
+        reverseAllString(chars, size, chars.length - 1);
+        reverseAllString(chars, 0, chars.length - 1);
+
+        System.out.println(String.valueOf(chars));
+    }
+
+    public static void reverseAllString(char[] chars, int start, int end) {
+        while (start < end) {
+            char temp = chars[end];
+
+            chars[end] = chars[start];
+
+            chars[start] = temp;
+
+            start++;
+            end--;
+        }
+    }
 
 }
