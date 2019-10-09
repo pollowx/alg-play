@@ -9,13 +9,13 @@ import org.springframework.util.StringUtils;
  */
 public class VarcharTB {
 
-    public static void main(String[] args) {
-
-        String str1 = "123";
-        String str2 = "2321";
-
-        System.out.println(twoWordsBianxing(str1, str2));
-    }
+//    public static void main(String[] args) {
+//
+//        String str1 = "123";
+//        String str2 = "2321";
+//
+//        System.out.println(twoWordsBianxing(str1, str2));
+//    }
 
     /**
      * 判断两个字符串出现的每个次数都一样
@@ -44,6 +44,28 @@ public class VarcharTB {
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+        String str1 = "cdab";
+        String str2 = "abcd";
+
+        System.out.println(judgeTwoWordsXuanzhuan(str1, str2));
+    }
+
+    /**
+     * 判断两个次互为旋转词
+     * @param a
+     * @param b
+     * @return
+     */
+    public static boolean judgeTwoWordsXuanzhuan(String a, String b) {
+        if (StringUtils.isEmpty(a) || StringUtils.isEmpty(b) || a.length() != b.length()) {
+            return false;
+        }
+        String b2 = b + b;
+        return b2.contains(a);
+    }
+
 
 
 }
