@@ -110,16 +110,16 @@ public class VarcharTB {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-
-        char[] arr = {'1','a','2','b','3','f','4','2','h'};
-
-        System.out.println(judgeArrayEleAppearOnce(arr));
-
-    }
+//    public static void main(String[] args) {
+//
+//        char[] arr = {'1','a','2','b','3','f','4','2','h'};
+//
+//        System.out.println(judgeArrayEleAppearOnce(arr));
+//
+//    }
 
     /**
-     * char数组里面的元素都只出现过一次
+     * char数组里面的元素都只出现过一次，最优解空间复杂度需要O(1), 利用排序算法空间复杂度达到O(1)然后就可以完成此最优解
      * @param arr
      * @return
      */
@@ -138,6 +138,272 @@ public class VarcharTB {
         }
         return true;
     }
+
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+
+        String[] stringArray = {null, "a", "b", "b", null, null, null, null, "d", "d"};
+
+        System.out.println(findFirstIndexOfAppearInArray(stringArray, "b"));
+
+        System.out.println(findFirstIndexOfAppearInArray(stringArray, "d"));
+    }
+
+
+    /**
+     * 在String的strings数组中，找到str第一次出现的位置
+     * @param stringArray
+     * @param str
+     * @return
+     */
+    public static int findFirstIndexOfAppearInArray(String[] stringArray, String str) {
+        if (null == stringArray || stringArray.length == 0 || StringUtils.isEmpty(str)) {
+            return -1;
+        }
+        // 采用二分查找
+        int left = 0;
+        int right = stringArray.length - 1;
+
+        int middle = 0;
+        int res = -1;
+        int i = 0; // 当中间值为null的时候，最右或者最左时不是null的位置
+
+        while (left <= right) {
+            middle = (left + right) / 2;
+            if (stringArray[middle] != null) {
+                // 判断middle和str的大小
+                if (stringArray[middle].equals(str)) { // 继续往左寻找
+                    res = middle;
+                    right = middle - 1;
+                } else if (stringArray[middle].compareTo(str) > 0) { // 在左侧
+                    right = middle - 1;
+                } else {
+                    left = middle + 1;
+                }
+            } else { // 中间的为null, 需要往左往右找
+                i = middle;
+                while (stringArray[i] == null && --i >= left); // 默认往左找，因为左边小，其实往右找也可以
+
+                if (i < left || stringArray[i].compareTo(str) < 0) { // 说明要找的在右侧，left挪到middle + 1的位置
+                    left = middle + 1;
+                } else {
+                    res = stringArray[i].equals(str) ? i : res;
+                    right = i - 1;
+                }
+            }
+        }
+        return res;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 }
