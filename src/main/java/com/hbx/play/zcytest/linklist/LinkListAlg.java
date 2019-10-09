@@ -45,10 +45,30 @@ public class LinkListAlg {
         //node15.next = head1;
         //josephusKill(head1, 3);
 
-        Node node8 = new Node(8);
-        node8.next = head1;
+        //Node node8 = new Node(8);
+        //node8.next = head1;
+        //judgeSwapNodeEleByGivenIndexValue(node8, 7);
 
-        judgeSwapNodeEleByGivenIndexValue(node8, 7);
+        //reverseKEleGroup(head1, 3);
+        //reverseKElementGroup(head1, 3);
+
+//        Node node8 = new Node(8);
+//        node8.next = head1;
+//        selectSortLinkList(node8);
+
+        Node mergeHead1 = new Node(2);
+        Node mergeNode5 = new Node(5);
+        Node mergeNode6 = new Node(6);
+        mergeHead1.next = mergeNode5;
+        mergeNode5.next = mergeNode6;
+
+        Node mergeHead2 = new Node(1);
+        Node mergeNode4 = new Node(4);
+        Node mergeNode7 = new Node(7);
+        mergeHead2.next = mergeNode4;
+        mergeNode4.next = mergeNode7;
+
+        mergeTwoLinkList(mergeHead1, mergeHead2);
     }
 
     /**
@@ -685,6 +705,397 @@ public class LinkListAlg {
             head = next;
         }
         return pre;
+    }
+
+    /**
+     * K个一组逆序链表，该方式用栈的结构来实现，时间复杂度O(N) + 空间复杂度O(N)
+     * @param head
+     * @param k
+     * @return
+     */
+    public static Node reverseKEleGroup(Node head, int k) {
+        if (null == head || k <= 1) {
+            return head;
+        }
+        // K个一组，需要记录当前的节点以及，新的头节点
+
+        Node newHead = head; // 新的头节点
+        Node cur = head; // 当前节点的位置
+
+        Node pre = null;
+        Node next = null;
+        Stack<Node> helpStack = new Stack<>();
+
+        while (null != cur) {
+            next = cur.next; // 暂存next节点
+            helpStack.push(cur);
+            if (helpStack.size() == k) { // 达到条件，开始反转
+                pre = reverseNodeByStack(helpStack, pre, next);
+
+                newHead = newHead == head ? cur : newHead;
+            }
+            cur = next; // 后移
+        }
+        return newHead;
+    }
+
+    public static Node reverseNodeByStack(Stack<Node> stack, Node left, Node right) {
+        // stack为链表的逆序, left是stack对应链表的左侧节点，right是对应链表的右侧节点
+        if (stack.isEmpty()) {
+            return null;
+        }
+        Node cur = stack.pop(); // 头节点，反转后的头节点
+        if (null != left) {
+            left.next = cur; // 左侧节点连接上cur
+        }
+        Node next = null;
+        while (!stack.isEmpty()) {
+            next = stack.pop(); // next节点暂存
+
+            cur.next = next;
+
+            cur = next; // 当前节点指向下一个
+        }
+        cur.next = right;
+        return cur;
+    }
+
+    /**
+     * K个一组逆序链表，该方式是最优解，时间复杂度O(N) + 空间复杂度O(1)
+     * @param head
+     * @param k
+     * @return
+     */
+    public static Node reverseKElementGroup(Node head, int k) {
+        if (null == head || k <= 1) {
+            return head;
+        }
+        Node pre = null;
+        Node start = null;
+        Node next = null;
+
+        int count = 1;
+
+        Node cur = head;
+        while (null != cur) {
+            next = cur.next;
+
+            if (count == k) {
+                start = pre == null ? head : pre.next;
+                head = pre == null ? cur : head; // 这个是头节点，要记录下来，只有一次的机会会有意义赋值
+
+                reverseLinkListByNode(pre, start, cur, next);
+
+                pre = start; // pre实际上是保存每次的反转之后的第一个节点1, 7, 9, 13这种
+                count = 0;
+            }
+            count++;
+            cur = next;
+        }
+        return head;
+    }
+
+    public static void reverseLinkListByNode(Node left, Node start, Node end, Node right) {
+        Node pre = start; // 类似head
+        Node cur = start.next; // head.next
+
+        Node next = null;
+
+        while (cur != right) { // 这个就是反转的标准写法
+            next = cur.next;
+
+            cur.next = pre;
+
+            pre = cur;
+
+            cur = next;
+        }
+
+        if (null != left) {
+            left.next = end; // 左侧节点next连上
+        }
+
+        start.next = right;
+        // start很重要, 每次都需要记录开头的位置
+        // 1 -> 7 -> 9
+        // 7 -> 13 -> 14
+        // 13 ->
+    }
+
+    /**
+     * 删除链表中重复的节点，借助了hash表，有额外的O(N)的空间
+     * 如果O(1)的空间复杂度，需要O(N^2)的时间复杂度, 直接每次往后遍历但前的元素，如果存在就删除
+     * @param head
+     * @return
+     */
+    public static Node deleteRepeat(Node head) {
+        // 用hash表来保存, 有过的节点
+        if (null == head) {
+            return null;
+        }
+        HashMap<Node, Node> helpMap = new HashMap<>();
+
+        Node cur = head;
+        Node next = null;
+        while (null != cur) {
+            next = cur.next;
+            if (helpMap.containsKey(cur)) { // 已经存在了，扔掉
+                cur.next = next.next;
+            }
+            helpMap.put(cur, cur);
+            cur = next;
+        }
+        return head;
+    }
+
+    /**
+     * 从链表中删除该值的节点
+     * @param head
+     * @param num
+     * @return
+     */
+    public static Node deleteThisValueFromLinkList(Node head, int num) {
+        if (null == head) {
+            return null;
+        }
+        Stack<Node> helpStack = new Stack<>();
+
+        Node cur = head;
+        Node next = null;
+        while (null != cur) {
+            next = cur.next;
+
+            if (cur.value != num) {
+                helpStack.push(cur);
+            }
+            cur = next;
+        }
+        next = helpStack.pop();
+        while (!helpStack.isEmpty()) {
+            cur = helpStack.pop();
+
+            cur.next = next;
+        }
+        return cur;
+    }
+
+    /**
+     * 链表的选择排序
+     * @param head
+     * @return
+     */
+    public static Node selectSortLinkList(Node head) {
+        if (null == head) {
+            return null;
+        }
+        Node tail = null; // 排序好的节点尾部
+        Node small = null; // 最小的节点
+
+        Node smallestPreNode = null; // 最小的节点的pre节点
+
+        // 每次选择最小的放在排序好的头节点后面,然后原链表remove该节点
+        Node cur = head;
+        while (null != cur) {
+            small = cur;
+
+            // 找到最小节点的preNode
+            smallestPreNode = getSmallestPreNode(cur);
+
+            if (null != smallestPreNode) {
+                small = smallestPreNode.next;
+
+                smallestPreNode.next = small == null ? null : small.next;
+            }
+
+            cur = cur == small ? cur.next : cur;
+            if (null == tail) {
+                head = small; // 初始化，最小的节点给head
+            } else {
+                tail.next = small;
+            }
+            tail = small; // 排序好的尾节点，也就是当前找到的samll节点
+        }
+        return head;
+    }
+
+    /**
+     * 找到最小元素的节点的pre节点
+     * @param head
+     * @return
+     */
+    public static Node getSmallestPreNode(Node head) {
+        if (null == head) {
+            return null;
+        }
+        Node smallPre = null;
+
+        Node small = head; // 暂定最小的节点
+
+        Node pre = head;
+        Node cur = head.next;
+        while (null != cur) {
+            if (cur.value < small.value) { // 找到了更小的Node
+                smallPre = pre;
+                small = cur; // 最小节点
+            }
+            pre = cur;
+            cur = cur.next;
+        }
+        return smallPre;
+    }
+
+    /**
+     * 删除node节点的一种怪异方式
+     * @param node
+     */
+    public static void deleteOneNodeByWired(Node node) {
+        if (null == node) {
+            return;
+        }
+        Node next = node.next;
+        if (null == next) {
+            return;
+        }
+        node.value = next.value;
+        node.next = next.next;
+    }
+
+    /**
+     * 把num插入到环形链表中(不降序)
+     * @param head
+     * @param num
+     * @return
+     */
+    public static Node insertNumToLinkList(Node head, int num) {
+        Node insertNode = new Node(num);
+        if (null == head) { // 如果head是null,num自己组成新节点
+            insertNode.next = insertNode;
+            return insertNode;
+        }
+
+        Node cur = head;
+        Node next = null;
+        while (head != cur.next) {
+            next = cur.next;
+            if (cur != head && next.value < num) { // 不是头节点，insert插入进去
+                cur.next = insertNode;
+                insertNode.next = next;
+            }
+            cur = next;
+        }
+
+        // 这个时候cur的下一个就是head节点，cur是最后一个节点
+        if (head.value < num) { // insertNode 到head节点前
+            cur.next = insertNode;
+            insertNode.next = head;
+            return insertNode;
+        }
+        return head;
+    }
+
+    /**
+     * merge两个链表，从小到大排序
+     * @param head1
+     * @param head2
+     * @return
+     */
+    public static Node mergeTwoLinkList(Node head1, Node head2) {
+        if (null == head1) {
+            return head2;
+        }
+        if (null == head2) {
+            return head1;
+        }
+        Node newHead = null;
+        Node current = null;
+
+        while (null != head1 && null != head1) {
+            if (head1.value < head2.value) {
+                if (null == newHead) {
+                    newHead = current = head1;
+                } else {
+                    current.next = head1;
+                    current = current.next; // current指向下一个
+                }
+                head1 = head1.next;
+            } else {
+                if (null == newHead) {
+                    newHead = current = head2;
+                } else {
+                    current.next = head2;
+                    current = current.next;
+                }
+                head2 = head2.next;
+            }
+        }
+        if (null != head1) {
+            current.next = head1;
+        }
+        if (null != head2) {
+            current.next = head2;
+        }
+        return newHead;
+    }
+
+    /**
+     * 按照左右半区重新merge链表
+     * @param head
+     * @return
+     */
+    public static void relocate(Node head) {
+        if (null == head || head.next == null) {
+            return;
+        }
+        // 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> null
+        // 1 -> 3 -> 5 -> 2 -> 4 -> 6 -> null
+        // 应该先找到中间节点，分为左右半区，然后merge
+        Node mid = head;
+        Node next = head.next;
+        while (next.next == null || next.next.next == null) {
+            mid = mid.next;
+            next = next.next.next;
+        }
+
+        // mid指向了中间节点
+        next = mid.next; // 右侧的第一个节点
+        mid.next = null; // 先断开
+
+        // 现在开始merge两边的链表. 没有大小顺序，只是先连接左侧
+        // 左侧是head, 右侧是next开始
+        connectOneByOne(head, next);
+    }
+
+    public static void connectOneByOne(Node left, Node right) {
+        if (null == left || null == right) {
+            return;
+        }
+        Node head = null;
+        Node current = null;
+        while (null == left && null == right) {
+            if (left.value < right.value) {
+                if (null == head) {
+                    head = current = left;
+                } else {
+                    current.next = left;
+                    current = current.next;
+                }
+                left = left.next;
+            } else {
+                if (null == head) {
+                    head = current = right;
+                } else {
+                    current.next = left;
+                    current = current.next;
+                }
+                right = right.next;
+            }
+        }
+
+        if (null != left) {
+            head.next = left;
+        } else {
+            head.next = right;
+        }
     }
 
     public static class Node {
