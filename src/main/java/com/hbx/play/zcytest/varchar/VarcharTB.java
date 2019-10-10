@@ -270,7 +270,7 @@ public class VarcharTB {
 
     public static void main(String[] args) {
 
-        String[] strs = {"1","3","3","3","2","3","1"};
+        String[] strs = {"1", "3", "3", "3", "2", "3", "1"};
 
         System.out.println(getTwoStrMinLength(strs, "1", "2"));
     }
@@ -306,6 +306,47 @@ public class VarcharTB {
             }
         }
         return minLength == Integer.MAX_VALUE ? -1 : minLength;
+    }
+
+    /**
+     * 判断字符串数组中str1,str2两个之间的最小距离 - by map
+     * @param strs
+     * @param str1
+     * @param str2
+     * @return
+     */
+    public static int getTwoStrMinLengthByMap(String[] strs, String str1, String str2) {
+        if (null == strs || strs.length == 0 || null == str1 || null == str2) {
+            return -1;
+        }
+        if (str1.equals(str2)) {
+            return 0;
+        }
+        Map<String, Map<String, Integer>> map = new HashMap<>();
+
+        for (int i = 1; i < strs.length - 1; i++) {
+            String left = strs[i - 1];
+            String right = strs[i + 1];
+
+            int leftJu = left.equals(strs[i]) ? 0 : 1;
+            int rightJu = right.equals(strs[i]) ? 0 : 1;
+
+            Map<String, Integer> lJuMap = new HashMap<>();
+            lJuMap.put(left, leftJu);
+            map.put(strs[i], lJuMap);
+
+            Map<String, Integer> rJuMap = new HashMap<>();
+            rJuMap.put(left, leftJu);
+            map.put(strs[i], rJuMap);
+        }
+
+        if (null == map.get(str1) || null == map.get(str2)) {
+            return -1;
+        }
+        Map contentMap = (HashMap<String, Integer>) map.get(str1);
+        int res = 0;
+
+        return res;
     }
 
 }
