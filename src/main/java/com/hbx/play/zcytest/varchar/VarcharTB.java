@@ -229,16 +229,15 @@ public class VarcharTB {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-        String str = "ABCDE";
-
-        rotatePartStringByIndex(str, 3);
-
-    }
+//    public static void main(String[] args) {
+//        String str = "ABCDE";
+//
+//        rotatePartStringByIndex(str, 3);
+//
+//    }
 
     /**
-     * 整体旋转字符串
-     * 当size = 3时ABCDE -> DEABC
+     * 整体旋转字符串 当size = 3时ABCDE -> DEABC
      * @param str
      * @param size
      */
@@ -265,6 +264,48 @@ public class VarcharTB {
             start++;
             end--;
         }
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+
+        String[] strs = {"1","3","3","3","2","3","1"};
+
+        System.out.println(getTwoStrMinLength(strs, "1", "2"));
+    }
+
+    /**
+     * 判断字符串数组中str1,str2两个之间的最小距离
+     * @param strs
+     * @param str1
+     * @param str2
+     * @return
+     */
+    public static int getTwoStrMinLength(String[] strs, String str1, String str2) {
+        if (null == strs || strs.length == 0 || null == str1 || null == str2) {
+            return -1;
+        }
+        if (str1.equals(str2)) {
+            return 0;
+        }
+        // 循环判断str1的第一次的位置，以及str2的位置，两者之间的最小距离就可以
+        int last1 = -1; // 记录str1最近出现的位置
+        int last2 = -1; // 记录str2最近出现的位置
+
+        int minLength = Integer.MAX_VALUE;
+
+        for (int i = 0; i < strs.length; i++) { // 排查整个数组
+            if (strs[i].equals(str1)) { // 找到了str1的位置
+                minLength = Math.min(minLength, last1 == -1 ? minLength : i - last2);
+                last1 = i;
+            }
+            if (strs[i].equals(str2)) { // 找到了str2的位置
+                minLength = Math.min(minLength, last2 == -1 ? minLength : i - last1);
+                last2 = i;
+            }
+        }
+        return minLength == Integer.MAX_VALUE ? -1 : minLength;
     }
 
 }
