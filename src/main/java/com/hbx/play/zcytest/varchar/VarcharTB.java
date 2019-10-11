@@ -525,15 +525,15 @@ public class VarcharTB {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public static void main(String[] args) {
-        System.out.println(judgeStringKuoHaoValid("()"));
-        System.out.println(judgeStringKuoHaoValid("()()"));
-        System.out.println(judgeStringKuoHaoValid("(()())"));
+        System.out.println(getStringKuoHaoValidCount("()"));
+        System.out.println(getStringKuoHaoValidCount("()()"));
+        System.out.println(getStringKuoHaoValidCount("(()())"));
+        System.out.println(getStringKuoHaoValidCount("()()(()())"));
 
-        System.out.println(judgeStringKuoHaoValid("())"));
-        System.out.println(judgeStringKuoHaoValid("()("));
-        System.out.println(judgeStringKuoHaoValid("()7()"));
-        System.out.println(judgeStringKuoHaoValid("()())()"));
-
+        System.out.println(getStringKuoHaoValidCount("())"));
+        System.out.println(getStringKuoHaoValidCount("()("));
+        System.out.println(getStringKuoHaoValidCount("()7()"));
+        System.out.println(getStringKuoHaoValidCount("()())()"));
     }
 
     /**
@@ -565,6 +565,38 @@ public class VarcharTB {
             }
         }
         return leftParenCount == rightParenCount;
+    }
+
+    /**
+     * 判断字符串的括号是否是有效的-进阶版本 -> 得到最大有效的长度 by dp
+     * @param str
+     * @return
+     */
+    public static int getStringKuoHaoValidCount(String str) {
+        if (StringUtils.isEmpty(str)) {
+            return 0;
+        }
+        char[] chars = str.toCharArray();
+
+        // 利用动态规划，这种凡是依赖上次或者不确定的，求最大特性的都是动态规划
+        int[] dp = new int[chars.length]; // 代表从0 ～ i这段下的最大有效数量
+
+        // 现在分析
+        int res = 0;
+        int pre = 0; // 成对之前的位置
+
+        for (int i = 1; i < chars.length; i++) {
+            if (chars[i] == ')') { // 到结尾才会分析
+                pre = i - dp[i - 1] - 1; // index
+                if (pre >= 0 && chars[pre] == '(') { // 是成对的
+                    dp[i] = dp[i - 1] + 2  // 这里是说明找到了i-1之后成对出现的两个，所以 + 2
+                            + (pre > 0 ? dp[pre - 1] : 0); // 再加上pre之前可能出现的成对的数量
+                }
+
+                res = Math.max(res, dp[i]);
+            }
+        }
+        return res;
     }
 
 
