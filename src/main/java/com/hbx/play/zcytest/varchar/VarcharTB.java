@@ -2,8 +2,16 @@ package com.hbx.play.zcytest.varchar;
 
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @Auther: bingxin
@@ -268,12 +276,12 @@ public class VarcharTB {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-
-        String[] strs = {"1", "3", "3", "3", "2", "3", "1"};
-
-        System.out.println(getTwoStrMinLength(strs, "1", "2"));
-    }
+//    public static void main(String[] args) {
+//
+//        String[] strs = {"1", "3", "3", "3", "2", "3", "1"};
+//
+//        System.out.println(getTwoStrMinLength(strs, "1", "2"));
+//    }
 
     /**
      * 判断字符串数组中str1,str2两个之间的最小距离
@@ -347,6 +355,148 @@ public class VarcharTB {
         int res = 0;
 
         return res;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+
+        List<String> list = Stream.of("cab", "acc", "cbc", "ccc", "cac", "cbb", "aab", "abb").collect(Collectors.toList());
+
+        String start = "abc";
+        String to = "cab";
+
+        // 每次只能变换一个字母，要在list中找到start -> to的最短路径
+        List<List<String>> res = findMinStringRotatePaths(start, to, list);
+
+        for (List<String> ss : res) {
+            for (String s : ss) {
+                System.out.print(s + " -> ");
+            }
+            System.out.println(" ");
+        }
+    }
+
+    /**
+     * 寻找字符串的转换的最短路径
+     * @param start
+     * @param to
+     * @param list
+     * @return
+     */
+    public static List<List<String>> findMinStringRotatePaths(String start, String to, List<String> list) {
+        // 先过滤参数
+        if (StringUtils.isEmpty(start) || StringUtils.isEmpty(to) || list.isEmpty()) {
+            return new ArrayList<>();
+        }
+        list.add(start); // list中把start也加进去，可以构成环状，不然无法找到对应的路径
+
+        // 处理步骤
+        // 1. 先获取start的变换一个字母的next字串在list中的map结构
+        Map<String, List<String>> next = generateMinStringRotatePathNextMap(start, to, list);
+
+        // 2. 然后处理从start出发，遍历完list，生成distance的map
+        Map<String, Integer> distanceMap = generateMinStringRotatePathDistanceMap(start, next);
+
+        // 3. 根据生成的distance map深度搜索找到最小距离
+        List<List<String>> res = new ArrayList<>();
+        processMinStringRotatePath(start, to, next, distanceMap, new LinkedList<>(), res);
+
+        return res;
+    }
+
+    public static Map<String, List<String>> generateMinStringRotatePathNextMap(String start, String to, List<String> list) {
+        // 在list里面找每次只变一个字母的next
+        Map<String, List<String>> stringListMap = new HashMap<>();
+
+        for (int i = 0; i < list.size(); i++) {
+            stringListMap.put(list.get(i), new ArrayList<>());
+        }
+
+        Set<String> dict = new HashSet<>(list);
+        for (int i = 0; i < list.size(); i++) {
+            stringListMap.put(list.get(i), getMinStringRotatePathNext(list.get(i), dict));
+        }
+        return stringListMap;
+    }
+
+    /**
+     * 在list中寻找start的每个单词的下一个
+     * @param word
+     * @param dict
+     * @return
+     */
+    public static List<String> getMinStringRotatePathNext(String word, Set<String> dict) {
+        List<String> res = new ArrayList<>();
+        char[] wordChars = word.toCharArray();
+
+        for (char cur = 'a'; cur <= 'z'; cur++) {
+            for (int i = 0; i < wordChars.length; i++) {
+                if (wordChars[i] != cur) {
+                    char temp = wordChars[i];
+
+                    wordChars[i] = cur;
+                    if (dict.contains(String.valueOf(wordChars))) { // list里面包含替换某一个字母后的词语
+                        res.add(String.valueOf(wordChars));
+                    }
+
+                    // 再把这个位置的换回来
+                    wordChars[i] = temp;
+                }
+            }
+        }
+        return res;
+    }
+
+    /**
+     * start开始到达next中的每一个的路径长度
+     * @param start
+     * @param to
+     * @param next
+     * @return
+     */
+    public static Map<String, Integer> generateMinStringRotatePathDistanceMap(String start,
+                                                                              Map<String, List<String>> next) {
+        Map<String, Integer> distanceMap = new HashMap<>();
+        distanceMap.put(start, 0);
+
+        Queue<String> queue = new LinkedList<>();
+        ((LinkedList<String>) queue).add(start);
+
+        Set<String> set = new HashSet<>();
+        set.add(start);
+
+        while (!queue.isEmpty()) {
+            String cur = queue.poll();
+            for (String str : next.get(cur)) {
+                if (!set.contains(str)) { // 处理过的，不再处理，防止环状出现
+                    distanceMap.put(str, distanceMap.get(cur) + 1);
+
+                    ((LinkedList<String>) queue).add(str);
+                    set.add(str);
+                }
+            }
+        }
+        return distanceMap;
+    }
+
+    public static void processMinStringRotatePath(String cur, String to,
+                                                  Map<String, List<String>> next,
+                                                  Map<String, Integer> distance,
+                                                  LinkedList<String> singleRes,
+                                                  List<List<String>> res) {
+        singleRes.add(cur); // 开头把start加上
+
+        if (cur.equals(to)) {
+            res.add(new LinkedList<>(singleRes));
+        } else {
+            for (String str : next.get(cur)) {
+                if (distance.get(str) == distance.get(cur) + 1) { // 是下一个路径，继续处理
+                    processMinStringRotatePath(str, to, next, distance, singleRes, res);
+                }
+            }
+        }
+        singleRes.pollLast();
     }
 
 }
