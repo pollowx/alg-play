@@ -499,10 +499,6 @@ public class VarcharTB {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-
-    }
-
     /**
      * 字符串中任意位置插入最少的字符使得原来的字符串有回文结构 - DP
      * @param str
@@ -515,7 +511,7 @@ public class VarcharTB {
 
         for (int i = 1; i < chars.length; i++) {
             dp[i - 1][i] = chars[i] == chars[i - 1] ? 0 : 1;
-            for (int j = i - 2; j >= 0; j--) {
+            for (int j = i - 2; j >= 0; j--) { // 中间位置往后加一开始对比
                 if (chars[i] == chars[j]) {
                     dp[i][j] = dp[i + 1][j - 1];
                 } else {
@@ -524,6 +520,51 @@ public class VarcharTB {
             }
         }
         return dp;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+        System.out.println(judgeStringKuoHaoValid("()"));
+        System.out.println(judgeStringKuoHaoValid("()()"));
+        System.out.println(judgeStringKuoHaoValid("(()())"));
+
+        System.out.println(judgeStringKuoHaoValid("())"));
+        System.out.println(judgeStringKuoHaoValid("()("));
+        System.out.println(judgeStringKuoHaoValid("()7()"));
+        System.out.println(judgeStringKuoHaoValid("()())()"));
+
+    }
+
+    /**
+     * 判断字符串的括号是否是有效的
+     * @param str
+     * @return
+     */
+    public static boolean judgeStringKuoHaoValid(String str) {
+        if (StringUtils.isEmpty(str)) {
+            return false;
+        }
+        char[] chars = str.toCharArray();
+
+        int leftParenCount = 0;
+        int rightParenCount = 0;
+
+        for (int i = 0; i < chars.length; i++) {
+            if (chars[i] != '(' && chars[i] != ')') {
+                return false;
+            }
+            if (rightParenCount > leftParenCount) {
+                return false;
+            }
+            if (chars[i] == '(') {
+                leftParenCount++;
+            }
+            if (chars[i] == ')') {
+                rightParenCount++;
+            }
+        }
+        return leftParenCount == rightParenCount;
     }
 
 
