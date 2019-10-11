@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * @Auther: bingxin
@@ -359,23 +357,23 @@ public class VarcharTB {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-
-        List<String> list = Stream.of("cab", "acc", "cbc", "ccc", "cac", "cbb", "aab", "abb").collect(Collectors.toList());
-
-        String start = "abc";
-        String to = "cab";
-
-        // 每次只能变换一个字母，要在list中找到start -> to的最短路径
-        List<List<String>> res = findMinStringRotatePaths(start, to, list);
-
-        for (List<String> ss : res) {
-            for (String s : ss) {
-                System.out.print(s + " -> ");
-            }
-            System.out.println(" ");
-        }
-    }
+//    public static void main(String[] args) {
+//
+//        List<String> list = Stream.of("cab", "acc", "cbc", "ccc", "cac", "cbb", "aab", "abb").collect(Collectors.toList());
+//
+//        String start = "abc";
+//        String to = "cab";
+//
+//        // 每次只能变换一个字母，要在list中找到start -> to的最短路径
+//        List<List<String>> res = findMinStringRotatePaths(start, to, list);
+//
+//        for (List<String> ss : res) {
+//            for (String s : ss) {
+//                System.out.print(s + " -> ");
+//            }
+//            System.out.println(" ");
+//        }
+//    }
 
     /**
      * 寻找字符串的转换的最短路径
@@ -498,5 +496,35 @@ public class VarcharTB {
         }
         singleRes.pollLast();
     }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+
+    }
+
+    /**
+     * 字符串中任意位置插入最少的字符使得原来的字符串有回文结构 - DP
+     * @param str
+     * @return
+     */
+    public static int[][] getHuiWenStringDP(String str) {
+        char[] chars = str.toCharArray();
+
+        int[][] dp = new int[chars.length][chars.length]; // DP
+
+        for (int i = 1; i < chars.length; i++) {
+            dp[i - 1][i] = chars[i] == chars[i - 1] ? 0 : 1;
+            for (int j = i - 2; j >= 0; j--) {
+                if (chars[i] == chars[j]) {
+                    dp[i][j] = dp[i + 1][j - 1];
+                } else {
+                    dp[i][j] = Math.min(dp[i + 1][j], dp[i][j - 1]) + 1;
+                }
+            }
+        }
+        return dp;
+    }
+
 
 }
