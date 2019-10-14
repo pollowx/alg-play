@@ -676,8 +676,40 @@ public class VarcharTB {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public static void main(String[] args) {
-
+        String str = "abcdcdeaab";
+        System.out.println(getMaxUniqueStringCount(str));
     }
 
+    /**
+     * 找到字符串中最长无重复的子串长度
+     * @param str
+     * @return
+     */
+    public static int getMaxUniqueStringCount(String str) {
+        if (StringUtils.isEmpty(str)) {
+            return 0;
+        }
+        char[] chars = str.toCharArray();
+
+        int[] map = new int[256];
+        for (int i = 0; i < 256; i++) { // 默认记录为-1
+            map[i] = -1;
+        }
+
+        int len = 0;
+        int pre = -1;
+        int curLength = 0;
+
+        for (int i = 0; i < chars.length; i++) {
+            pre = Math.max(pre, map[chars[i]]); // 当前char之前出现的位置
+
+            curLength = i - pre; // 当前长度
+
+            len = Math.max(len, curLength);
+
+            map[chars[i]] = i; // 更新最近的一次出现的位置
+        }
+        return len;
+    }
 
 }
