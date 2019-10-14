@@ -823,13 +823,15 @@ public class VarcharTB {
         }
 
         int max = Integer.MAX_VALUE;
-
         for (int j = 0; j < arr.length; j++) {
+            // 以j结尾最大的异或和
+            // j = 1, i = (0,1)
+            // j = 2, i = (0,1,2)
+            // j = 3, i = (0,1,2,3) ...
             for (int i = 0; i <= j; i++) {
                 max = Math.max(max, i == 0 ? eor[j] : eor[j] ^ eor[i - 1]);
             }
         }
-
         return max;
     }
 
