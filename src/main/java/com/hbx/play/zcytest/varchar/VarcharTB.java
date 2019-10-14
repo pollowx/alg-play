@@ -524,17 +524,17 @@ public class VarcharTB {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-        System.out.println(getStringKuoHaoValidCount("()"));
-        System.out.println(getStringKuoHaoValidCount("()()"));
-        System.out.println(getStringKuoHaoValidCount("(()())"));
-        System.out.println(getStringKuoHaoValidCount("()()(()())"));
-
-        System.out.println(getStringKuoHaoValidCount("())"));
-        System.out.println(getStringKuoHaoValidCount("()("));
-        System.out.println(getStringKuoHaoValidCount("()7()"));
-        System.out.println(getStringKuoHaoValidCount("()())()"));
-    }
+//    public static void main(String[] args) {
+//        System.out.println(getStringKuoHaoValidCount("()"));
+//        System.out.println(getStringKuoHaoValidCount("()()"));
+//        System.out.println(getStringKuoHaoValidCount("(()())"));
+//        System.out.println(getStringKuoHaoValidCount("()()(()())"));
+//
+//        System.out.println(getStringKuoHaoValidCount("())"));
+//        System.out.println(getStringKuoHaoValidCount("()("));
+//        System.out.println(getStringKuoHaoValidCount("()7()"));
+//        System.out.println(getStringKuoHaoValidCount("()())()"));
+//    }
 
     /**
      * 判断字符串的括号是否是有效的
@@ -597,6 +597,51 @@ public class VarcharTB {
             }
         }
         return res;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+        System.out.println(getZeroLeftIsOneCount(1));
+        System.out.println(getZeroLeftIsOneCount(2));
+        System.out.println(getZeroLeftIsOneCount(3));
+        System.out.println(getZeroLeftIsOneCount(4));
+        System.out.println(getZeroLeftIsOneCount(5));
+        System.out.println(getZeroLeftIsOneCount(6));
+        System.out.println(getZeroLeftIsOneCount(7));
+        System.out.println(getZeroLeftIsOneCount(8));
+    }
+
+    /**
+     * N个字符串的数量下，0左边必是1的数量
+     * @param n
+     * @return
+     */
+    public static int getZeroLeftIsOneCount(int n) {
+        // 先分析字符串的种类和组成
+        // N = 1 的时候 "1" -> 1种
+        // N = 2 的时候 "10","11" -> 2种
+        // N = 3 的时候 "101", "110", "111" -> 3种
+
+        // p(i) 代表0 ～ i上的位置已经固定的情况下， i ~ N的位置上穷举的所有可能性
+        // 如果p(i)的位置上是1，那么p(i+1)的数量就是i+1 ~ N的穷举数量
+        // 如果p(i)的位置上是0，那么p(i+1)的位置上必须要是1，所以p(i+1)的数量就变成了p(i+2)的穷举数量
+        // 所以得出结论p(i) = p(i+1) + p(i+2)
+
+        if (n < 1) {
+            return 0;
+        }
+        return processZeroLeftIsOneCount(1, n);
+    }
+
+    public static int processZeroLeftIsOneCount(int i, int n) {
+        if (i == n - 1) {
+            return 2;
+        }
+        if (i == n) {
+            return 1;
+        }
+        return processZeroLeftIsOneCount(i + 1, n) + processZeroLeftIsOneCount(i + 2, n);
     }
 
 
