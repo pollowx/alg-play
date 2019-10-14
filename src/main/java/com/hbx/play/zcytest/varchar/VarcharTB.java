@@ -601,16 +601,19 @@ public class VarcharTB {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-        System.out.println(getZeroLeftIsOneCount(1));
-        System.out.println(getZeroLeftIsOneCount(2));
-        System.out.println(getZeroLeftIsOneCount(3));
-        System.out.println(getZeroLeftIsOneCount(4));
-        System.out.println(getZeroLeftIsOneCount(5));
-        System.out.println(getZeroLeftIsOneCount(6));
-        System.out.println(getZeroLeftIsOneCount(7));
-        System.out.println(getZeroLeftIsOneCount(8));
-    }
+//    public static void main(String[] args) {
+//        System.out.println(getZeroLeftIsOneCount(5));
+//        System.out.println(getFibernacciZeroLeftIsOneCount(5));
+//
+//        System.out.println(getZeroLeftIsOneCount(6));
+//        System.out.println(getFibernacciZeroLeftIsOneCount(6));
+//
+//        System.out.println(getZeroLeftIsOneCount(7));
+//        System.out.println(getFibernacciZeroLeftIsOneCount(7));
+//
+//        System.out.println(getZeroLeftIsOneCount(8));
+//        System.out.println(getFibernacciZeroLeftIsOneCount(8));
+//    }
 
     /**
      * N个字符串的数量下，0左边必是1的数量
@@ -642,6 +645,38 @@ public class VarcharTB {
             return 1;
         }
         return processZeroLeftIsOneCount(i + 1, n) + processZeroLeftIsOneCount(i + 2, n);
+    }
+
+    /**
+     * N个字符串的数量下，0左边必是1的数量 - 非递归版本
+     * @param n
+     * @return
+     */
+    public static int getFibernacciZeroLeftIsOneCount(int n) {
+        if (n <= 0) {
+            return 0;
+        }
+        if (n <= 2) {
+            return n;
+        }
+        int pre = 1;
+        int sum = 1; // 求和
+
+        int temp = 0;
+        for (int i = 2; i <= n; i++) {
+            temp = sum;
+
+            sum = sum + pre;
+
+            pre = temp;
+        }
+        return sum;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+
     }
 
 
