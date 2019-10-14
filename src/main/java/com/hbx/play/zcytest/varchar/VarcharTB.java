@@ -675,10 +675,10 @@ public class VarcharTB {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-        String str = "abcdcdeaab";
-        System.out.println(getMaxUniqueStringCount(str));
-    }
+//    public static void main(String[] args) {
+//        String str = "abcdcdeaab";
+//        System.out.println(getMaxUniqueStringCount(str));
+//    }
 
     /**
      * 找到字符串中最长无重复的子串长度
@@ -712,4 +712,55 @@ public class VarcharTB {
         return len;
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+        String str1 = "adabbca";
+        String str2 = "acb";
+
+        System.out.println(getString1ContainString2的MinLength(str1, str2));
+    }
+
+    /**
+     * 字符串1包含字符串2的最小长度
+     * @param str1
+     * @param str2
+     * @return
+     */
+    public static int getString1ContainString2的MinLength(String str1, String str2) {
+        if (StringUtils.isEmpty(str1) || StringUtils.isEmpty(str2) ||
+                str2.length() > str1.length()) {
+            return 0;
+        }
+        char[] chars1 = str1.toCharArray();
+        char[] chars2 = str2.toCharArray();
+
+        int[] map = new int[256];
+        for (int i = 0; i != chars2.length; i++) {
+            map[chars2[i]]++; // 默认是1
+        }
+        int minLength = Integer.MAX_VALUE; // 最中的最小长度
+        int left = 0; // 左指针
+        int right = 0; // 右指针
+        int match = chars2.length; // 需要match的长度
+
+        while (right != chars1.length) {
+            // right右移动
+            map[chars1[right]]--; // 初始值是1， 现在找到chars1[right]对应的位置上--
+            if (map[chars1[right]] >= 0) { // 说明right--有效果，match--, 还回去到str2一个字符
+                match--;
+            }
+            // 找到了所有的匹配后，开始移动left，找到最小的窗口
+            if (match == 0) {
+                while (map[chars1[left]] < 0) { // 说明str1多还了一个，不需要
+                    map[chars1[left++]]++; // left++开始右移，对应的map值++
+                }
+                minLength = Math.min(minLength, right - left + 1);
+                match++; // 匹配数量++，因为str1右拿走了一个
+                map[chars1[left++]]++;
+            }
+            right++;
+        }
+        return minLength == Integer.MAX_VALUE ? 0 : minLength;
+    }
 }
