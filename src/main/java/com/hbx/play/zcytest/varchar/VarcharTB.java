@@ -714,12 +714,12 @@ public class VarcharTB {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-        String str1 = "adabbca";
-        String str2 = "acb";
-
-        System.out.println(getString1ContainString2的MinLength(str1, str2));
-    }
+//    public static void main(String[] args) {
+//        String str1 = "adabbca";
+//        String str2 = "acb";
+//
+//        System.out.println(getString1ContainString2的MinLength(str1, str2));
+//    }
 
     /**
      * 字符串1包含字符串2的最小长度
@@ -763,4 +763,41 @@ public class VarcharTB {
         }
         return minLength == Integer.MAX_VALUE ? 0 : minLength;
     }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+
+        getStringMin回文分割Count("AABA");
+
+    }
+
+    /**
+     * 获取字符串最小的回文分割方式 - DP
+     * @param str
+     * @return
+     */
+    public static int getStringMin回文分割Count(String str) {
+        if (StringUtils.isEmpty(str)) {
+            return 0;
+        }
+        char[] chars = str.toCharArray();
+        int length = chars.length;
+
+        int[] dp = new int[length + 1];
+
+        boolean[][] p = new boolean[length][length];
+
+        for (int i = length - 1; i >= 0; i--) {
+            dp[i] = Integer.MAX_VALUE; // 默认当前值为最大值
+            for (int j = i; j < length; j++) { // 取值[i, length-1]
+                if (chars[i] == chars[j] && (j - i < 2 || p[i + 1][j - 1])) { // j - i < 2代表i和j的距离是0或者1
+                    dp[i] = Math.min(dp[i], dp[j + 1] + 1); // 上一个位置的分割数量 + 1，和当前比大小
+                    p[i][j] = true; // p[][]赋值
+                }
+            }
+        }
+        return dp[0];
+    }
+
 }
