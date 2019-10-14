@@ -766,11 +766,11 @@ public class VarcharTB {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-
-        getStringMin回文分割Count("AABA");
-
-    }
+//    public static void main(String[] args) {
+//
+//        getStringMin回文分割Count("AABA");
+//
+//    }
 
     /**
      * 获取字符串最小的回文分割方式 - DP
@@ -799,5 +799,39 @@ public class VarcharTB {
         }
         return dp[0];
     }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+
+    }
+
+    /**
+     * 子数组中的最大异或和
+     * @param arr
+     * @return
+     */
+    public static int maxChildArrayXorValue(int[] arr) {
+        if (null == arr || arr.length == 0) {
+            return 0;
+        }
+        int[] eor = new int[arr.length];
+        eor[0] = arr[0];
+
+        for (int i = 1; i < arr.length; i++) {
+            eor[i] = eor[i - 1] ^ arr[i];
+        }
+
+        int max = Integer.MAX_VALUE;
+
+        for (int j = 0; j < arr.length; j++) {
+            for (int i = 0; i <= j; i++) {
+                max = Math.max(max, i == 0 ? eor[j] : eor[j] ^ eor[i - 1]);
+            }
+        }
+
+        return max;
+    }
+
 
 }
