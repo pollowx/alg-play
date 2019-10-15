@@ -83,9 +83,4 @@ public class DataAndLimitSpace {
         infectIsland(m, i, j - 1, M, N);
     }
 
-    public static void main(String[] args) {
-
-    }
-
-
 }
