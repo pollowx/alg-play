@@ -71,6 +71,45 @@ public class BitChecker {
         return res;
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//    public static void main(String[] args) {
+//        System.out.println(getzhen整数中1的数量(5997));
+//        System.out.println(getzhen整数中1的数量A(5997));
+//        System.out.println(getzhen整数中1的数量B(5997));
+//    }
+
+    public static int getzhen整数中1的数量(int n) {
+        int count = 0;
+
+        while (n != 0) {
+            if ((n & 1) == 1) {
+                count++;
+            }
+            n >>>= 1;
+        }
+        return count;
+    }
+
+    public static int getzhen整数中1的数量A(int n) {
+        int count = 0;
+
+        while (n != 0) {
+            n = n & n -1;
+            count++;
+        }
+        return count;
+    }
+
+    public static int getzhen整数中1的数量B(int n) {
+
+        n = (n & 0x55555555) + ((n >>> 1) & 0x55555555);
+        n = (n & 0x33333333) + ((n >>> 2) & 0x33333333);
+        n = (n & 0x0f0f0f0f) + ((n >>> 4) & 0x0f0f0f0f);
+        n = (n & 0x00ff00ff) + ((n >>> 8) & 0x00ff00ff);
+        n = (n & 0x0000ffff) + ((n >>> 16) & 0x0000ffff);
+
+        return n;
+    }
 
 }
