@@ -46,11 +46,11 @@ public class ArrayAndMartrix {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-        int[][] array = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}};
-
-        printMartrix(array);
-    }
+//    public static void main(String[] args) {
+//        int[][] array = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}};
+//
+//        printMartrix(array);
+//    }
 
     /**
      * 打印旋转矩阵
@@ -106,6 +106,59 @@ public class ArrayAndMartrix {
             }
         }
         return res;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+        int[][] array = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}};
+
+        print之字型martrix(array);
+    }
+
+    public static void print之字型martrix(int[][] martrix) {
+        if (null == martrix || martrix.length == 0 ||
+                null == martrix[0] || martrix[0].length == 0) {
+            return;
+        }
+        int endR = martrix.length - 1;
+        int endC = martrix[0].length - 1;
+
+        int tR = 0;
+        int tC = 0;
+
+        int dR = 0;
+        int dC = 0;
+
+        boolean printDirection = false; // bottomToUp
+
+        while (tR != endR + 1) {
+            print之字型martrixLevel(
+                    martrix,
+                    tR, tC,
+                    dR, dC, printDirection);
+
+            tR = tC == endC ? tR + 1 : tR;
+            tC = tC == endC ? tC : tC + 1;
+
+            dC = dR == endR ? dC + 1 : dC;
+            dR = dR == endR ? dR : dR + 1;
+
+            printDirection = !printDirection;
+        }
+        System.out.println();
+    }
+
+    public static void print之字型martrixLevel(int[][] m, int uLR, int uLC, int bLR, int bLC, boolean direction) {
+        if (direction) {
+            while (uLR != bLR + 1) {
+                System.out.print(m[uLR++][uLC--] + " ");
+            }
+        } else { // 从下往上
+            while (bLR != uLR - 1) {
+                System.out.print(m[bLR--][bLC++] + " ");
+            }
+        }
     }
 
 }
