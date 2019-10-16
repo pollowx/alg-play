@@ -110,11 +110,11 @@ public class ArrayAndMartrix {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-        int[][] array = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}};
-
-        print之字型martrix(array);
-    }
+//    public static void main(String[] args) {
+//        int[][] array = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}};
+//
+//        print之字型martrix(array);
+//    }
 
     public static void print之字型martrix(int[][] martrix) {
         if (null == martrix || martrix.length == 0 ||
@@ -160,5 +160,90 @@ public class ArrayAndMartrix {
             }
         }
     }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+
+        int[] arr = {5, 7, 6, 1, 2};
+
+        int[] res = getKMinNumByHeap(arr, 3);
+
+        for (int r : res) {
+            System.out.println(r);
+        }
+
+    }
+
+    /**
+     * 在数组中找到最小的K个数 - 大根堆
+     * @param arr
+     * @param k
+     * @return
+     */
+    public static int[] getKMinNumByHeap(int[] arr, int k) {
+        if (null == arr || arr.length == 0 || k > arr.length) {
+            return arr;
+        }
+
+        int[] kHeap = new int[k];
+        // 先排成大顶堆
+        for (int i = 0; i != k; i++) {
+            heapInsert(kHeap, arr[i], i);
+        }
+
+        for (int i = k; i != arr.length; i++) {
+            if (arr[i] < kHeap[0]) {
+                kHeap[0] = arr[i];
+                heapify(kHeap, 0, k);
+            }
+        }
+        return kHeap;
+    }
+
+    public static void heapInsert(int[] arr, int value, int index) {
+        arr[index] = value; // 先插入
+        while (index != 0) {
+            int parent = (index - 1) / 2;
+            if (arr[parent] < arr[index]) {
+                swapTwoEle(arr, parent, index);
+                index = parent;
+            } else {
+                break;
+            }
+        }
+    }
+
+    public static void heapify(int[] arr, int index, int heapSize) {
+        int left = index * 2 + 1;
+        int right = index * 2 + 2;
+
+        int largest = index;
+
+        while (left < heapSize) {
+            if (arr[left] > arr[index]) {
+                largest = left;
+            }
+            if (arr[right] > arr[index] && right < heapSize) {
+                largest = right;
+            }
+
+            if (largest != index) {
+                swapTwoEle(arr, largest, index);
+            } else {
+                break;
+            }
+            index = largest;
+            left = index * 2 + 1;
+            right = index * 2 + 2;
+        }
+    }
+
+    public static void swapTwoEle(int[] arr, int indexA, int indexB) {
+        int temp = arr[indexA];
+        arr[indexA] = arr[indexB];
+        arr[indexB] = temp;
+    }
+
 
 }
