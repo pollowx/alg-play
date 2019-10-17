@@ -163,17 +163,17 @@ public class ArrayAndMartrix {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-
-        int[] arr = {5, 7, 6, 1, 2};
-
-        int[] res = getKMinNumByHeap(arr, 3);
-
-        for (int r : res) {
-            System.out.println(r);
-        }
-
-    }
+//    public static void main(String[] args) {
+//
+//        int[] arr = {5, 7, 6, 1, 2};
+//
+//        int[] res = getKMinNumByHeap(arr, 3);
+//
+//        for (int r : res) {
+//            System.out.println(r);
+//        }
+//
+//    }
 
     /**
      * 在数组中找到最小的K个数 - 大根堆
@@ -243,6 +243,50 @@ public class ArrayAndMartrix {
         int temp = arr[indexA];
         arr[indexA] = arr[indexB];
         arr[indexB] = temp;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+        int[] arr = {1, 5, 3, 4, 2, 6, 7};
+
+        System.out.println(get需要排序的最短子数组长度(arr));
+    }
+
+    /**
+     * @param arr
+     * @return
+     */
+    public static int get需要排序的最短子数组长度(int[] arr) {
+        if (null == arr || arr.length == 0) {
+            return 0;
+        }
+        // {1, 5, 3, 4, 2, 6, 7};
+        // 最短的子数组长度是{1, 2, 6, 7}
+        // 现在来找规律
+        // 从右往左找，来找最小值，如果不是最小值那么，记录不是最小值的位置，最终会落在5的身上，即i = 1
+        // 从左往右找，来找最大值，如果不是最大值那么，记录不是最大值的位置，最终会落在2的身上，即i = 4
+        // 那么从5到4，即i从1 ～ 4，4 - 1 + 1 = 4，那么长度就是4
+        int minIndex = 0;
+        int minValue = arr[arr.length - 1];
+        for (int i = arr.length - 2; i >= 0; i--) {
+            if (arr[i] < minValue) {
+                minValue = arr[i];
+            } else {
+                minIndex = i; // 最终minIndex = 1;
+            }
+        }
+
+        int maxIndex = 0;
+        int maxValue = arr[0];
+        for (int i = 1; i < arr.length; i++) {
+            if (arr[i] > maxValue) {
+                maxValue = arr[i];
+            } else {
+                maxIndex = i;  // 最终maxIndex = 4;
+            }
+        }
+        return maxIndex - minIndex + 1;
     }
 
 
