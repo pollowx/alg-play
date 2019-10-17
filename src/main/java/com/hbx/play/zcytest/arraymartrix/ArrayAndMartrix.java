@@ -497,11 +497,13 @@ public class ArrayAndMartrix {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-        int[] arr = {-8, -4, -3, 0, 1, 2, 4, 5, 8, 9};
-
-        printOrderArrayAddIsKValue(arr, 10);
-    }
+//    public static void main(String[] args) {
+//        int[] arr = {-8, -4, -3, 0, 1, 2, 4, 5, 8, 9};
+//
+//        printOrderArrayAddIsKValue(arr, 10);
+//
+//        printThreeOrderArrayAddIsKValue(arr, 10);
+//    }
 
     /**
      * 不重复打印排序数组中相加和为给定值的所有二元数组
@@ -519,6 +521,38 @@ public class ArrayAndMartrix {
             if (arr[left] + arr[right] == k) {
                 if (left == 0 || arr[left] != arr[left - 1]) { // 不重复打印
                     System.out.println(arr[left] + " + " + arr[right] + " = " + k);
+                    left++;
+                    right--;
+                }
+            } else if (arr[left] + arr[right] > k) {
+                right--;
+            } else {
+                left++;
+            }
+        }
+    }
+
+    /**
+     * 不重复打印排序数组中相加和为给定值的所有三元数组
+     * @param arr
+     * @param k
+     */
+    public static void printThreeOrderArrayAddIsKValue(int[] arr, int k) {
+        if (null == arr || arr.length < 3) {
+            return;
+        }
+        for (int i = 0; i < arr.length; i++) {
+            if (i == 0 || arr[i] != arr[i - 1]) {
+                printThreeOrderArrayAddIsKValueRest(arr, i + 1, arr.length - 1, i, k - arr[i]);
+            }
+        }
+    }
+
+    public static void printThreeOrderArrayAddIsKValueRest(int[] arr, int left, int right, int currentIndex, int k) {
+        while (right > left) {
+            if (arr[left] + arr[right] == k) {
+                if (left == currentIndex + 1 || arr[left] != arr[left - 1]) { // 不重复打印
+                    System.out.println(arr[currentIndex] + " + " + arr[left] + " + " + arr[right] + " = " + (k + arr[currentIndex]));
                     left++;
                     right--;
                 }
