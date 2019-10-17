@@ -512,7 +512,6 @@ public class ArrayAndMartrix {
         if (null == arr || arr.length == 0) {
             return;
         }
-
         int left = 0;
         int right = arr.length - 1;
 
