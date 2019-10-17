@@ -247,11 +247,11 @@ public class ArrayAndMartrix {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-        int[] arr = {1, 5, 3, 4, 2, 6, 7};
-
-        System.out.println(get需要排序的最短子数组长度(arr));
-    }
+//    public static void main(String[] args) {
+//        int[] arr = {1, 5, 3, 4, 2, 6, 7};
+//
+//        System.out.println(get需要排序的最短子数组长度(arr));
+//    }
 
     /**
      * @param arr
@@ -289,5 +289,46 @@ public class ArrayAndMartrix {
         return maxIndex - minIndex + 1;
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+
+        int[] arr = {1, 2, 1, 3, 5, 1, 7, 1, 1};
+
+        printHalfMajorAppearValue(arr);
+
+    }
+
+    public static void printHalfMajorAppearValue(int[] arr) {
+        if (null == arr || arr.length == 0) {
+            return;
+        }
+        int cand = 0;
+        int times = 0;
+
+        for (int i = 0; i != arr.length; i++) {
+            if (times == 0) {
+                cand = arr[i];
+                times = 1;
+            } else if (arr[i] == cand) {
+                times++;
+            } else {
+                times--;
+            }
+        }
+
+        times = 0;
+        for (int i = 0; i != arr.length; i++) {
+            if (arr[i] == cand) {
+                times++;
+            }
+        }
+
+        if (times > arr.length / 2) {
+            System.out.println(cand);
+        } else {
+            System.out.println("no such number appear.");
+        }
+    }
 
 }
