@@ -2,10 +2,12 @@ package com.hbx.play.zcytest.arraymartrix;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @Auther: bingxin
@@ -447,6 +449,50 @@ public class ArrayAndMartrix {
             }
         }
         return false;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+
+        int[] arr = {5, 5, 3, 2, 6, 4, 3};
+
+        System.out.println(getMaxLengthOfOrderArray(arr));
+
+    }
+
+    /**
+     * 最大可整合子数组的长度
+     * @param arr
+     * @return
+     */
+    public static int getMaxLengthOfOrderArray(int[] arr) {
+        if (null == arr || arr.length == 0) {
+
+        }
+        // 思路很重要，如果一个数组中没有重复的数字，且max - min + 1 == length的长度，那么这一段数组就是可整合的子数组
+        Set<Integer> set = Sets.newHashSet();
+        int length = 0;
+
+        for (int i = 0; i < arr.length; i++) { // 外层循环
+            int max = Integer.MIN_VALUE;
+            int min = Integer.MAX_VALUE;
+
+            for (int j = i; j < arr.length; j++) {
+                if (set.contains(arr[j])) {
+                    break;
+                }
+                set.add(arr[j]);
+
+                max = Math.max(max, arr[j]);
+                min = Math.min(min, arr[j]);
+                if (max - min == j - i) {
+                    length = Math.max(length, j - i + 1);
+                }
+            }
+            set.clear();
+        }
+        return length;
     }
 
 }
