@@ -1,6 +1,7 @@
 package com.hbx.play.zcytest.arraymartrix;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import java.util.HashMap;
 import java.util.List;
@@ -297,8 +298,13 @@ public class ArrayAndMartrix {
 
         printHalfMajorAppearValue(arr);
 
+        printKMajorAppearValue(arr, 9);
     }
 
+    /**
+     * 找到数组中出现大于一半的数字
+     * @param arr
+     */
     public static void printHalfMajorAppearValue(int[] arr) {
         if (null == arr || arr.length == 0) {
             return;
@@ -329,6 +335,79 @@ public class ArrayAndMartrix {
         } else {
             System.out.println("no such number appear.");
         }
+    }
+
+    /**
+     * 找到数组中出现大于N/K的所有数字
+     * @param arr
+     * @param k
+     */
+    public static void printKMajorAppearValue(int[] arr, int k) {
+        if (null == arr || arr.length == 0 || k < 2) {
+            return;
+        }
+        Map<Integer, Integer> candMap = Maps.newHashMap();
+        for (int i = 0; i != arr.length; i++) {
+            if (candMap.containsKey(arr[i])) {
+                candMap.put(arr[i], candMap.get(arr[i]) + 1);
+            } else {
+                if (candMap.size() == k - 1) { // 马上要超出啦
+                    // 开始处理超出
+                    processKMajorAppearValueKeyMinusOne(candMap);
+                } else {
+                    candMap.put(arr[i], 1);
+                }
+            }
+        }
+        Map<Integer, Integer> realMap = keyByStatistics(arr, candMap);
+        boolean canPrint = false;
+        for (Map.Entry<Integer, Integer> entry : candMap.entrySet()) {
+            Integer key = entry.getKey();
+            if (realMap.get(key) > arr.length / k) {
+                canPrint = true;
+                System.out.print(key + "\t");
+            }
+        }
+        System.out.println(canPrint ? "" : "no such number appear.");
+    }
+
+    public static void processKMajorAppearValueKeyMinusOne(Map<Integer, Integer> candMap) {
+        List<Integer> removeListKey = Lists.newArrayList();
+        for (Map.Entry<Integer, Integer> entry : candMap.entrySet()) {
+            Integer key = entry.getKey();
+            Integer value = entry.getValue();
+
+            if (value == 1) {
+                removeListKey.add(key);
+            }
+            candMap.put(key, value - 1); // 所有的统计 -1
+        }
+
+        for (Integer key : removeListKey) {
+            candMap.remove(key);
+        }
+    }
+
+    /**
+     * @param arr
+     * @param candMap
+     * @return
+     */
+    public static Map<Integer, Integer> keyByStatistics(int[] arr,
+                                                        Map<Integer, Integer> candMap) {
+        Map<Integer, Integer> realMap = Maps.newHashMap(); // 出现的数量
+
+        for (int i = 0; i != arr.length; i++) {
+            int currentNum = arr[i];
+            if (candMap.containsKey(currentNum)) {
+                if (realMap.containsKey(currentNum)) {
+                    realMap.put(currentNum, realMap.get(currentNum) + 1); // + 1
+                } else {
+                    realMap.put(currentNum, 1);
+                }
+            }
+        }
+        return realMap;
     }
 
 }
