@@ -509,7 +509,7 @@ public class ArrayAndMartrix {
      * @param k
      */
     public static void printOrderArrayAddIsKValue(int[] arr, int k) {
-        if (null == arr || arr.length == 0) {
+        if (null == arr || arr.length < 2) {
             return;
         }
         int left = 0;
@@ -517,9 +517,11 @@ public class ArrayAndMartrix {
 
         while (right > left) {
             if (arr[left] + arr[right] == k) {
-                System.out.println(arr[left] + " + " + arr[right] + " = " + k);
-                left++;
-                right--;
+                if (left == 0 || arr[left] != arr[left - 1]) { // 不重复打印
+                    System.out.println(arr[left] + " + " + arr[right] + " = " + k);
+                    left++;
+                    right--;
+                }
             } else if (arr[left] + arr[right] > k) {
                 right--;
             } else {
