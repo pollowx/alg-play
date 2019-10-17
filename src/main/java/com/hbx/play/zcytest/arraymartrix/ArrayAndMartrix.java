@@ -453,22 +453,22 @@ public class ArrayAndMartrix {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-
-        int[] arr = {5, 5, 3, 2, 6, 4, 3};
-
-        System.out.println(getMaxLengthOfOrderArray(arr));
-
-    }
+//    public static void main(String[] args) {
+//
+//        int[] arr = {5, 5, 3, 2, 6, 4, 3};
+//
+//        System.out.println(getMaxLengthOfOrderArray(arr));
+//
+//    }
 
     /**
-     * 最大可整合子数组的长度
+     * 最大可整合子数组的长度 O(N^2)
      * @param arr
      * @return
      */
     public static int getMaxLengthOfOrderArray(int[] arr) {
         if (null == arr || arr.length == 0) {
-
+            return 0;
         }
         // 思路很重要，如果一个数组中没有重复的数字，且max - min + 1 == length的长度，那么这一段数组就是可整合的子数组
         Set<Integer> set = Sets.newHashSet();
@@ -493,6 +493,40 @@ public class ArrayAndMartrix {
             set.clear();
         }
         return length;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+        int[] arr = {-8, -4, -3, 0, 1, 2, 4, 5, 8, 9};
+
+        printOrderArrayAddIsKValue(arr, 10);
+    }
+
+    /**
+     * 不重复打印排序数组中相加和为给定值的所有二元数组
+     * @param arr
+     * @param k
+     */
+    public static void printOrderArrayAddIsKValue(int[] arr, int k) {
+        if (null == arr || arr.length == 0) {
+            return;
+        }
+
+        int left = 0;
+        int right = arr.length - 1;
+
+        while (right > left) {
+            if (arr[left] + arr[right] == k) {
+                System.out.println(arr[left] + " + " + arr[right] + " = " + k);
+                left++;
+                right--;
+            } else if (arr[left] + arr[right] > k) {
+                right--;
+            } else {
+                left++;
+            }
+        }
     }
 
 }
