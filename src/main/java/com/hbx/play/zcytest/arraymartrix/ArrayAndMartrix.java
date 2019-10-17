@@ -292,14 +292,14 @@ public class ArrayAndMartrix {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-
-        int[] arr = {1, 2, 1, 3, 5, 1, 7, 1, 1};
-
-        printHalfMajorAppearValue(arr);
-
-        printKMajorAppearValue(arr, 9);
-    }
+//    public static void main(String[] args) {
+//
+//        int[] arr = {1, 2, 1, 3, 5, 1, 7, 1, 1};
+//
+//        printHalfMajorAppearValue(arr);
+//
+//        printKMajorAppearValue(arr, 9);
+//    }
 
     /**
      * 找到数组中出现大于一半的数字
@@ -408,6 +408,45 @@ public class ArrayAndMartrix {
             }
         }
         return realMap;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//    public static void main(String[] args) {
+//        int[][] array = {{0, 1, 2, 5}, {2, 3, 4, 7}, {4, 4, 4, 8}, {5, 7, 7, 9}};
+//
+//        System.out.println(findElementInMartrixOfOrdered(array, 7));
+//
+//        System.out.println(findElementInMartrixOfOrdered(array, 6));
+//    }
+
+    /**
+     * 在排好序的矩阵中找到指定的数字(每一行每一列都是递增)，时间复杂度限制O(M+N).空间复杂度要求O(1)
+     * @param martrix
+     * @return
+     */
+    public static boolean findElementInMartrixOfOrdered(int[][] martrix, int k) {
+        if (null == martrix || martrix.length == 0) {
+            return false;
+        }
+        // 思路：要利用好有序这个特点，从右上角找起
+        int row = martrix.length;
+        int col = martrix[0].length;
+
+        int i = 0;
+        int j = col - 1; // 右上角
+
+        while (i < row && j >= 0) {
+            if (martrix[i][j] > k) {
+                j--;
+            } else if (martrix[i][j] < k) {
+                i++;
+            } else {
+                System.out.println(martrix[i][j]);
+                return true;
+            }
+        }
+        return false;
     }
 
 }
