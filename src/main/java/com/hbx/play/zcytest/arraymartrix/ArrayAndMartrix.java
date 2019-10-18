@@ -564,4 +564,47 @@ public class ArrayAndMartrix {
         }
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//    public static void main(String[] args) {
+//        int[] arr = {2, 1, 1, 1, 1};
+//
+//        System.out.println(getUnorderedArrayAddVauleIsKMaxLength(arr, 2));
+//    }
+
+    /**
+     * 未排序的数组中相加和为给定值的最大子数组长度
+     * @param arr
+     * @param k
+     * @return
+     */
+    public static int getUnorderedArrayAddVauleIsKMaxLength(int[] arr, int k) {
+        if (null == arr || arr.length == 0) {
+            return 0;
+        }
+        int left = 0;
+        int right = 0;
+
+        int length = 0; // 最大子数组长度
+        int sum = arr[0]; // 最大和
+
+        while (right < arr.length) {
+            if (sum == k) { // 找到了某一个值
+                length = Math.max(length, right - left + 1); // 更新length
+                sum = sum - arr[left];
+                left++;
+            } else if (sum < k) {
+                right++;
+                if (right == arr.length) {
+                    break;
+                }
+                sum = sum + arr[right];
+            } else {
+                sum = sum - arr[left];
+                left++;
+            }
+        }
+        return length;
+    }
+
 }
