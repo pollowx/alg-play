@@ -573,13 +573,13 @@ public class ArrayAndMartrix {
 //    }
 
     /**
-     * 未排序的数组中相加和为给定值的最大子数组长度
+     * 未排序的正整数数组中相加和为给定值的最大子数组长度
      * @param arr
      * @param k
      * @return
      */
     public static int getUnorderedArrayAddVauleIsKMaxLength(int[] arr, int k) {
-        if (null == arr || arr.length == 0) {
+        if (null == arr || arr.length == 0 || k < 0) {
             return 0;
         }
         int left = 0;
@@ -606,5 +606,44 @@ public class ArrayAndMartrix {
         }
         return length;
     }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//    public static void main(String[] args) {
+//        int[] arr = {1, 2, 3, 3};
+//
+//        System.out.println(getUnorderedArrayAddVauleIsKMaxLength_arrarValue(arr, 6));
+//    }
+
+    /**
+     * 未排序的数组中相加和为给定值的最大子数组长度O(N) + O(N)
+     * @param arr
+     * @param k
+     * @return
+     */
+    public static int getUnorderedArrayAddVauleIsKMaxLength_arrarValue(int[] arr, int k) {
+        if (null == arr || arr.length == 0) {
+            return 0;
+        }
+        int maxLength = 0;
+        int sum = 0;
+
+        Map<Integer, Integer> map = Maps.newHashMap();
+        map.put(0, -1);
+
+        for (int i = 0; i < arr.length; i++) {
+            sum = sum + arr[i];
+
+            if (map.containsKey(sum - k)) {
+                maxLength = Math.max(maxLength, i - map.get(sum - k));
+            }
+
+            if (!map.containsKey(sum)) {
+                map.put(sum, i);
+            }
+        }
+        return maxLength;
+    }
+
 
 }
