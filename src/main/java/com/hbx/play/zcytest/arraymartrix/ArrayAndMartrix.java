@@ -651,16 +651,17 @@ public class ArrayAndMartrix {
 
         int[] arr = {2, 1, 5, 7, 4, 3, 6};
 
-        sort自然数数组的排序(arr);
+        // sort自然数数组的排序(arr);
+
+        sort自然数数组的排序A(arr);
 
         for (int i : arr) {
             System.out.print(i + "\t");
         }
-
     }
 
     /**
-     * 自然数数组的排序O(N) + O(1)
+     * 自然数数组的排序O(N) + O(1) - 成环推
      * @param arr
      */
     public static void sort自然数数组的排序(int[] arr) {
@@ -676,6 +677,24 @@ public class ArrayAndMartrix {
                 next = arr[temp - 1];
                 arr[temp - 1] = temp;
                 temp = next;
+            }
+        }
+    }
+
+    /**
+     * 自然数数组的排序O(N) + O(1) - 交换
+     * @param arr
+     */
+    public static void sort自然数数组的排序A(int[] arr) {
+        if (null == arr || arr.length == 0) {
+            return;
+        }
+        int temp = 0;
+        for (int i = 0; i < arr.length; i++) {
+            while (arr[i] != i + 1) {
+                temp = arr[arr[i] - 1];
+                arr[arr[i] - 1] = arr[i];
+                arr[i] = temp;
             }
         }
     }
