@@ -647,18 +647,18 @@ public class ArrayAndMartrix {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-
-        int[] arr = {2, 1, 5, 7, 4, 3, 6};
-
-        // sort自然数数组的排序(arr);
-
-        sort自然数数组的排序A(arr);
-
-        for (int i : arr) {
-            System.out.print(i + "\t");
-        }
-    }
+//    public static void main(String[] args) {
+//
+//        int[] arr = {2, 1, 5, 7, 4, 3, 6};
+//
+//        // sort自然数数组的排序(arr);
+//
+//        sort自然数数组的排序A(arr);
+//
+//        for (int i : arr) {
+//            System.out.print(i + "\t");
+//        }
+//    }
 
     /**
      * 自然数数组的排序O(N) + O(1) - 成环推
@@ -699,4 +699,44 @@ public class ArrayAndMartrix {
         }
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//    public static void main(String[] args) {
+//        int[] arr = {2, 1, 5, 7, 4, 3, 6};
+//
+//        modifyArrayValueEvenOdd(arr);
+//
+//        for (int i : arr) {
+//            System.out.print(i + "\t");
+//        }
+//    }
+
+    /**
+     * 奇数下标都是奇数，或者偶数下标是偶数
+     * @param arr
+     */
+    public static void modifyArrayValueEvenOdd(int[] arr) {
+        if (null == arr || arr.length == 0) {
+            return;
+        }
+        int even = 0; // 偶数
+        int odd = 1; // 奇数
+        int end = arr.length - 1;
+
+        while (even < arr.length && odd < arr.length) {
+            if (arr[end] % 2 == 0) { // 偶数
+                swapModifyArrayValueEvenOdd(arr, even, end);
+                even = even + 2;
+            } else { // 奇数
+                swapModifyArrayValueEvenOdd(arr, odd, end);
+                odd = odd + 2;
+            }
+        }
+    }
+
+    public static void swapModifyArrayValueEvenOdd(int[] arr, int left, int right) {
+        arr[left] = arr[left] ^ arr[right];
+        arr[right] = arr[left] ^ arr[right];
+        arr[left] = arr[left] ^ arr[right];
+    }
 }
