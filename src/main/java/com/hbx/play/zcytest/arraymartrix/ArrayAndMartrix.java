@@ -645,5 +645,39 @@ public class ArrayAndMartrix {
         return maxLength;
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+
+        int[] arr = {2, 1, 5, 7, 4, 3, 6};
+
+        sort自然数数组的排序(arr);
+
+        for (int i : arr) {
+            System.out.print(i + "\t");
+        }
+
+    }
+
+    /**
+     * 自然数数组的排序O(N) + O(1)
+     * @param arr
+     */
+    public static void sort自然数数组的排序(int[] arr) {
+        if (null == arr || arr.length == 0) {
+            return;
+        }
+        int temp = 0;
+        int next = 0;
+
+        for (int i = 0; i < arr.length; i++) {
+            temp = arr[i];
+            while (arr[i] != i + 1) {
+                next = arr[temp - 1];
+                arr[temp - 1] = temp;
+                temp = next;
+            }
+        }
+    }
 
 }
