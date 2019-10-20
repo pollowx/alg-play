@@ -739,4 +739,35 @@ public class ArrayAndMartrix {
         arr[right] = arr[left] ^ arr[right];
         arr[left] = arr[left] ^ arr[right];
     }
+
+//    public static void main(String[] args) {
+//        int[] arr = {1, -2, 3, 5, -2, 6, -1};
+//
+//        System.out.println(getChildArrayMaxValue(arr));
+//    }
+
+    /**
+     * 子数组的最大累加和
+     * @param arr
+     * @return
+     */
+    public static int getChildArrayMaxValue(int[] arr) {
+        if (null == arr || arr.length == 0) {
+            return 0;
+        }
+        int currentIndex = 0;
+
+        int max = 0;
+        int sum = 0;
+        while (currentIndex < arr.length) {
+            sum += arr[currentIndex];
+            if (sum < 0) { // 重新计算
+                sum = 0;
+            } else {
+                max = Math.max(max, sum);
+            }
+            currentIndex++;
+        }
+        return max;
+    }
 }
