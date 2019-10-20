@@ -770,4 +770,41 @@ public class ArrayAndMartrix {
         }
         return max;
     }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//    public static void main(String[] args) {
+//        int[][] martrix = {{-90, 48, 78}, {64, -40, 64}, {-81, -7, 66}};
+//
+//        System.out.println(getChildMaxtrixMaxValue(martrix));
+//    }
+
+    /**
+     * 子矩阵最大累加和
+     * @param martrix
+     * @return
+     */
+    public static int getChildMaxtrixMaxValue(int[][] martrix) {
+        if (null == martrix || martrix.length == 0 || null == martrix[0] || martrix[0].length == 0) {
+            return 0;
+        }
+        int max = Integer.MIN_VALUE;
+        int cur = 0;
+        int[] addArray = null;
+
+        for (int i = 0; i < martrix.length; i++) {
+            addArray = new int[martrix[0].length];
+            for (int j = i; j < martrix.length; j++) {
+                cur = 0;
+                for (int k = 0; k < addArray.length; k++) {
+                    addArray[k] += martrix[j][k];
+                    cur += addArray[k];
+                    max = Math.max(max, cur);
+                    cur = cur < 0 ? 0 : cur;
+                }
+            }
+        }
+        return max;
+    }
+
 }
