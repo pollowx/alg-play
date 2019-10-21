@@ -807,4 +807,40 @@ public class ArrayAndMartrix {
         return max;
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * 子数组中的最大累乘积
+     * @param arr
+     * @return
+     */
+    public static double getChildArrayMaxMulityValue(double[] arr) {
+        if (null == arr || arr.length == 0) {
+            return 0;
+        }
+
+        // 分析到哪一个会是最大值
+        // 1. arr[i]之前是正数字，那么最大值出现可能之一是arr[i] * max
+        // 2. arr[i]之前是正数字, 但是是小数，那么最大值 = arr[i];
+        // 3. arr[i]之前是负数，arr[i]也是负数，那么最大值 = arr[i] * min
+
+        double res = arr[0]; // 最终结果
+        double max = arr[0];
+        double min = arr[0];
+
+        double maxEnd = 0;
+        double minEnd = 0;
+
+        for (int i = 1; i < arr.length; i++) {
+            maxEnd = max * arr[i];
+            minEnd = min * arr[i];
+
+            max = Math.max(Math.max(maxEnd, minEnd), arr[i]);
+            min = Math.min(Math.min(maxEnd, minEnd), arr[i]);
+
+            res = Math.max(max, res);
+        }
+        return res;
+    }
+
 }
