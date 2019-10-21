@@ -994,4 +994,30 @@ public class ArrayAndMartrix {
         return res;
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 2, 2, 3, 3, 4, 5, 6, 6, 7, 7, 8, 8, 8, 9};
+
+        leftSwapToOrderArray(arr);
+    }
+
+    /**
+     * 使得有序重复元素的数组中左侧变成有序不重复的序列
+     * @param arr
+     */
+    public static void leftSwapToOrderArray(int[] arr) {
+        if (null == arr || arr.length < 2) {
+            return;
+        }
+        int u = 0;
+        int i = 1;
+
+        while (i != arr.length) {
+            if (arr[i++] != arr[u]) {
+                swapTwoEle(arr, ++u, i - 1);
+            }
+        }
+    }
+
 }
