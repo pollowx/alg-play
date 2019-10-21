@@ -1048,5 +1048,37 @@ public class ArrayAndMartrix {
         }
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//    public static void main(String[] args) {
+//        int[] arr = {-1, 2, 3, 4};
+//
+//        System.out.println(getMinArrayValue(arr));
+//    }
+
+    /**
+     * 数组中未出现的最小正整数
+     * @param arr
+     * @return
+     */
+    public static int getMinArrayValue(int[] arr) {
+        if (null == arr || arr.length == 0) {
+            return 0;
+        }
+        int left = 0;
+        int right = arr.length;
+
+        while (left < right) {
+            if (arr[left] == left + 1) {
+                left++; // 从1 - l开始都有值了
+            } else if (arr[left] <= left || arr[left] > right || arr[arr[left] - 1] == arr[left]) {
+                arr[left] = arr[--right]; // 从right--往前找，然后check是否符合
+            } else {
+                swapTwoEle(arr, left, arr[left] - 1);
+            }
+        }
+        return left + 1;
+    }
+
 
 }
