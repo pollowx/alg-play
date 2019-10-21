@@ -996,15 +996,15 @@ public class ArrayAndMartrix {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-        int[] arr = {1, 2, 2, 2, 3, 3, 4, 5, 6, 6, 7, 7, 8, 8, 8, 9};
-
-        leftSwapToOrderArray(arr);
-
-        int[] arr1 = {0, 1, 0, 1, 2, 1, 0, 2, 0, 1};
-
-        leftMiddleRightSwapInArray(arr1);
-    }
+//    public static void main(String[] args) {
+//        int[] arr = {1, 2, 2, 2, 3, 3, 4, 5, 6, 6, 7, 7, 8, 8, 8, 9};
+//
+//        leftSwapToOrderArray(arr);
+//
+//        int[] arr1 = {0, 1, 0, 1, 2, 1, 0, 2, 0, 1};
+//
+//        leftMiddleRightSwapInArray(arr1);
+//    }
 
     /**
      * 使得有序重复元素的数组中左侧变成有序不重复的序列
