@@ -1000,6 +1000,10 @@ public class ArrayAndMartrix {
         int[] arr = {1, 2, 2, 2, 3, 3, 4, 5, 6, 6, 7, 7, 8, 8, 8, 9};
 
         leftSwapToOrderArray(arr);
+
+        int[] arr1 = {0, 1, 0, 1, 2, 1, 0, 2, 0, 1};
+
+        leftMiddleRightSwapInArray(arr1);
     }
 
     /**
@@ -1019,5 +1023,30 @@ public class ArrayAndMartrix {
             }
         }
     }
+
+    /**
+     * 在数组中划分成左中右三个区域，每块区域元素相同（只有三种元素）
+     * @param arr
+     */
+    public static void leftMiddleRightSwapInArray(int[] arr) {
+        if (null == arr || arr.length == 0) {
+            return;
+        }
+
+        int left = 0;
+        int index = 0;
+        int right = arr.length - 1;
+
+        while (index <= right) {
+            if (arr[index] == 0) { // 左侧交换
+                swapTwoEle(arr, index++, left++);
+            } else if (arr[index] == 2) { // 右侧交换
+                swapTwoEle(arr, index, right--); // index还要看换回来的元素是什么，然后才能++
+            } else {
+                index++;
+            }
+        }
+    }
+
 
 }
