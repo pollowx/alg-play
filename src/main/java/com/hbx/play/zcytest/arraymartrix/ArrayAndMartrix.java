@@ -1080,5 +1080,68 @@ public class ArrayAndMartrix {
         return left + 1;
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//    public static void main(String[] args) {
+//        int[] arr = {9, 3, 1, 10};
+//
+//        System.out.println(getOrderArrayMaxGap(arr));
+//    }
+
+    /**
+     * 数组排序后的相邻数的最大差值 - O(N)时间复杂度
+     * @param arr
+     * @return
+     */
+    public static int getOrderArrayMaxGap(int[] arr) {
+        if (null == arr || arr.length == 0) {
+            return 0;
+        }
+        // 本题一般的排序时间复杂度一般都是O(logN*N), 利用桶排序的思想时间复杂度达到O(N)
+        // 首先找到数组中的最大值和最小值
+        int max = Integer.MIN_VALUE;
+        int min = Integer.MAX_VALUE;
+
+        for (int i = 0; i < arr.length; i++) {
+            max = Math.max(max, arr[i]);
+            min = Math.min(min, arr[i]);
+        }
+
+        if (max == min) {
+            return 0;
+        }
+
+        int len = arr.length;
+        // 分桶
+        int[] maxs = new int[len + 1]; // 记录N+1个桶里面的每个桶的最大值
+        int[] mins = new int[len + 1]; // 记录N+1个桶里面的每个桶的最小值
+
+        boolean[] hasNum = new boolean[len + 1];
+
+        int bucketNumber = 0;
+        for (int i = 0; i < arr.length; i++) {
+            // 分桶处理
+            bucketNumber = calBucketNum(arr[i], len, max, min); // 计算桶标号
+            mins[bucketNumber] = hasNum[bucketNumber] ? Math.min(mins[bucketNumber], arr[i]) : arr[i];
+            maxs[bucketNumber] = hasNum[bucketNumber] ? Math.max(maxs[bucketNumber], arr[i]) : arr[i];
+            hasNum[bucketNumber] = true; // 桶里有值，桶被用到了
+        }
+
+        // 最大的差值出现在每个桶的跨桶区间上，本桶的最小值 - 上一个桶的最大值
+        int res = 0;
+        int lastMax = maxs[0];
+        for (int i = 1; i <= len; i++) {
+            if (hasNum[i]) {
+                res = Math.max(res, mins[i] - lastMax);
+                lastMax = maxs[i];
+            }
+        }
+        return res;
+    }
+
+    public static int calBucketNum(long num, long len, long max, long min) {
+        return (int) ((num - min) * len / (max - min));
+    }
+
 
 }
