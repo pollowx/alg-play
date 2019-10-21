@@ -938,4 +938,33 @@ public class ArrayAndMartrix {
         return false;
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+        int[] arr = {2, 3, 1, 4};
+
+        getMulityArrayValueExceptCurrentIndexValue(arr);
+    }
+
+    /**
+     * 除去当前位置上的求其他位置上所有的乘积
+     * @param arr
+     * @return
+     */
+    public static int[] getMulityArrayValueExceptCurrentIndexValue(int[] arr) {
+        if (null == arr || arr.length == 0) {
+            return arr;
+        }
+        int allMulity = 1;
+        for (int i = 0; i < arr.length; i++) {
+            allMulity *= arr[i];
+        }
+
+        int[] res = new int[arr.length];
+        for (int i = 0; i < arr.length; i++) {
+            res[i] = allMulity / arr[i];
+        }
+        return res;
+    }
+
 }
