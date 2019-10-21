@@ -940,14 +940,16 @@ public class ArrayAndMartrix {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-        int[] arr = {2, 3, 1, 4};
-
-        getMulityArrayValueExceptCurrentIndexValue(arr);
-    }
+//    public static void main(String[] args) {
+//        int[] arr = {2, 3, 1, 4};
+//
+//        getMulityArrayValueExceptCurrentIndexValue(arr);
+//
+//        getMulityArrayValueExceptCurrentIndexValueB(arr);
+//    }
 
     /**
-     * 除去当前位置上的求其他位置上所有的乘积
+     * 除去当前位置上的求其他位置上所有的乘积 - 除法
      * @param arr
      * @return
      */
@@ -964,6 +966,31 @@ public class ArrayAndMartrix {
         for (int i = 0; i < arr.length; i++) {
             res[i] = allMulity / arr[i];
         }
+        return res;
+    }
+
+    /**
+     * 除去当前位置上的求其他位置上所有的乘积 - 非除法
+     * @param arr
+     * @return
+     */
+    public static int[] getMulityArrayValueExceptCurrentIndexValueB(int[] arr) {
+        if (null == arr || arr.length == 0) {
+            return arr;
+        }
+        int[] res = new int[arr.length];
+
+        res[0] = arr[0];
+        for (int i = 1; i < arr.length; i++) {
+            res[i] = res[i - 1] * arr[i];
+        }
+
+        int temp = 1;
+        for (int i = arr.length - 1; i > 0; i--) {
+            res[i] = res[i - 1] * temp;
+            temp = temp * arr[i];
+        }
+        res[0] = temp;
         return res;
     }
 
