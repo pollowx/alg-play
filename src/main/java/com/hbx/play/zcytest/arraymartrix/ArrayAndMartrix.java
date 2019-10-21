@@ -843,4 +843,99 @@ public class ArrayAndMartrix {
         return res;
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//    public static void main(String[] args) {
+//        int[][] m = {
+//                {0, 1, 1, 1, 1},
+//                {0, 1, 0, 0, 1},
+//                {0, 1, 0, 0, 1},
+//                {0, 1, 1, 1, 1},
+//                {0, 1, 0, 1, 1}};
+//
+//        System.out.println(getMaxSquareSize(m));
+//    }
+
+    /**
+     * 边界是1的最大正方形大小
+     * @param m
+     * @return
+     */
+    public static int getMaxSquareSize(int[][] m) {
+        if (null == m || m.length == 0 || null == m[0] || m[0].length == 0) {
+            return 0;
+        }
+        // 生成两个辅助矩阵，用来判断正方形的四个角，check right矩阵和down矩阵的size是否符合边长
+        // right[][]矩阵
+        //  down[][]矩阵
+
+        // 1. 辅助矩阵
+        int[][] down = new int[m.length][m[0].length];
+        int[][] right = new int[m.length][m[0].length];
+
+        // 2. 生成辅助矩阵
+        setupHelpedMartrix(m, down, right);
+
+        // 3. check正方形是否存在
+        int borderSize = Math.min(m.length, m[0].length);
+        for (int size = borderSize; size > 0; size--) {
+            if (checkSizeCanBorder(size, down, right)) {
+                return size;
+            }
+        }
+        return 0;
+    }
+
+    public static void setupHelpedMartrix(int[][] m,
+                                          int[][] down,
+                                          int[][] right) {
+        int row = m.length;
+        int col = m[0].length;
+
+        // 两个辅助矩阵的右下角都是1
+        if (m[row - 1][col - 1] == 1) {
+            down[row - 1][col - 1] = 1;
+            right[row - 1][col - 1] = 1;
+        }
+
+        // 以m的最后一列生成辅助矩阵down和right的最后一列
+        for (int i = row - 2; i >= 0; i--) {
+            if (m[i][col - 1] == 1) {
+                right[i][col - 1] = 1;
+                down[i][col - 1] = down[i + 1][col - 1] + 1;
+            }
+        }
+
+        // 以m的最后一行生成辅助矩阵down和right的最后一列
+        for (int i = col - 2; i >= 0; i--) {
+            if (m[row - 1][i] == 1) {
+                down[row - 1][i] = 1;
+                right[row - 1][i] = right[row - 1][i + 1] + 1;
+            }
+        }
+
+        // 处理剩下的位置
+        for (int i = row - 2; i >= 0; i--) {
+            for (int j = col - 2; j >= 0; j--) {
+                if (m[i][j] == 1) {
+                    down[i][j] = down[i + 1][j] + 1;
+                    right[i][j] = right[i][j + 1] + 1;
+                }
+            }
+        }
+    }
+
+    public static boolean checkSizeCanBorder(int size,
+                                             int[][] down,
+                                             int[][] right) {
+        for (int i = 0; i < right.length - size + 1; i++) {
+            for (int j = 0; j < right[0].length - size + 1; j++) {
+                if (right[i][j] >= size && down[i][j] >= size && right[i + size - 1][j] >= size && down[i][j + size - 1] >= size) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 }
