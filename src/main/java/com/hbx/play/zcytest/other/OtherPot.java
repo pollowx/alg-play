@@ -36,8 +36,7 @@ public class OtherPot {
     }
 
     /**
-     * 产生 1 - 10的数根据1-7
-     * https://leetcode-cn.com/problems/implement-rand10-using-rand7/submissions/
+     * 产生 1 - 10的数根据1-7 https://leetcode-cn.com/problems/implement-rand10-using-rand7/submissions/
      * @return
      */
     public static int getRadom10ByRandom7() {
@@ -97,6 +96,29 @@ public class OtherPot {
     public static int getTwoNumberMax公约数(int m, int n) {
         // 采用辗转相除法
         return n == 0 ? m : getTwoNumberMax公约数(n, m % n);
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+        System.out.println(getNum的阶乘尾巴上有多少个0(5));
+    }
+
+    public static int getNum的阶乘尾巴上有多少个0(int num) {
+        if (num <= 0) {
+            return 0;
+        }
+        int res = 0;
+        int cur = 0;
+
+        for (int i = 5; i < num + 1; i += 5) {
+            cur = i;
+            if (cur % 5 == 0) {
+                res++;
+                cur = cur / 5;
+            }
+        }
+        return res;
     }
 
 }
