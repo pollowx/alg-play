@@ -7,6 +7,7 @@ import com.google.common.collect.Sets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Set;
 
 /**
@@ -1145,8 +1146,34 @@ public class ArrayAndMartrix {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
+//    public static void main(String[] args) {
+//        int[] ar = {3, 9, 5, 2, 4, 4};
+//
+//        System.out.println(getMinSplitArrayValue(ar));
+//    }
 
+    /**
+     * 数组中的分割代价，数组中的总和分割成现状的最小代价（黄金分割问题）
+     * @param arr
+     * @return
+     */
+    public static int getMinSplitArrayValue(int[] arr) {
+        if (null == arr || arr.length == 0) {
+            return 0;
+        }
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>(); // 默认是小顶堆
+        for (int i = 0; i < arr.length; i++) {
+            minHeap.add(arr[i]);
+        }
+
+        int res = 0;
+        int sum = 0;
+        while (minHeap.size() != 1) {
+            sum = minHeap.poll() + minHeap.poll();
+            res += sum;
+            minHeap.add(sum);
+        }
+        return res;
     }
 
 
