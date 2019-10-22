@@ -7,6 +7,7 @@ import com.google.common.collect.Sets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Set;
 
 /**
@@ -562,6 +563,617 @@ public class ArrayAndMartrix {
                 left++;
             }
         }
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//    public static void main(String[] args) {
+//        int[] arr = {2, 1, 1, 1, 1};
+//
+//        System.out.println(getUnorderedArrayAddVauleIsKMaxLength(arr, 2));
+//    }
+
+    /**
+     * 未排序的正整数数组中相加和为给定值的最大子数组长度
+     * @param arr
+     * @param k
+     * @return
+     */
+    public static int getUnorderedArrayAddVauleIsKMaxLength(int[] arr, int k) {
+        if (null == arr || arr.length == 0 || k < 0) {
+            return 0;
+        }
+        int left = 0;
+        int right = 0;
+
+        int length = 0; // 最大子数组长度
+        int sum = arr[0]; // 最大和
+
+        while (right < arr.length) {
+            if (sum == k) { // 找到了某一个值
+                length = Math.max(length, right - left + 1); // 更新length
+                sum = sum - arr[left];
+                left++;
+            } else if (sum < k) {
+                right++;
+                if (right == arr.length) {
+                    break;
+                }
+                sum = sum + arr[right];
+            } else {
+                sum = sum - arr[left];
+                left++;
+            }
+        }
+        return length;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//    public static void main(String[] args) {
+//        int[] arr = {1, 2, 3, 3};
+//
+//        System.out.println(getUnorderedArrayAddVauleIsKMaxLength_arrarValue(arr, 6));
+//    }
+
+    /**
+     * 未排序的数组中相加和为给定值的最大子数组长度O(N) + O(N)
+     * @param arr
+     * @param k
+     * @return
+     */
+    public static int getUnorderedArrayAddVauleIsKMaxLength_arrarValue(int[] arr, int k) {
+        if (null == arr || arr.length == 0) {
+            return 0;
+        }
+        int maxLength = 0;
+        int sum = 0;
+
+        Map<Integer, Integer> map = Maps.newHashMap();
+        map.put(0, -1);
+
+        for (int i = 0; i < arr.length; i++) {
+            sum = sum + arr[i];
+
+            if (map.containsKey(sum - k)) {
+                maxLength = Math.max(maxLength, i - map.get(sum - k));
+            }
+
+            if (!map.containsKey(sum)) {
+                map.put(sum, i);
+            }
+        }
+        return maxLength;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//    public static void main(String[] args) {
+//
+//        int[] arr = {2, 1, 5, 7, 4, 3, 6};
+//
+//        // sort自然数数组的排序(arr);
+//
+//        sort自然数数组的排序A(arr);
+//
+//        for (int i : arr) {
+//            System.out.print(i + "\t");
+//        }
+//    }
+
+    /**
+     * 自然数数组的排序O(N) + O(1) - 成环推
+     * @param arr
+     */
+    public static void sort自然数数组的排序(int[] arr) {
+        if (null == arr || arr.length == 0) {
+            return;
+        }
+        int temp = 0;
+        int next = 0;
+
+        for (int i = 0; i < arr.length; i++) {
+            temp = arr[i];
+            while (arr[i] != i + 1) {
+                next = arr[temp - 1];
+                arr[temp - 1] = temp;
+                temp = next;
+            }
+        }
+    }
+
+    /**
+     * 自然数数组的排序O(N) + O(1) - 交换
+     * @param arr
+     */
+    public static void sort自然数数组的排序A(int[] arr) {
+        if (null == arr || arr.length == 0) {
+            return;
+        }
+        int temp = 0;
+        for (int i = 0; i < arr.length; i++) {
+            while (arr[i] != i + 1) {
+                temp = arr[arr[i] - 1];
+                arr[arr[i] - 1] = arr[i];
+                arr[i] = temp;
+            }
+        }
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//    public static void main(String[] args) {
+//        int[] arr = {2, 1, 5, 7, 4, 3, 6};
+//
+//        modifyArrayValueEvenOdd(arr);
+//
+//        for (int i : arr) {
+//            System.out.print(i + "\t");
+//        }
+//    }
+
+    /**
+     * 奇数下标都是奇数，或者偶数下标是偶数
+     * @param arr
+     */
+    public static void modifyArrayValueEvenOdd(int[] arr) {
+        if (null == arr || arr.length == 0) {
+            return;
+        }
+        int even = 0; // 偶数
+        int odd = 1; // 奇数
+        int end = arr.length - 1;
+
+        while (even < arr.length && odd < arr.length) {
+            if (arr[end] % 2 == 0) { // 偶数
+                swapModifyArrayValueEvenOdd(arr, even, end);
+                even = even + 2;
+            } else { // 奇数
+                swapModifyArrayValueEvenOdd(arr, odd, end);
+                odd = odd + 2;
+            }
+        }
+    }
+
+    public static void swapModifyArrayValueEvenOdd(int[] arr, int left, int right) {
+        arr[left] = arr[left] ^ arr[right];
+        arr[right] = arr[left] ^ arr[right];
+        arr[left] = arr[left] ^ arr[right];
+    }
+
+//    public static void main(String[] args) {
+//        int[] arr = {1, -2, 3, 5, -2, 6, -1};
+//
+//        System.out.println(getChildArrayMaxValue(arr));
+//    }
+
+    /**
+     * 子数组的最大累加和
+     * @param arr
+     * @return
+     */
+    public static int getChildArrayMaxValue(int[] arr) {
+        if (null == arr || arr.length == 0) {
+            return 0;
+        }
+        int currentIndex = 0;
+
+        int max = 0;
+        int sum = 0;
+        while (currentIndex < arr.length) {
+            sum += arr[currentIndex];
+            if (sum < 0) { // 重新计算
+                sum = 0;
+            } else {
+                max = Math.max(max, sum);
+            }
+            currentIndex++;
+        }
+        return max;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//    public static void main(String[] args) {
+//        int[][] martrix = {{-90, 48, 78}, {64, -40, 64}, {-81, -7, 66}};
+//
+//        System.out.println(getChildMaxtrixMaxValue(martrix));
+//    }
+
+    /**
+     * 子矩阵最大累加和
+     * @param martrix
+     * @return
+     */
+    public static int getChildMaxtrixMaxValue(int[][] martrix) {
+        if (null == martrix || martrix.length == 0 || null == martrix[0] || martrix[0].length == 0) {
+            return 0;
+        }
+        int max = Integer.MIN_VALUE;
+        int cur = 0;
+        int[] addArray = null;
+
+        for (int i = 0; i < martrix.length; i++) {
+            addArray = new int[martrix[0].length];
+            for (int j = i; j < martrix.length; j++) {
+                cur = 0;
+                for (int k = 0; k < addArray.length; k++) {
+                    addArray[k] += martrix[j][k];
+                    cur += addArray[k];
+                    max = Math.max(max, cur);
+                    cur = cur < 0 ? 0 : cur;
+                }
+            }
+        }
+        return max;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * 子数组中的最大累乘积
+     * @param arr
+     * @return
+     */
+    public static double getChildArrayMaxMulityValue(double[] arr) {
+        if (null == arr || arr.length == 0) {
+            return 0;
+        }
+
+        // 分析到哪一个会是最大值
+        // 1. arr[i]之前是正数字，那么最大值出现可能之一是arr[i] * max
+        // 2. arr[i]之前是正数字, 但是是小数，那么最大值 = arr[i];
+        // 3. arr[i]之前是负数，arr[i]也是负数，那么最大值 = arr[i] * min
+
+        double res = arr[0]; // 最终结果
+        double max = arr[0];
+        double min = arr[0];
+
+        double maxEnd = 0;
+        double minEnd = 0;
+
+        for (int i = 1; i < arr.length; i++) {
+            maxEnd = max * arr[i];
+            minEnd = min * arr[i];
+
+            max = Math.max(Math.max(maxEnd, minEnd), arr[i]);
+            min = Math.min(Math.min(maxEnd, minEnd), arr[i]);
+
+            res = Math.max(max, res);
+        }
+        return res;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//    public static void main(String[] args) {
+//        int[][] m = {
+//                {0, 1, 1, 1, 1},
+//                {0, 1, 0, 0, 1},
+//                {0, 1, 0, 0, 1},
+//                {0, 1, 1, 1, 1},
+//                {0, 1, 0, 1, 1}};
+//
+//        System.out.println(getMaxSquareSize(m));
+//    }
+
+    /**
+     * 边界是1的最大正方形大小
+     * @param m
+     * @return
+     */
+    public static int getMaxSquareSize(int[][] m) {
+        if (null == m || m.length == 0 || null == m[0] || m[0].length == 0) {
+            return 0;
+        }
+        // 生成两个辅助矩阵，用来判断正方形的四个角，check right矩阵和down矩阵的size是否符合边长
+        // right[][]矩阵
+        //  down[][]矩阵
+
+        // 1. 辅助矩阵
+        int[][] down = new int[m.length][m[0].length];
+        int[][] right = new int[m.length][m[0].length];
+
+        // 2. 生成辅助矩阵
+        setupHelpedMartrix(m, down, right);
+
+        // 3. check正方形是否存在
+        int borderSize = Math.min(m.length, m[0].length);
+        for (int size = borderSize; size > 0; size--) {
+            if (checkSizeCanBorder(size, down, right)) {
+                return size;
+            }
+        }
+        return 0;
+    }
+
+    public static void setupHelpedMartrix(int[][] m,
+                                          int[][] down,
+                                          int[][] right) {
+        int row = m.length;
+        int col = m[0].length;
+
+        // 两个辅助矩阵的右下角都是1
+        if (m[row - 1][col - 1] == 1) {
+            down[row - 1][col - 1] = 1;
+            right[row - 1][col - 1] = 1;
+        }
+
+        // 以m的最后一列生成辅助矩阵down和right的最后一列
+        for (int i = row - 2; i >= 0; i--) {
+            if (m[i][col - 1] == 1) {
+                right[i][col - 1] = 1;
+                down[i][col - 1] = down[i + 1][col - 1] + 1;
+            }
+        }
+
+        // 以m的最后一行生成辅助矩阵down和right的最后一列
+        for (int i = col - 2; i >= 0; i--) {
+            if (m[row - 1][i] == 1) {
+                down[row - 1][i] = 1;
+                right[row - 1][i] = right[row - 1][i + 1] + 1;
+            }
+        }
+
+        // 处理剩下的位置
+        for (int i = row - 2; i >= 0; i--) {
+            for (int j = col - 2; j >= 0; j--) {
+                if (m[i][j] == 1) {
+                    down[i][j] = down[i + 1][j] + 1;
+                    right[i][j] = right[i][j + 1] + 1;
+                }
+            }
+        }
+    }
+
+    public static boolean checkSizeCanBorder(int size,
+                                             int[][] down,
+                                             int[][] right) {
+        for (int i = 0; i < right.length - size + 1; i++) {
+            for (int j = 0; j < right[0].length - size + 1; j++) {
+                if (right[i][j] >= size && down[i][j] >= size && right[i + size - 1][j] >= size && down[i][j + size - 1] >= size) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//    public static void main(String[] args) {
+//        int[] arr = {2, 3, 1, 4};
+//
+//        getMulityArrayValueExceptCurrentIndexValue(arr);
+//
+//        getMulityArrayValueExceptCurrentIndexValueB(arr);
+//    }
+
+    /**
+     * 除去当前位置上的求其他位置上所有的乘积 - 除法
+     * @param arr
+     * @return
+     */
+    public static int[] getMulityArrayValueExceptCurrentIndexValue(int[] arr) {
+        if (null == arr || arr.length == 0) {
+            return arr;
+        }
+        int allMulity = 1;
+        for (int i = 0; i < arr.length; i++) {
+            allMulity *= arr[i];
+        }
+
+        int[] res = new int[arr.length];
+        for (int i = 0; i < arr.length; i++) {
+            res[i] = allMulity / arr[i];
+        }
+        return res;
+    }
+
+    /**
+     * 除去当前位置上的求其他位置上所有的乘积 - 非除法
+     * @param arr
+     * @return
+     */
+    public static int[] getMulityArrayValueExceptCurrentIndexValueB(int[] arr) {
+        if (null == arr || arr.length == 0) {
+            return arr;
+        }
+        int[] res = new int[arr.length];
+
+        res[0] = arr[0];
+        for (int i = 1; i < arr.length; i++) {
+            res[i] = res[i - 1] * arr[i];
+        }
+
+        int temp = 1;
+        for (int i = arr.length - 1; i > 0; i--) {
+            res[i] = res[i - 1] * temp;
+            temp = temp * arr[i];
+        }
+        res[0] = temp;
+        return res;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//    public static void main(String[] args) {
+//        int[] arr = {1, 2, 2, 2, 3, 3, 4, 5, 6, 6, 7, 7, 8, 8, 8, 9};
+//
+//        leftSwapToOrderArray(arr);
+//
+//        int[] arr1 = {0, 1, 0, 1, 2, 1, 0, 2, 0, 1};
+//
+//        leftMiddleRightSwapInArray(arr1);
+//    }
+
+    /**
+     * 使得有序重复元素的数组中左侧变成有序不重复的序列
+     * @param arr
+     */
+    public static void leftSwapToOrderArray(int[] arr) {
+        if (null == arr || arr.length < 2) {
+            return;
+        }
+        int u = 0;
+        int i = 1;
+
+        while (i != arr.length) {
+            if (arr[i++] != arr[u]) {
+                swapTwoEle(arr, ++u, i - 1);
+            }
+        }
+    }
+
+    /**
+     * 在数组中划分成左中右三个区域，每块区域元素相同（只有三种元素）
+     * @param arr
+     */
+    public static void leftMiddleRightSwapInArray(int[] arr) {
+        if (null == arr || arr.length == 0) {
+            return;
+        }
+
+        int left = 0;
+        int index = 0;
+        int right = arr.length - 1;
+
+        while (index <= right) {
+            if (arr[index] == 0) { // 左侧交换
+                swapTwoEle(arr, index++, left++);
+            } else if (arr[index] == 2) { // 右侧交换
+                swapTwoEle(arr, index, right--); // index还要看换回来的元素是什么，然后才能++
+            } else {
+                index++;
+            }
+        }
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//    public static void main(String[] args) {
+//        int[] arr = {-1, 2, 3, 4};
+//
+//        System.out.println(getMinArrayValue(arr));
+//    }
+
+    /**
+     * 数组中未出现的最小正整数
+     * @param arr
+     * @return
+     */
+    public static int getMinArrayValue(int[] arr) {
+        if (null == arr || arr.length == 0) {
+            return 0;
+        }
+        int left = 0;
+        int right = arr.length;
+
+        while (left < right) {
+            if (arr[left] == left + 1) {
+                left++; // 从1 - l开始都有值了
+            } else if (arr[left] <= left || arr[left] > right || arr[arr[left] - 1] == arr[left]) {
+                arr[left] = arr[--right]; // 从right--往前找，然后check是否符合
+            } else {
+                swapTwoEle(arr, left, arr[left] - 1);
+            }
+        }
+        return left + 1;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//    public static void main(String[] args) {
+//        int[] arr = {9, 3, 1, 10};
+//
+//        System.out.println(getOrderArrayMaxGap(arr));
+//    }
+
+    /**
+     * 数组排序后的相邻数的最大差值 - O(N)时间复杂度
+     * @param arr
+     * @return
+     */
+    public static int getOrderArrayMaxGap(int[] arr) {
+        if (null == arr || arr.length == 0) {
+            return 0;
+        }
+        // 本题一般的排序时间复杂度一般都是O(logN*N), 利用桶排序的思想时间复杂度达到O(N)
+        // 首先找到数组中的最大值和最小值
+        int max = Integer.MIN_VALUE;
+        int min = Integer.MAX_VALUE;
+
+        for (int i = 0; i < arr.length; i++) {
+            max = Math.max(max, arr[i]);
+            min = Math.min(min, arr[i]);
+        }
+
+        if (max == min) {
+            return 0;
+        }
+
+        int len = arr.length;
+        // 分桶
+        int[] maxs = new int[len + 1]; // 记录N+1个桶里面的每个桶的最大值
+        int[] mins = new int[len + 1]; // 记录N+1个桶里面的每个桶的最小值
+
+        boolean[] hasNum = new boolean[len + 1];
+
+        int bucketNumber = 0;
+        for (int i = 0; i < arr.length; i++) {
+            // 分桶处理
+            bucketNumber = calBucketNum(arr[i], len, max, min); // 计算桶标号
+            mins[bucketNumber] = hasNum[bucketNumber] ? Math.min(mins[bucketNumber], arr[i]) : arr[i];
+            maxs[bucketNumber] = hasNum[bucketNumber] ? Math.max(maxs[bucketNumber], arr[i]) : arr[i];
+            hasNum[bucketNumber] = true; // 桶里有值，桶被用到了
+        }
+
+        // 最大的差值出现在每个桶的跨桶区间上，本桶的最小值 - 上一个桶的最大值
+        int res = 0;
+        int lastMax = maxs[0];
+        for (int i = 1; i <= len; i++) {
+            if (hasNum[i]) {
+                res = Math.max(res, mins[i] - lastMax);
+                lastMax = maxs[i];
+            }
+        }
+        return res;
+    }
+
+    public static int calBucketNum(long num, long len, long max, long min) {
+        return (int) ((num - min) * len / (max - min));
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//    public static void main(String[] args) {
+//        int[] ar = {3, 9, 5, 2, 4, 4};
+//
+//        System.out.println(getMinSplitArrayValue(ar));
+//    }
+
+    /**
+     * 数组中的分割代价，数组中的总和分割成现状的最小代价（黄金分割问题）
+     * @param arr
+     * @return
+     */
+    public static int getMinSplitArrayValue(int[] arr) {
+        if (null == arr || arr.length == 0) {
+            return 0;
+        }
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>(); // 默认是小顶堆
+        for (int i = 0; i < arr.length; i++) {
+            minHeap.add(arr[i]);
+        }
+
+        int res = 0;
+        int sum = 0;
+        while (minHeap.size() != 1) {
+            sum = minHeap.poll() + minHeap.poll();
+            res += sum;
+            minHeap.add(sum);
+        }
+        return res;
     }
 
 }
