@@ -7,17 +7,17 @@ package com.hbx.play.zcytest.other;
  */
 public class OtherPot {
 
-    public static void main(String[] args) {
-        int count = 0;
-        for (int i = 0; i < 10000; i++) {
-            if (getRadom7ByRandom5() == 1) {
-                count++;
-            }
-        }
-        System.out.println(count);
-        System.out.println((double) count / 10000);
-        System.out.println(1.0 / 7);
-    }
+//    public static void main(String[] args) {
+//        int count = 0;
+//        for (int i = 0; i < 10000; i++) {
+//            if (getRadom7ByRandom5() == 1) {
+//                count++;
+//            }
+//        }
+//        System.out.println(count);
+//        System.out.println((double) count / 10000);
+//        System.out.println(1.0 / 7);
+//    }
 
     /**
      * 产生1 - 7的随机数
@@ -80,6 +80,23 @@ public class OtherPot {
         } while (num >= 12);
         // 现在num 取值在0 ~ 11之间
         return num % 6 + 1;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//    public static void main(String[] args) {
+//        System.out.println(getTwoNumberMax公约数(12, 10));
+//    }
+
+    /**
+     * 求两个数的最大公约数
+     * @param n
+     * @param m
+     * @return
+     */
+    public static int getTwoNumberMax公约数(int m, int n) {
+        // 采用辗转相除法
+        return n == 0 ? m : getTwoNumberMax公约数(n, m % n);
     }
 
 }
