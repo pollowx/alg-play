@@ -1143,5 +1143,11 @@ public class ArrayAndMartrix {
         return (int) ((num - min) * len / (max - min));
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+
+    }
+
 
 }
