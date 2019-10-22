@@ -35,6 +35,19 @@ public class OtherPot {
         return (int) (Math.random() * 5) + 1;
     }
 
+    /**
+     * 产生 1 - 10的数根据1-7
+     * https://leetcode-cn.com/problems/implement-rand10-using-rand7/submissions/
+     * @return
+     */
+    public static int getRadom10ByRandom7() {
+        int num = 0;
+        do {
+            num = (getRadom7ByRandom5() - 1) * 7 + (getRadom7ByRandom5() - 1); // (0 ~ 49)
+        } while (num >= 39);
+        return num % 10 + 1;
+    }
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public static int rand01p() {
