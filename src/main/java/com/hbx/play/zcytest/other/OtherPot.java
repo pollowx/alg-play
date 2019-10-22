@@ -35,6 +35,38 @@ public class OtherPot {
         return (int) (Math.random() * 5) + 1;
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    public static int rand01p() {
+        double p = 0.91; // 可以随意改
+
+        return Math.random() < p ? 0 : 1;
+    }
+
+    public static int rand01() {
+        int num = 0;
+        do {
+            num = rand01p();
+        } while (num == rand01p());
+
+        return num; // 随机产生0或者1
+    }
+
+    public static int rand0To3() {
+        return 2 * rand01() + rand01();
+    }
+
+    /**
+     * 生成1-6之间的随机数利用给定的概率函数
+     * @return
+     */
+    public static int rand1To6() {
+        int num = 0;
+        do {
+            num = rand0To3() * 4 + rand0To3();
+        } while (num >= 12);
+        // 现在num 取值在0 ~ 11之间
+        return num % 6 + 1;
+    }
 
 }
