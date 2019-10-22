@@ -14,6 +14,8 @@ public class TrapRainWater {
         System.out.println(getMaxRainWaterA(arr));
 
         System.out.println(getMaxRainWaterB(arr));
+
+        System.out.println(getMaxRainWaterBest(arr));
     }
 
     /**
@@ -81,6 +83,39 @@ public class TrapRainWater {
             res += Math.max(Math.min(leftMaxs[i], rightMaxs[i]) - arr[i], 0);
         }
 
+        return res;
+    }
+
+    /**
+     * 最优解 - O(N) + O(1)
+     * @param arr
+     * @return
+     */
+    public static int getMaxRainWaterBest(int[] arr) {
+        if (null == arr || arr.length < 3) { // 无法组成山峰
+            return 0;
+        }
+        // 思路是这样的
+        // left, right两个指针指向arr[1] 和 arr[arr.length - 2], leftMax = arr[0], rightMax = arr[arr.length - 1]
+        // 如果leftMax <= rightMax说明，当前arr[i]的瓶颈在左侧，因为右侧还有没遍历的，右侧只遍历到当前的leftMax就已经比leftMax大了
+        // 如果leftMax > rightMax, 同理
+
+        int left = 1;
+        int right = arr.length - 2;
+
+        int leftMax = arr[0];
+        int rightMax = arr[arr.length - 1];
+
+        int res = 0;
+        while (left <= right) {
+            if (leftMax < rightMax) {
+                res += leftMax - arr[left] > 0 ? leftMax - arr[left] : 0;
+                leftMax = Math.max(leftMax, arr[left++]);
+            } else {
+                res += rightMax - arr[right] > 0 ? rightMax - arr[right] : 0;
+                rightMax = Math.max(rightMax, arr[right--]);
+            }
+        }
         return res;
     }
 
