@@ -287,4 +287,37 @@ public class OtherPot {
         return area == (mostRight - mostLeft) * (mostUp - mostDown);
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static int randKByMax(int max) {
+        return (int) (Math.random() * max) + 1; // 产生 1 ~ max之间的值
+    }
+
+    /**
+     * 蓄水池算法 & 抽样算法 & 等概率算法
+     * @param k
+     * @param max
+     * @return
+     */
+    public static int[] getKNumEqualRand(int k, int max) {
+        if (k <= 0 || max <= 0) {
+            return null;
+        }
+
+        int[] res = new int[Math.min(k, max)];
+
+        // 前k个数据直接放入res
+        for (int i = 0; i < k; i++) {
+            res[i] = i + 1;
+        }
+
+        // 从第k+1个数据开始，用等概率扔掉一个res中的值，并且把当前值加入进来
+        for (int i = k + 1; i <= max; i++) {
+            if (randKByMax(i) <= k) { // 同一种概率下，准备放入res
+                res[randKByMax(k) - 1] = i; // res中随机扔掉一个，换成i
+            }
+        }
+        return res;
+    }
+
 }
