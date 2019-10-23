@@ -213,25 +213,25 @@ public class OtherPot {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-        int[][] martrix = {
-                {1, 1, 3, 3},
-                {3, 2, 4, 3},
-                {3, 2, 4, 4},
-                {1, 3, 2, 4},
-                {2, 3, 3, 4},
-        };
-        System.out.println(judgePerfectRectangle(martrix));
-
-        int[][] martrix1 = {
-                {1, 1, 3, 3},
-                {3, 1, 4, 2},
-                {3, 2, 4, 4},
-                {1, 3, 2, 4},
-                {2, 3, 3, 4},
-        };
-        System.out.println(judgePerfectRectangle(martrix1));
-    }
+//    public static void main(String[] args) {
+//        int[][] martrix = {
+//                {1, 1, 3, 3},
+//                {3, 2, 4, 3},
+//                {3, 2, 4, 4},
+//                {1, 3, 2, 4},
+//                {2, 3, 3, 4},
+//        };
+//        System.out.println(judgePerfectRectangle(martrix));
+//
+//        int[][] martrix1 = {
+//                {1, 1, 3, 3},
+//                {3, 1, 4, 2},
+//                {3, 2, 4, 4},
+//                {1, 3, 2, 4},
+//                {2, 3, 3, 4},
+//        };
+//        System.out.println(judgePerfectRectangle(martrix1));
+//    }
 
     /**
      * 判断是否是完美矩形
