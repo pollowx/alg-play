@@ -361,4 +361,34 @@ public class OtherPot {
     }
 
 
+    /**
+     * 找到数组的划分方式使得左侧最大值和右侧最大值的差最大 - 辅助数组O(N) + O(N)
+     * @param arr
+     * @return
+     */
+    public static int getArraySplitAbsValueA(int[] arr) {
+        if (null == arr || arr.length == 0) {
+            return 0;
+        }
+        int[] leftMaxs = new int[arr.length];
+        int[] rightMaxs = new int[arr.length];
+
+        leftMaxs[0] = arr[0];
+        for (int i = 1; i < arr.length; i++) {
+            leftMaxs[i] = Math.max(leftMaxs[i - 1], arr[i]);
+        }
+
+        rightMaxs[arr.length - 1] = arr[arr.length - 1];
+        for (int i = arr.length - 2; i >= 0; i--) {
+            rightMaxs[i] = Math.max(rightMaxs[i + 1], arr[i]);
+        }
+
+        int res = 0;
+        for (int i = 0; i < arr.length; i++) {
+            res = Math.max(res, Math.abs(rightMaxs[i] - leftMaxs[i]));
+        }
+        return res;
+    }
+
+
 }
