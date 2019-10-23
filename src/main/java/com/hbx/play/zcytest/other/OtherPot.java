@@ -100,10 +100,10 @@ public class OtherPot {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-        System.out.println(getNum的阶乘尾巴上有多少个0(20));
-        System.out.println(getNum的阶乘尾巴上有多少个0Best(20));
-    }
+//    public static void main(String[] args) {
+//        System.out.println(getNum的阶乘尾巴上有多少个0(20));
+//        System.out.println(getNum的阶乘尾巴上有多少个0Best(20));
+//    }
 
     /**
      * O(N*logN)
@@ -144,6 +144,22 @@ public class OtherPot {
         while (num != 0) {
             res = res + num / 5;
             num = num / 5;
+        }
+        return res;
+    }
+
+    /**
+     * @param num
+     * @return
+     */
+    public static int calN阶乘二进制上末尾0的个数(int num) {
+        if (num < 1) {
+            return -1;
+        }
+        int res = 0;
+        while (num != 0) {
+            res += num / 2;
+            num /= 2;
         }
         return res;
     }
