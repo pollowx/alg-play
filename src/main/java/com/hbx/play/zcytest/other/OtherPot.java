@@ -164,4 +164,23 @@ public class OtherPot {
         return res;
     }
 
+    /**
+     * @param num
+     * @return
+     */
+    public static int calN阶乘二进制上末尾0的个数B(int num) {
+        // Z = 2的因子总个数, m是N的二进制上1的个数, 有Z = N - m
+        // N = 6, N! = 720, m = 2 所以Z = 6 - 2 = 4
+        if (num < 1) {
+            return -1;
+        }
+        int temp = num;
+        int res = 0;
+        while (num != 0) {
+           res += (num & 1) == 1 ? 1 : 0;
+           num = num >>> 1;
+        }
+        return temp - res;
+    }
+
 }
