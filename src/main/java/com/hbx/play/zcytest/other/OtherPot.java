@@ -183,4 +183,26 @@ public class OtherPot {
         return temp - res;
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//    public static void main(String[] args) {
+//        printFlods(1, 2, true);
+//    }
+
+    /**
+     * 折纸的打印上下折痕 - 二叉树的反中序遍历
+     * @param i
+     * @param n
+     * @param down
+     */
+    public static void printFlods(int i, int n, boolean down) {
+        if (i > n) {
+            return;
+        }
+        printFlods(i + 1, n, true);
+        System.out.print(down ? " 下 " : " 上 ");
+        printFlods(i + 1, n, false);
+    }
+
+
 }
