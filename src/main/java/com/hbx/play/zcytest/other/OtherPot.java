@@ -101,9 +101,15 @@ public class OtherPot {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public static void main(String[] args) {
-        System.out.println(getNum的阶乘尾巴上有多少个0(5));
+        System.out.println(getNum的阶乘尾巴上有多少个0(1000000000));
+        System.out.println(getNum的阶乘尾巴上有多少个0Best(1000000000));
     }
 
+    /**
+     * O(N*logN)
+     * @param num
+     * @return
+     */
     public static int getNum的阶乘尾巴上有多少个0(int num) {
         if (num <= 0) {
             return 0;
@@ -113,10 +119,22 @@ public class OtherPot {
 
         for (int i = 5; i < num + 1; i += 5) {
             cur = i;
-            if (cur % 5 == 0) {
+            while (cur % 5 == 0) {
                 res++;
                 cur = cur / 5;
             }
+        }
+        return res;
+    }
+
+    public static int getNum的阶乘尾巴上有多少个0Best(int num) {
+        if (num <= 0) {
+            return 0;
+        }
+        int res = 0;
+        while (num != 0) {
+            res = res + num / 5;
+            num = num / 5;
         }
         return res;
     }
