@@ -1,5 +1,12 @@
 package com.hbx.play.zcytest.other;
 
+import com.google.common.collect.Sets;
+
+import java.util.HashMap;
+import java.util.Set;
+
+import javax.validation.constraints.Max;
+
 /**
  * @Auther: bingxin
  * @Date: 2019-10-22 16:44
@@ -177,8 +184,8 @@ public class OtherPot {
         int temp = num;
         int res = 0;
         while (num != 0) {
-           res += (num & 1) == 1 ? 1 : 0;
-           num = num >>> 1;
+            res += (num & 1) == 1 ? 1 : 0;
+            num = num >>> 1;
         }
         return temp - res;
     }
@@ -204,5 +211,80 @@ public class OtherPot {
         printFlods(i + 1, n, false);
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+        int[][] martrix = {
+                {1, 1, 3, 3},
+                {3, 2, 4, 3},
+                {3, 2, 4, 4},
+                {1, 3, 2, 4},
+                {2, 3, 3, 4},
+        };
+        System.out.println(judgePerfectRectangle(martrix));
+
+        int[][] martrix1 = {
+                {1, 1, 3, 3},
+                {3, 1, 4, 2},
+                {3, 2, 4, 4},
+                {1, 3, 2, 4},
+                {2, 3, 3, 4},
+        };
+        System.out.println(judgePerfectRectangle(martrix1));
+    }
+
+    /**
+     * 判断是否是完美矩形
+     * @param maxrtrix
+     * @return
+     */
+    public static boolean judgePerfectRectangle(int[][] maxrtrix) {
+        if (null == maxrtrix || maxrtrix.length == 0 || null == maxrtrix[0] || maxrtrix[0].length == 0) {
+            return false;
+        }
+
+        int mostLeft = Integer.MAX_VALUE;
+        int mostRight = Integer.MIN_VALUE;
+        int mostDown = Integer.MAX_VALUE;
+        int mostUp = Integer.MIN_VALUE;
+
+        int area = 0; // 每一个矩形可以组成的面积
+
+        Set<String> set = Sets.newHashSet();
+        for (int[] arr : maxrtrix) { // 每一行拿出来处理
+            mostLeft = Math.min(mostLeft, arr[0]);
+            mostRight = Math.max(mostRight, arr[2]);
+            mostDown = Math.min(mostDown, arr[1]);
+            mostUp = Math.max(mostUp, arr[3]);
+
+            area += (arr[2] - arr[0]) * (arr[3] - arr[1]);
+
+            String leftDown = arr[0] + "_" + arr[1];
+            String leftUp = arr[0] + "_" + arr[3];
+            String rightDown = arr[2] + "_" + arr[1];
+            String rightUp = arr[2] + "_" + arr[3];
+
+            if (!set.add(leftDown)) { // 没加入成功，可能已经存在了
+                set.remove(leftDown);
+            }
+            if (!set.add(leftUp)) { // 没加入成功，可能已经存在了
+                set.remove(leftUp);
+            }
+            if (!set.add(rightDown)) { // 没加入成功，可能已经存在了
+                set.remove(rightDown);
+            }
+            if (!set.add(rightUp)) { // 没加入成功，可能已经存在了
+                set.remove(rightUp);
+            }
+        }
+
+        if (set.size() != 4 || !set.contains(mostLeft + "_" + mostDown) ||
+                !set.contains(mostLeft + "_" + mostUp) ||
+                !set.contains(mostRight + "_" + mostDown) ||
+                !set.contains(mostRight + "_" + mostUp)) { // 到这里小矩形的每个顶点已经都remove了，剩下的只有大矩形的四个角坐标
+            return false;
+        }
+        return area == (mostRight - mostLeft) * (mostUp - mostDown);
+    }
 
 }
