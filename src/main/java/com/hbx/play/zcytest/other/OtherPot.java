@@ -2,10 +2,7 @@ package com.hbx.play.zcytest.other;
 
 import com.google.common.collect.Sets;
 
-import java.util.HashMap;
 import java.util.Set;
-
-import javax.validation.constraints.Max;
 
 /**
  * @Auther: bingxin
@@ -319,5 +316,49 @@ public class OtherPot {
         }
         return res;
     }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+//        int[] arr = {2, 7, 3, 1, 1};
+//
+//        System.out.println(getArraySplitAbsValue(arr));
+//        System.out.println(getArraySplitAbsValueA(arr));
+//        System.out.println(getArraySplitAbsValueBest(arr));
+
+        int[] arr1 = {2, 6, 3, 1, 1, 7};
+
+        System.out.println(getArraySplitAbsValue(arr1));
+        System.out.println(getArraySplitAbsValueA(arr1));
+        System.out.println(getArraySplitAbsValueBest(arr1));
+    }
+
+    /**
+     * 找到数组的划分方式使得左侧最大值和右侧最大值的差最大 - 普通方式O(N^2) + O(1)
+     * @param arr
+     * @return
+     */
+    public static int getArraySplitAbsValue(int[] arr) {
+        if (null == arr || arr.length == 0) {
+            return 0;
+        }
+        int res = 0;
+        for (int i = 0; i < arr.length - 1; i++) {
+            int leftMax = 0;
+            int rightMax = 0;
+
+            for (int j = i; j >= 0; j--) {
+                leftMax = Math.max(leftMax, arr[j]);
+            }
+
+            for (int k = i + 1; k < arr.length; k++) {
+                rightMax = Math.max(rightMax, arr[k]);
+            }
+
+            res = Math.max(res, Math.abs(rightMax - leftMax));
+        }
+        return res;
+    }
+
 
 }
