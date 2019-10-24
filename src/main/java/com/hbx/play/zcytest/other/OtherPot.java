@@ -319,19 +319,19 @@ public class OtherPot {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
+//    public static void main(String[] args) {
 //        int[] arr = {2, 7, 3, 1, 1};
 //
 //        System.out.println(getArraySplitAbsValue(arr));
 //        System.out.println(getArraySplitAbsValueA(arr));
 //        System.out.println(getArraySplitAbsValueBest(arr));
-
-        int[] arr1 = {2, 6, 3, 1, 1, 7};
-
-        System.out.println(getArraySplitAbsValue(arr1));
-        System.out.println(getArraySplitAbsValueA(arr1));
-        System.out.println(getArraySplitAbsValueBest(arr1));
-    }
+//
+//        int[] arr1 = {2, 6, 3, 1, 1, 7};
+//
+//        System.out.println(getArraySplitAbsValue(arr1));
+//        System.out.println(getArraySplitAbsValueA(arr1));
+//        System.out.println(getArraySplitAbsValueBest(arr1));
+//    }
 
     /**
      * 找到数组的划分方式使得左侧最大值和右侧最大值的差最大 - 普通方式O(N^2) + O(1)
@@ -405,5 +405,24 @@ public class OtherPot {
             allMax = Math.max(allMax, arr[i]);
         }
         return allMax - Math.min(arr[0], arr[arr.length - 1]);
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * 调整[0, X)区间上的数出现的概率
+     * @param k
+     * @return
+     */
+    public static double randXPowerK(int k) {
+        if (k <= 0) {
+            return 0;
+        }
+
+        double res = 0;
+        for (int i = 1; i <= k; i++) {
+            res = Math.max(res, Math.random());
+        }
+        return res;
     }
 }
