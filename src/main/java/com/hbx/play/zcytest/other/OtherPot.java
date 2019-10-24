@@ -2,6 +2,7 @@ package com.hbx.play.zcytest.other;
 
 import com.google.common.collect.Sets;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -429,15 +430,15 @@ public class OtherPot {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-        int[] arr = {9, 1, 4, 9, 0, 4, 8, 9, 0, 1};
-
-        findStaticsticsArrayPath(arr);
-
-        for (int a : arr) {
-            System.out.print(a + "\t");
-        }
-    }
+//    public static void main(String[] args) {
+//        int[] arr = {9, 1, 4, 9, 0, 4, 8, 9, 0, 1};
+//
+//        findStaticsticsArrayPath(arr);
+//
+//        for (int a : arr) {
+//            System.out.print(a + "\t");
+//        }
+//    }
 
     /**
      * 路径数组变为统计数组
@@ -525,4 +526,51 @@ public class OtherPot {
         }
         arr[0] = 1; // 首都只有一个
     }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+        int[] arr = {3, 2, 5};
+
+        System.out.println(findMinCannotAddToSumNormal(arr));
+    }
+
+    /**
+     * 正数数组中的最小不可组成和 - O(2^N) + O(N)
+     * @param arr
+     * @return
+     */
+    public static int findMinCannotAddToSumNormal(int[] arr) {
+        if (null == arr || arr.length == 0) {
+            return 1;
+        }
+        // 把所有子集的和加入到set
+        Set<Integer> set = new HashSet<>();
+        process(arr, 0, 0, set);
+
+        // 找到数组中的最小值
+        int min = Integer.MAX_VALUE;
+        for (int i = 0; i < arr.length; i++) {
+            min = Math.min(min, arr[i]);
+        }
+
+        for (int i = min; i < Integer.MAX_VALUE; i++) {
+            if (!set.contains(i)) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    public static void process(int[] arr, int i, int sum, Set<Integer> set) {
+        if (i == arr.length) {
+            set.add(sum);
+            return;
+        }
+        process(arr, i + 1, sum, set);
+
+        process(arr, i + 1, sum + arr[i], set);
+    }
+
+
 }
