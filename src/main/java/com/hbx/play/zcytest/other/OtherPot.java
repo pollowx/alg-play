@@ -415,6 +415,7 @@ public class OtherPot {
      * @return
      */
     public static double randXPowerK(int k) {
+        // 分析[0, x)上出现的概率，下一次如果k^2需要< x那么下一次出现的数字仍然要在[0, x)区间上
         if (k <= 0) {
             return 0;
         }
