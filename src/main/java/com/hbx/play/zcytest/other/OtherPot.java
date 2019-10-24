@@ -533,6 +533,8 @@ public class OtherPot {
         int[] arr = {3, 2, 5};
 
         System.out.println(findMinCannotAddToSumNormal(arr));
+
+        System.out.println(findMinCannotAddToSumByDp(arr));
     }
 
     /**
@@ -570,6 +572,43 @@ public class OtherPot {
         process(arr, i + 1, sum, set);
 
         process(arr, i + 1, sum + arr[i], set);
+    }
+
+    /**
+     * 正数数组中的最小不可组成和 - DP O(N * sum) + O(N)
+     * @param arr
+     * @return
+     */
+    public static int findMinCannotAddToSumByDp(int[] arr) {
+        if (null == arr || arr.length == 0) {
+            return 1;
+        }
+
+        int sum = 0;
+        int min = Integer.MAX_VALUE;
+        for (int i = 0; i < arr.length; i++) {
+            sum += arr[i];
+            min = Math.min(min, arr[i]);
+        }
+        boolean[] dp = new boolean[sum + 1]; // boolean 的index代表，该数字能被arr的子集相加得到
+        dp[0] = true;
+
+        // 如果arr[0 ~ i]的子集相加可以得到k
+        // 那么arr[0 ~ i]的子集必然可以得到k + arr[i+1]
+        // 可以这样解释，即每个元素对应的位置肯定是可以得到的，然后剩下的就是元素累加对应的index的赋值，
+        // 那么总和 - 当前对应的index就是剩下可以组成的另外半部分的和，可以一次求出来得到index
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = sum; j >= arr[i]; j--) {
+                dp[j] = dp[j - arr[i]] ? true : dp[j];
+            }
+        }
+
+        for (int i = min; i < dp.length; i++) {
+            if (!dp[i]) {
+                return i;
+            }
+        }
+        return 0;
     }
 
 
