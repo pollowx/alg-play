@@ -426,4 +426,103 @@ public class OtherPot {
         }
         return res;
     }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+        int[] arr = {9, 1, 4, 9, 0, 4, 8, 9, 0, 1};
+
+        findStaticsticsArrayPath(arr);
+
+        for (int a : arr) {
+            System.out.print(a + "\t");
+        }
+    }
+
+    /**
+     * 路径数组变为统计数组
+     * @param arr
+     * @return
+     */
+    public static void findStaticsticsArrayPath(int[] arr) {
+        if (null == arr || arr.length == 0) {
+            return;
+        }
+        // 把原始数组变成距离数组
+        modifyDistanceArrayPath(arr);
+
+        // 把距离数组变成统计数组，统计每个距离的数量
+        modifyStaticsticsArrayPath(arr);
+    }
+
+    public static void modifyDistanceArrayPath(int[] arr) {
+        // 先从第一个元素出发，用循环推来找到距离首都的距离
+        int nextIndex = 0;
+        int preIndex = 0;
+
+        int capIndex = -1;
+
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] == i) { // 首都
+                capIndex = i;
+                continue;
+            }
+
+            if (arr[i] < 0) { // 过滤处理过的
+                continue;
+            }
+            preIndex = i;
+            nextIndex = arr[i];
+
+            // 先把当前位置设置为-1
+            arr[i] = -1;
+
+            int current = -1;
+            while (nextIndex >= 0 && arr[nextIndex] >= 0 && nextIndex != arr[nextIndex]) { // 有值，继续循环推, 或者到首都终止
+                current = arr[nextIndex]; // 当前的value;
+                arr[nextIndex] = preIndex;
+                preIndex = nextIndex;
+                nextIndex = current;
+            }
+
+            int temp = -1;
+            int reverse = arr[nextIndex] < 0 ? arr[nextIndex] : 0;
+            while (arr[preIndex] >= 0) { // 正向推完了一轮，开始逆向赋值
+                temp = arr[preIndex]; // 回跳的值
+                arr[preIndex] = --reverse;
+                preIndex = temp;
+            }
+            if (preIndex == i) { // 回到之前的城市
+                arr[i] = --reverse;
+            }
+        }
+        arr[capIndex] = 0;
+    }
+
+    public static void modifyStaticsticsArrayPath(int[] arr) {
+        int nextIndex = 0;
+        // 从第一个元素出发，来统计每个距离的长度
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] > 0) { // 已经统计过的城市
+                continue;
+            }
+            nextIndex = Math.abs(arr[i]); // 下一个index
+
+            int temp = 0;
+            while (arr[nextIndex] <= 0) { // 说明还没统计过
+                temp = Math.abs(arr[nextIndex]);
+                arr[nextIndex] = 1;
+                nextIndex = temp;
+            }
+
+            // 跳到这里说明，1. while处理完到了arr[index]的正值上，++
+            // 2. while跳过了，直接到了这里，直接++，并且把arr[i]置0
+
+            if (arr[nextIndex] > 0) {
+                arr[nextIndex]++;
+                arr[i] = 0;
+            }
+        }
+        arr[0] = 1; // 首都只有一个
+    }
 }
