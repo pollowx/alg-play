@@ -2,6 +2,7 @@ package com.hbx.play.zcytest.other;
 
 import com.google.common.collect.Sets;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -535,6 +536,9 @@ public class OtherPot {
         System.out.println(findMinCannotAddToSumNormal(arr));
 
         System.out.println(findMinCannotAddToSumByDp(arr));
+
+        int[] arr1 = {3, 8, 1, 2};
+        System.out.println(findMinCannotAddToSumByContainOneBest(arr1));
     }
 
     /**
@@ -611,5 +615,26 @@ public class OtherPot {
         return 0;
     }
 
+    /**
+     * 正数数组中(肯定含有1)的最小不可组成和
+     * @param arr
+     * @return
+     */
+    public static int findMinCannotAddToSumByContainOneBest(int[] arr) {
+        // 思路，肯定含有1，代表每个间隔都能加上1，和上一个元素和的比较增加1，排好序后得到扩大到每个元素的有没有空缺
+        if (null == arr || arr.length == 0) {
+            return 1;
+        }
+        Arrays.sort(arr); // 排序
 
+        int range = 0;
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] <= range + 1) {
+                range += arr[i];
+            } else { // arr[i] > range + 1 说明缺了这个空隙
+                return range + 1;
+            }
+        }
+        return range + 1;
+    }
 }
