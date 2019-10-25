@@ -692,12 +692,12 @@ public class OtherPot {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-        System.out.println(getOneAppearTimeNoramal(114));
-
-        System.out.println(getOneAppearTimeBest(211));
-
-    }
+//    public static void main(String[] args) {
+//        System.out.println(getOneAppearTimeNoramal(114));
+//
+//        System.out.println(getOneAppearTimeBest(211));
+//
+//    }
 
     /**
      * 1~N中1出现的次数
@@ -760,5 +760,49 @@ public class OtherPot {
     public static int powerOf10(int base) {
         return (int) (Math.pow(10, base));
     }
+
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//    public static void main(String[] args) {
+//        //System.out.println(Math.random() * 3 + 1); // (0 ~ 2) -> (1 ~ 3)
+//
+//        int[] arr = {1, 2, 3, 7};
+//
+//        for (int i = 0; i < 20; i++) {
+//            printMCountFromArrayOfNLength(arr, 3);
+//            System.out.println();
+//        }
+//    }
+
+    /**
+     * 等概率打印N长度的数组中的M个数
+     * @param arr
+     * @param m
+     */
+    public static void printMCountFromArrayOfNLength(int[] arr, int m) {
+        if (null == arr || arr.length == 0 || m > arr.length) {
+            return;
+        }
+        int length = arr.length;
+
+        while (m > 0) {
+            int index = (int) (Math.random() * length); // 随机找一个，然后打印
+
+            System.out.print(arr[index] + " ");
+
+            swapTwoEle(arr, index, length - 1);
+
+            m--;
+            length--;
+        }
+    }
+
+    public static void swapTwoEle(int[] arr, int indexA, int indexB) {
+        int temp = arr[indexA];
+        arr[indexA] = arr[indexB];
+        arr[indexB] = temp;
+    }
+
 
 }
