@@ -530,16 +530,16 @@ public class OtherPot {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-        int[] arr = {3, 2, 5};
-
-        System.out.println(findMinCannotAddToSumNormal(arr));
-
-        System.out.println(findMinCannotAddToSumByDp(arr));
-
-        int[] arr1 = {3, 8, 1, 2};
-        System.out.println(findMinCannotAddToSumByContainOneBest(arr1));
-    }
+//    public static void main(String[] args) {
+//        int[] arr = {3, 2, 5};
+//
+//        System.out.println(findMinCannotAddToSumNormal(arr));
+//
+//        System.out.println(findMinCannotAddToSumByDp(arr));
+//
+//        int[] arr1 = {3, 8, 1, 2};
+//        System.out.println(findMinCannotAddToSumByContainOneBest(arr1));
+//    }
 
     /**
      * 正数数组中的最小不可组成和 - O(2^N) + O(N)
@@ -636,5 +636,57 @@ public class OtherPot {
             }
         }
         return range + 1;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 3, 7};
+        System.out.println(needMinCountMakeupToRange(arr, 15));
+
+        int[] arrA = {1, 5, 7};
+        System.out.println(needMinCountMakeupToRange(arrA, 15));
+
+        int[] arrB = {3, 17, 21, 78};
+        System.out.println(needMinCountMakeupToRange(arrB, 67));
+    }
+
+    /**
+     * 累加出整个范围的所有数最少还需要几个数
+     * @param arr
+     * @param range
+     * @return
+     */
+    public static int needMinCountMakeupToRange(int[] arr, int range) {
+        if (null == arr || arr.length == 0 || range < 0) {
+            return 0;
+        }
+
+        int touch = 0; // 初始值
+        int resCount = 0; // 所需要的数量
+
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] - touch <= 1) { // 说明累加值可以直接扩大, 之所以单独写这个if，就是想按类分析单个情况
+                touch += arr[i];
+            } else { // > 1的时候说明touch的值距离arr[i]还不够，那么开始处理
+                // 先拿到范围即(1 ~ arr[i] - 1)
+                int currentRange = arr[i] - 1;
+                while (touch < currentRange) {
+                    touch = touch + (touch + 1);
+                    resCount++;
+                    if (touch > range) {
+                        return resCount;
+                    }
+                }
+                touch += arr[i];
+            }
+        }
+
+        // 遍历完了数组，那么还是不到range
+        while (touch < range) {
+            touch = touch + (touch + 1);
+            resCount++;
+        }
+        return resCount;
     }
 }
