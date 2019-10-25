@@ -640,16 +640,16 @@ public class OtherPot {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-        int[] arr = {1, 2, 3, 7};
-        System.out.println(needMinCountMakeupToRange(arr, 15));
-
-        int[] arrA = {1, 5, 7};
-        System.out.println(needMinCountMakeupToRange(arrA, 15));
-
-        int[] arrB = {3, 17, 21, 78};
-        System.out.println(needMinCountMakeupToRange(arrB, 67));
-    }
+//    public static void main(String[] args) {
+//        int[] arr = {1, 2, 3, 7};
+//        System.out.println(needMinCountMakeupToRange(arr, 15));
+//
+//        int[] arrA = {1, 5, 7};
+//        System.out.println(needMinCountMakeupToRange(arrA, 15));
+//
+//        int[] arrB = {3, 17, 21, 78};
+//        System.out.println(needMinCountMakeupToRange(arrB, 67));
+//    }
 
     /**
      * 累加出整个范围的所有数最少还需要几个数
@@ -689,4 +689,38 @@ public class OtherPot {
         }
         return resCount;
     }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+        System.out.println(getOneAppearTimeNoramal(114));
+    }
+
+    /**
+     * 1~N中1出现的次数
+     * @param num
+     * @return
+     */
+    public static int getOneAppearTimeNoramal(int num) {
+        if (num <= 0) {
+            return 0;
+        }
+        int count = 0;
+        for (int i = 1; i <= num; i++) {
+            count += getOneNumCount(i);
+        }
+        return count;
+    }
+
+    public static int getOneNumCount(int num) {
+        int res = 0;
+        while (num != 0) {
+            if (num % 10 == 1) {
+                res++;
+            }
+            num /= 10;
+        }
+        return res;
+    }
+
 }
