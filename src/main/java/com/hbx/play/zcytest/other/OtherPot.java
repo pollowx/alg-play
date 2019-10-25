@@ -804,5 +804,50 @@ public class OtherPot {
         arr[indexB] = temp;
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//    public static void main(String[] args) {
+//        System.out.println(judgeOneNumberPalindrome(12121));
+//        System.out.println(judgeOneNumberPalindrome(-145676541));
+//        System.out.println(judgeOneNumberPalindrome(-890198));
+//        System.out.println(judgeOneNumberPalindrome(8910198));
+//        System.out.println(judgeOneNumberPalindrome(-22));
+//
+//    }
+
+    /**
+     * 判断一个数是否是回文数字
+     * @param n
+     * @return
+     */
+    public static boolean judgeOneNumberPalindrome(int n) {
+        if (n == Integer.MIN_VALUE) {
+            return false;
+        }
+        n = Math.abs(n); // 都变成正值
+        if (n <= 10) {
+            return false;
+        }
+        // 思路是次从这个数字的左右两侧拿出一个数，比对两个数字是否一致
+
+        int length = getLengthOfNum(n);
+
+        int left = 0;
+        int right = 0;
+
+        while (length > 1) { // 一位数直接跳过
+            int equal10Value = powerOf10(length - 1);
+
+            left = n / equal10Value;
+            right = n % 10;
+            if (left != right) { // 左侧 != 右侧
+                return false;
+            }
+            length = length - 2; // 两位数干掉
+
+            n = (n % equal10Value) / 10;
+        }
+        return true; // 到最后是回文数字
+    }
 
 }
