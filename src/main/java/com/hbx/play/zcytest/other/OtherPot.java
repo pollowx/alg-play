@@ -694,6 +694,9 @@ public class OtherPot {
 
     public static void main(String[] args) {
         System.out.println(getOneAppearTimeNoramal(114));
+
+        System.out.println(getOneAppearTimeBest(211));
+
     }
 
     /**
@@ -721,6 +724,41 @@ public class OtherPot {
             num /= 10;
         }
         return res;
+    }
+
+    /**
+     * 1~N中1出现的次数 - Best
+     * @param num
+     * @return
+     */
+    public static int getOneAppearTimeBest(int num) {
+        if (num <= 0) {
+            return 0;
+        }
+        int length = getLengthOfNum(num);
+        if (length == 1) {
+            return 1;
+        }
+        int temp = powerOf10(length - 1);
+        int first = num / temp;
+
+        int firstOneCount = first == 1 ? num % temp + 1 : temp; // 首位是1的话，加上1
+        int otherOneCount = first * (length - 1) * (temp / 10);
+
+        return firstOneCount + otherOneCount + getOneAppearTimeBest(num % temp);
+    }
+
+    public static int getLengthOfNum(int num) {
+        int length = 0;
+        while (num != 0) {
+            length++;
+            num /= 10;
+        }
+        return length;
+    }
+
+    public static int powerOf10(int base) {
+        return (int) (Math.pow(10, base));
     }
 
 }
