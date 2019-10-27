@@ -813,6 +813,7 @@ public class OtherPot {
 //        System.out.println(judgeOneNumberPalindrome(8910198));
 //        System.out.println(judgeOneNumberPalindrome(-22));
 //
+//        System.out.println(judgeOneNumberPalindrome(2147483647));
 //    }
 
     /**
@@ -849,5 +850,71 @@ public class OtherPot {
         }
         return true; // 到最后是回文数字
     }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//    public static void main(String[] args) {
+//        int[] middle = new int[]{7, 8, 1, 2, 3, 4, 5, 6};
+//        System.out.println(getMinOfRotateArray(middle));
+//
+//
+//        int[] having = new int[]{1, 2, 0, 1, 1, 1, 1, 1, 1, 1};
+//        System.out.println(getMinOfRotateArray(having));
+//
+//    }
+
+    /**
+     * 得到旋转数组中最小值，数组中可能有重复元素
+     * @param arr
+     * @return
+     */
+    public static int getMinOfRotateArray(int[] arr) {
+        int low = 0;
+        int high = arr.length - 1;
+
+        int middle = 0;
+
+        while (low < high) {
+            if (low == high - 1) {
+                break;
+            }
+            if (arr[low] < arr[high]) {
+                return arr[low];
+            }
+            middle = (low + high) / 2;
+
+            if (arr[low] > arr[middle]) { // 说明最小值在这个里面
+                high = middle;
+                continue;
+            }
+            if (arr[middle] > arr[high]) {
+                low = middle;
+                continue;
+            }
+
+            // 走到这里触发这个条件 arr[low] == arr[middle] == arr[high]
+            while (low < middle) { // 在low和middle中间找
+                if (arr[low] == arr[middle]) {
+                    low++;
+                } else if (arr[low] < arr[middle]) {
+                    return arr[low];
+                } else {
+                    high = middle;
+                    break;
+                }
+            }
+        }
+        return Math.min(arr[low], arr[high]);
+    }
+
+
+
+
+
+
+
+
+
+
 
 }

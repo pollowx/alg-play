@@ -29,9 +29,10 @@ public class ArrayRotateFindMinElement {
     public static void main(String[] args) {
 
         int[] middle = new int[]{7, 8, 1, 2, 3, 4, 5, 6};
+        System.out.println(findMinElement(middle));
+
 
         int[] having = new int[]{1, 2, 0, 1, 1, 1, 1, 1, 1, 1};
-
         System.out.println(findMinElement(having));
 
     }
