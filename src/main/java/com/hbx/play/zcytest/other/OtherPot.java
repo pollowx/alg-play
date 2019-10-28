@@ -909,14 +909,14 @@ public class OtherPot {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-        int[] middle = new int[]{7, 8, 1, 2, 3, 4, 5, 6};
-        System.out.println(judgeRotateArrayContainsNum(middle, 7));
-
-
-        int[] having = new int[]{1, 2, 0, 1, 1, 1, 1, 1, 1, 1};
-        System.out.println(judgeRotateArrayContainsNum(having, 0));
-    }
+//    public static void main(String[] args) {
+//        int[] middle = new int[]{7, 8, 1, 2, 3, 4, 5, 6};
+//        System.out.println(judgeRotateArrayContainsNum(middle, 7));
+//
+//
+//        int[] having = new int[]{1, 2, 0, 1, 1, 1, 1, 1, 1, 1};
+//        System.out.println(judgeRotateArrayContainsNum(having, 0));
+//    }
 
     /**
      * 有序数组中(可能有重复)的旋转中判断是否含有值
@@ -971,6 +971,60 @@ public class OtherPot {
             }
         }
         return false;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+        int[] middle = new int[]{1, 4, 5, 9, 3, 2, 4, 5};
+
+        System.out.println(candyChild(middle));
+    }
+
+    public static int candyChild(int[] arr) {
+        if (null == arr || arr.length == 0) {
+            return 0;
+        }
+        int index = nextMinCandyChild(arr, 0);
+        int res = rightCandsCandyChild(arr, 0, index++);
+
+        int lbase = 1; // 左侧的开始res数组，左侧坡顶
+        int next = 0;
+        int rcands = 0;
+        int rbase = 0; // 右侧坡顶
+
+        while (index < arr.length) {
+            if (arr[index] > arr[index - 1]) { // 递增爬坡
+                res += ++lbase; // 累加，lbase++，然后再计入
+                index++;
+            } else if (arr[index] < arr[index - 1]) {
+                next = nextMinCandyChild(arr, index - 1); // 找到下一个最小值index的位置
+                rcands = rightCandsCandyChild(arr, index - 1, next++);
+                rbase = next - index + 1; // 可以看成是从右往左数第几个元素，从1开始，不是下标
+                res += rcands + (rbase > lbase ? -lbase : -rbase); // 右侧候选值和 - Math.min(左侧坡顶，右侧坡顶), 也就是那个坡顶大要哪个，但是要减掉较小的坡顶值
+                lbase = 1; // 左侧坡顶恢复
+                index = next; // 下一个index下标
+            } else {
+                res += 1;
+                lbase = 1;
+                index++;
+            }
+        }
+        return res;
+    }
+
+    public static int nextMinCandyChild(int[] arr, int start) {
+        for (int i = start; i < arr.length - 1; i++) {
+            if (arr[i] <= arr[i + 1]) {
+                return i;
+            }
+        }
+        return arr.length - 1;
+    }
+
+    public static int rightCandsCandyChild(int[] arr, int left, int right) {
+        int n = right - left + 1;
+        return n + n * (n - 1) / 2;
     }
 
 
