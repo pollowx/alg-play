@@ -975,11 +975,11 @@ public class OtherPot {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-        int[] middle = new int[]{1, 4, 5, 9, 3, 2, 4, 5};
-
-        System.out.println(candyChild(middle));
-    }
+//    public static void main(String[] args) {
+//        int[] middle = new int[]{1, 4, 5, 9, 3, 2, 4, 5};
+//
+//        System.out.println(candyChild(middle));
+//    }
 
     public static int candyChild(int[] arr) {
         if (null == arr || arr.length == 0) {
@@ -1027,5 +1027,59 @@ public class OtherPot {
         return n + n * (n - 1) / 2;
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//    public static void main(String[] args) {
+//
+//        int[] arr1 = {1, 2, 3, 4, 5};
+//        int[] arr2 = {0, 1, 2, 3, 4};
+//
+//        System.out.println(getTwoOrderArrayMiddleNumber(arr1, arr2));
+//
+//        int[] arrA = {2, 3, 4, 5};
+//        int[] arrB = {1, 2, 3, 4};
+//
+//        System.out.println(getTwoOrderArrayMiddleNumber(arrA, arrB));
+//
+//    }
+
+    /**
+     * 找到两个长度相等的排序数组中的上中位数
+     * @param arr1
+     * @param arr2
+     * @return
+     */
+    public static int getTwoOrderArrayMiddleNumber(int[] arr1, int[] arr2) {
+        if (null == arr1 || null == arr2 || arr1.length != arr2.length) {
+            return -1;
+        }
+        int start1 = 0;
+        int end1 = arr1.length - 1;
+        int middle1 = 0;
+
+        int start2 = 0;
+        int end2 = arr2.length - 1;
+        int middle2 = 0;
+
+        int offset = 0;
+
+        while (start1 < end1) {
+            middle1 = (start1 + end1) / 2;
+            middle2 = (start2 + end2) / 2;
+
+            offset = ((end1 - start1 + 1) & 1) ^ 1; // 0的话代表是奇数，1的话代表是偶数
+
+            if (arr1[middle1] == arr2[middle2]) {
+                return arr1[middle1];
+            } else if (arr1[middle1] > arr2[middle2]) { // 在(1~3) ~ (3'~5')中间 或者在(1~2) ~ (3~4)中间
+                end1 = middle1;
+                start2 = middle2 + offset; // 偶数的时候，会往后移动一位
+            } else {
+                start1 = middle1 + offset;
+                end2 = middle2;
+            }
+        }
+        return Math.min(arr1[start1], arr2[start2]);
+    }
 
 }
