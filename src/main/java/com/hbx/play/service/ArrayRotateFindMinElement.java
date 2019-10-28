@@ -34,7 +34,6 @@ public class ArrayRotateFindMinElement {
 
         int[] having = new int[]{1, 2, 0, 1, 1, 1, 1, 1, 1, 1};
         System.out.println(findMinElement(having));
-
     }
 
 }

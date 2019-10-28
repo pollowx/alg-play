@@ -907,14 +907,71 @@ public class OtherPot {
         return Math.min(arr[low], arr[high]);
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+        int[] middle = new int[]{7, 8, 1, 2, 3, 4, 5, 6};
+        System.out.println(judgeRotateArrayContainsNum(middle, 7));
 
 
+        int[] having = new int[]{1, 2, 0, 1, 1, 1, 1, 1, 1, 1};
+        System.out.println(judgeRotateArrayContainsNum(having, 0));
+    }
 
-
-
-
-
-
+    /**
+     * 有序数组中(可能有重复)的旋转中判断是否含有值
+     * @param arr
+     * @param num
+     * @return
+     */
+    public static boolean judgeRotateArrayContainsNum(int[] arr, int num) {
+        int low = 0, high = arr.length - 1, middle = 0;
+        while (low <= high) {
+            middle = (low + high) / 2;
+            if (arr[middle] == num) {
+                return true;
+            }
+            if (arr[low] == arr[middle] && arr[middle] == arr[high]) { // 左中右都相等，那么二分法继续寻找
+                while (low != middle && arr[low] == arr[middle]) {
+                    low++; // 往右侧移动
+                }
+                if (low == middle) {
+                    low = middle + 1;
+                    continue;
+                }
+            }
+            if (arr[low] != arr[middle]) {
+                if (arr[middle] > arr[low]) {
+                    if (num >= arr[low] && num < arr[middle]) {
+                        high = middle - 1;
+                    } else {
+                        low = middle + 1;
+                    }
+                } else {
+                    if (num > arr[middle] && num <= arr[high]) {
+                        low = middle + 1;
+                    } else {
+                        high = middle - 1;
+                    }
+                }
+            } else { // === 说明arr[low] == arr[middle] != arr[high]
+                if (arr[middle] < arr[high]) {
+                    if (num > arr[middle] && num <= arr[high]) {
+                        low = middle + 1;
+                    } else {
+                        high = middle - 1;
+                    }
+                } else {
+                    if (num >= arr[low] && num < arr[middle]) {
+                        high = middle - 1;
+                    } else {
+                        low = middle + 1;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 
 
 }
