@@ -1082,4 +1082,97 @@ public class OtherPot {
         return Math.min(arr1[start1], arr2[start2]);
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//    public static void main(String[] args) {
+//        int[] arr1 = new int[10];
+//        int[] arr2 = new int[27];
+//
+//        for (int i = 0; i < arr1.length; i++) {
+//            arr1[i] = i + 1;
+//        }
+//        for (int i = 0; i < arr2.length; i++) {
+//            arr2[i] = i + 3;
+//        }
+//        System.out.println(getMinKFromTwoOrderArray(arr1, arr2, 2));
+//
+//        System.out.println(getMinKFromTwoOrderArray(arr1, arr2, 33));
+//
+//        System.out.println(getMinKFromTwoOrderArray(arr1, arr2, 17));
+//    }
+
+    /**
+     * 从两个排序的数组中找到第K小的数(数组长度不一定相等)
+     * @param arr1
+     * @param arr2
+     * @param k
+     * @return
+     */
+    public static int getMinKFromTwoOrderArray(int[] arr1, int[] arr2, int k) {
+        if (null == arr1 || null == arr2) {
+            throw new IllegalArgumentException("invalid params");
+        }
+        if (k < 1 || k > arr1.length + arr2.length) {
+            throw new IllegalArgumentException("invalid params");
+        }
+        int[] longs = arr1.length >= arr2.length ? arr1 : arr2;
+        int[] shorts = arr1.length < arr2.length ? arr1 : arr2;
+        int l = longs.length;
+        int s = shorts.length;
+
+        if (k <= s) { // 小于长度较小的数组，那么第k小个数，就在(arr1 ~ k) 和 (arr2 ~ k)之间
+            return getUpMedia(
+                    shorts, 0, k - 1,
+                    longs, 0, k - 1);
+        }
+
+        //k > l
+        if (k > l) {
+            if (shorts[k - l - 1] >= longs[l - 1]) { // 判断s的中间位置和l数组的最后位置谁更大，谁大说明谁是最后一个，即第K个
+                return shorts[k - l - 1];
+            }
+            if (longs[k - s - 1] >= shorts[s - 1]) { // 判断l的中间位置和s数组的最后位置谁更大，谁大说明谁是最后一个，即第K个
+                return longs[k - s - 1];
+            }
+            // 剩下的需要从arr1里面(k - l, 到最后) 和 arr2的(k - s, 到最后)这个区间里面寻找
+            return getUpMedia(
+                    shorts, k - l, s - 1,
+                    longs, k - s, l - 1);
+        }
+
+        // s < k < l k在中间的位置，看下哪个大，哪个大哪个是第k个
+        if (longs[k - s - 1] >= shorts[s - 1]) {
+            return longs[k - s - 1];
+        }
+
+        return getUpMedia(shorts, 0, s - 1, longs, k - s, k - 1);
+    }
+
+    public static int getUpMedia(int[] arr1, int s1, int e1,
+                                 int[] arr2, int s2, int e2) {
+        int middle1 = 0;
+        int middle2 = 0;
+
+        int offset = 0; // 判断是奇数长度还是偶数长度
+
+        while (s1 < e1) {
+            middle1 = (s1 + e1) / 2;
+            middle2 = (s2 + e2) / 2;
+
+            offset = ((e1 - s1 + 1) & 1) ^ 1; // 奇数还是偶数
+
+            if (arr1[middle1] == arr2[middle2]) {
+                return arr1[middle1];
+            } else if (arr1[middle1] > arr2[middle2]) {
+                e1 = middle1;
+                s2 = middle2 + offset;
+            } else {
+                e2 = middle2;
+                s1 = middle1 + offset;
+            }
+        }
+        return Math.min(arr1[s1], arr2[s2]);
+    }
+
+
 }
