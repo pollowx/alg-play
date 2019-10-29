@@ -1174,5 +1174,10 @@ public class OtherPot {
         return Math.min(arr1[s1], arr2[s2]);
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+
+    }
 
 }
