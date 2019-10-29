@@ -628,12 +628,12 @@ public class BinaryTreeAlg {
                 : -1; // 没找到
     }
 
-//    public static void main(String[] args) {
-//        //String str = "ABCDABD";
-//        String str = "ACDA";
-//
-//        getNextArray(str.toCharArray());
-//    }
+    public static void main(String[] args) {
+        String str = "ABCDABDE";
+        //String str = "ACDA";
+
+        getNextArray(str.toCharArray());
+    }
 
     /**
      * 找matchChars的前缀和后缀匹配的next数组
@@ -650,7 +650,7 @@ public class BinaryTreeAlg {
         }
 
         int[] next = new int[matchChars.length];
-        next[0] = -1; // next 0 就是-1
+        next[0] = -1; // next 0 就是-1, 有规律发现next数组就是matchChars的前缀后缀匹配整体向右移动一个下标的数组映射， 所以移动后的数组第一位肯定是-1，第二位是0
         next[1] = 0; // next 1 是0, 空串
 
         int pos = 2; // 从下标2开始
@@ -1162,40 +1162,40 @@ public class BinaryTreeAlg {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-        Node root = new Node(1);
-
-        Node node2 = new Node(2);
-        Node node3 = new Node(3);
-
-        Node node4 = new Node(4);
-        Node node5 = new Node(5);
-
-        Node node6 = new Node(6);
-        Node node7 = new Node(7);
-
-        Node node8 = new Node(8);
-        Node node9 = new Node(9);
-
-        Node node10 = new Node(10);
-
-
-        root.left = node2;
-        root.right = node3;
-
-        node2.left = node4;
-        node2.right = node5;
-
-        node3.left = node6;
-        node3.right = node7;
-
-        node4.left = node8;
-        node4.right = node9;
-
-        node5.left = node10;
-
-        getBTSNodeCount(root);
-    }
+//    public static void main(String[] args) {
+//        Node root = new Node(1);
+//
+//        Node node2 = new Node(2);
+//        Node node3 = new Node(3);
+//
+//        Node node4 = new Node(4);
+//        Node node5 = new Node(5);
+//
+//        Node node6 = new Node(6);
+//        Node node7 = new Node(7);
+//
+//        Node node8 = new Node(8);
+//        Node node9 = new Node(9);
+//
+//        Node node10 = new Node(10);
+//
+//
+//        root.left = node2;
+//        root.right = node3;
+//
+//        node2.left = node4;
+//        node2.right = node5;
+//
+//        node3.left = node6;
+//        node3.right = node7;
+//
+//        node4.left = node8;
+//        node4.right = node9;
+//
+//        node5.left = node10;
+//
+//        getBTSNodeCount(root);
+//    }
 
     /**
      * 查询完全二叉树的节点数量
