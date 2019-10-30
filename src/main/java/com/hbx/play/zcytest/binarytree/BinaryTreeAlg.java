@@ -42,7 +42,6 @@ public class BinaryTreeAlg {
 
     /**
      * 递归前序遍历
-     *
      * @param head
      */
     public static void preOrder(Node head) {
@@ -56,7 +55,6 @@ public class BinaryTreeAlg {
 
     /**
      * 递归中序遍历
-     *
      * @param head
      */
     public static void inOrder(Node head) {
@@ -70,7 +68,6 @@ public class BinaryTreeAlg {
 
     /**
      * 递归后序遍历
-     *
      * @param head
      */
     public static void posOrder(Node head) {
@@ -84,7 +81,6 @@ public class BinaryTreeAlg {
 
     /**
      * 前序普通方式遍历
-     *
      * @param head
      */
     public static void preOrderByNormal(Node head) {
@@ -109,7 +105,6 @@ public class BinaryTreeAlg {
 
     /**
      * 中序遍历二叉树
-     *
      * @param head
      */
     public static void inOrderByNormal(Node head) {
@@ -131,7 +126,6 @@ public class BinaryTreeAlg {
 
     /**
      * 后续遍历，用两个栈
-     *
      * @param head
      */
     public static void posOrderByNormalTwoStack(Node head) {
@@ -160,7 +154,6 @@ public class BinaryTreeAlg {
 
     /**
      * BFS遍历二叉树，广度优先遍历
-     *
      * @param root
      */
     private void bfsBinaryTree(Node root) {
@@ -185,7 +178,6 @@ public class BinaryTreeAlg {
 
     /**
      * DFS遍历二叉树，深度优先遍历
-     *
      * @param root
      */
     private void dfsBinaryTree(Node root) {
@@ -212,7 +204,6 @@ public class BinaryTreeAlg {
 
     /**
      * morris序列
-     *
      * @param head
      */
     public static void morris(Node head) {
@@ -245,7 +236,6 @@ public class BinaryTreeAlg {
 
     /**
      * morris的先序遍历 对于只遍历一次的节点，遍历到的时候直接打印 对于遍历两次的节点，只在第一次遍历的时候打印就好
-     *
      * @param head
      */
     public static void morrisPre(Node head) {
@@ -279,7 +269,6 @@ public class BinaryTreeAlg {
 
     /**
      * morris的中序遍历 对于只遍历一次的节点，遍历到的时候直接打印 对于遍历两次的节点，在第二次遍历的时候打印
-     *
      * @param head
      */
     public static void morrisIn(Node head) {
@@ -313,7 +302,6 @@ public class BinaryTreeAlg {
 
     /**
      * 按层打印二叉树
-     *
      * @param head
      */
     public static void printBinaryTreeByLevel(Node head) {
@@ -388,7 +376,6 @@ public class BinaryTreeAlg {
 
     /**
      * 搜索二叉树里面有两个节点放错了左右顺序，请找出这两个节点
-     *
      * @param head
      * @return
      */
@@ -431,7 +418,6 @@ public class BinaryTreeAlg {
 
     /**
      * 判断A树是否包含B树的子结构
-     *
      * @param t1
      * @param t2
      * @return
@@ -463,7 +449,6 @@ public class BinaryTreeAlg {
 
     /**
      * 判断A树是否包含B树的子结构，递归
-     *
      * @param t1
      * @param t2
      * @return
@@ -483,7 +468,6 @@ public class BinaryTreeAlg {
 
     /**
      * 看t2是不是完全等于t1
-     *
      * @param t1
      * @param t2
      * @return
@@ -503,7 +487,6 @@ public class BinaryTreeAlg {
 
     /**
      * 判断A树是否完全包含B树的结构
-     *
      * @param t1
      * @param t2
      * @return
@@ -532,7 +515,6 @@ public class BinaryTreeAlg {
 
     /**
      * 判断两个树完全相等
-     *
      * @param t1
      * @param t2
      * @return
@@ -554,7 +536,6 @@ public class BinaryTreeAlg {
 
     /**
      * 判断B树是否完全属于A树的一部分，KMP算法，时间复杂度O(N)
-     *
      * @param t1
      * @param t2
      * @return
@@ -574,7 +555,6 @@ public class BinaryTreeAlg {
 
     /**
      * 前序遍历序列化二叉树
-     *
      * @param head
      * @return
      */
@@ -597,7 +577,6 @@ public class BinaryTreeAlg {
 
     /**
      * str里是否含有match
-     *
      * @param str
      * @param match
      * @return
@@ -632,12 +611,14 @@ public class BinaryTreeAlg {
         String str = "ABCDABDE";
         //String str = "ACDA";
 
-        getNextArray(str.toCharArray());
+        for (int i : getNextArray(str.toCharArray())) {
+            System.out.print(i + "\t");
+        }
+
     }
 
     /**
      * 找matchChars的前缀和后缀匹配的next数组
-     *
      * @param matchChars
      * @return
      */
@@ -672,7 +653,6 @@ public class BinaryTreeAlg {
 
     /**
      * 判断树是否是平衡树二叉树
-     *
      * @param head
      * @return
      */
@@ -682,7 +662,6 @@ public class BinaryTreeAlg {
 
     /**
      * 递归判断是否是平衡树二叉树
-     *
      * @param head
      * @return
      */
@@ -718,7 +697,6 @@ public class BinaryTreeAlg {
 
     /**
      * check一个数组是否是搜索二叉树的后续遍历
-     *
      * @param arr
      * @return
      */
@@ -731,7 +709,6 @@ public class BinaryTreeAlg {
 
     /**
      * 递归判断是否是后续遍历序列
-     *
      * @param arr
      * @param start
      * @param end
@@ -765,7 +742,6 @@ public class BinaryTreeAlg {
 
     /**
      * 重建二叉树
-     *
      * @param arr
      * @return
      */
@@ -803,7 +779,6 @@ public class BinaryTreeAlg {
 
     /**
      * 判断二叉树是否是搜索二叉树
-     *
      * @param head
      * @return
      */
@@ -848,7 +823,6 @@ public class BinaryTreeAlg {
 
     /**
      * 判断一棵树是否是完全二叉树
-     *
      * @return
      */
     public static boolean judgeTreeIsCBT(Node head) {
@@ -896,7 +870,6 @@ public class BinaryTreeAlg {
 
     /**
      * 根据数组中序生成平衡搜索二叉树
-     *
      * @param arr
      * @return
      */
@@ -909,7 +882,6 @@ public class BinaryTreeAlg {
 
     /**
      * 生成AVLSearchTree
-     *
      * @param sortArr
      * @param start
      * @param end
@@ -933,7 +905,6 @@ public class BinaryTreeAlg {
 
     /**
      * 如果节点有指针指向parent节点，且后续节点是中序遍历的下一个节点，那么找到后续节点
-     *
      * @param head
      * @return
      */
@@ -1010,7 +981,6 @@ public class BinaryTreeAlg {
 
     /**
      * 找寻两个节点的最近的公共祖先
-     *
      * @param head
      * @param o1
      * @param o2
@@ -1032,7 +1002,6 @@ public class BinaryTreeAlg {
 
     /**
      * 找寻两个节点的最近的公共祖先-By HashMap
-     *
      * @param head
      * @param o1
      * @param o2
@@ -1076,7 +1045,6 @@ public class BinaryTreeAlg {
 
     /**
      * 找到整个二叉树的叶子节点的最大距离值
-     *
      * @param head
      * @return
      */
@@ -1116,7 +1084,6 @@ public class BinaryTreeAlg {
 
     /**
      * 根据二叉树的前序和中序生成后续，不需要重建二叉树
-     *
      * @param pre
      * @param in
      * @return
@@ -1199,7 +1166,6 @@ public class BinaryTreeAlg {
 
     /**
      * 查询完全二叉树的节点数量
-     *
      * @param head
      * @return
      */
