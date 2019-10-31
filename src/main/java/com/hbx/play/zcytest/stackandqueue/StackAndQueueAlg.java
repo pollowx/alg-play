@@ -217,18 +217,18 @@ public class StackAndQueueAlg {
 
     // ####################################################################### //
 
-    public static void main(String[] args) {
-        int[] arr = {3, 4, 1, 5, 6, 2, 7};
-
-        int[][] res = getNearLessNoRepeatMy(arr);
-
-        for (int i = 0; i < res.length; i++) {
-            for (int j = 0; j < res[0].length; j++) {
-                System.out.print(res[i][j] + "\t");
-            }
-            System.out.println();
-        }
-    }
+//    public static void main(String[] args) {
+//        int[] arr = {3, 4, 1, 5, 6, 2, 7};
+//
+//        int[][] res = getNearLessNoRepeatMy(arr);
+//
+//        for (int i = 0; i < res.length; i++) {
+//            for (int j = 0; j < res[0].length; j++) {
+//                System.out.print(res[i][j] + "\t");
+//            }
+//            System.out.println();
+//        }
+//    }
 
     public static int[][] getNearLessNoRepeatMy(int[] arr) {
         if (null == arr || arr.length == 0) {
@@ -288,6 +288,12 @@ public class StackAndQueueAlg {
 
     // ####################################################################### //
 
+    public static void main(String[] args) {
+        int[] arr = {3, 5, 1, 6, 2};
+
+        System.out.println(getNum(arr, 1));
+    }
+
     /**
      * 该题目要求在数组中找到Max(arr[i ~ j]) - Min(arr[i ~ j]) <= num的符合条件子数组的数量 普通解法：O(N^3) 最优解法：O(N), 但是需要用到额外空间，需要用到双端链表
      * @param arr
@@ -311,11 +317,11 @@ public class StackAndQueueAlg {
                     while (!qmin.isEmpty() && arr[qmin.getLast()] >= arr[j]) {
                         qmin.pollLast(); // 扔掉
                     }
-                    qmin.addLast(i);
+                    qmin.addLast(j);
                     while (!qmax.isEmpty() && arr[qmax.getLast()] <= arr[j]) {
                         qmax.pollLast(); // 扔掉
                     }
-                    qmax.addLast(i);
+                    qmax.addLast(j);
                 }
                 if (arr[qmax.getFirst()] - arr[qmin.getFirst()] > num) {
                     break;
