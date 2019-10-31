@@ -2,6 +2,8 @@ package com.hbx.play.zcytest.other;
 
 import com.google.common.collect.Sets;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -429,15 +431,15 @@ public class OtherPot {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void main(String[] args) {
-        int[] arr = {9, 1, 4, 9, 0, 4, 8, 9, 0, 1};
-
-        findStaticsticsArrayPath(arr);
-
-        for (int a : arr) {
-            System.out.print(a + "\t");
-        }
-    }
+//    public static void main(String[] args) {
+//        int[] arr = {9, 1, 4, 9, 0, 4, 8, 9, 0, 1};
+//
+//        findStaticsticsArrayPath(arr);
+//
+//        for (int a : arr) {
+//            System.out.print(a + "\t");
+//        }
+//    }
 
     /**
      * 路径数组变为统计数组
@@ -525,4 +527,657 @@ public class OtherPot {
         }
         arr[0] = 1; // 首都只有一个
     }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//    public static void main(String[] args) {
+//        int[] arr = {3, 2, 5};
+//
+//        System.out.println(findMinCannotAddToSumNormal(arr));
+//
+//        System.out.println(findMinCannotAddToSumByDp(arr));
+//
+//        int[] arr1 = {3, 8, 1, 2};
+//        System.out.println(findMinCannotAddToSumByContainOneBest(arr1));
+//    }
+
+    /**
+     * 正数数组中的最小不可组成和 - O(2^N) + O(N)
+     * @param arr
+     * @return
+     */
+    public static int findMinCannotAddToSumNormal(int[] arr) {
+        if (null == arr || arr.length == 0) {
+            return 1;
+        }
+        // 把所有子集的和加入到set
+        Set<Integer> set = new HashSet<>();
+        process(arr, 0, 0, set);
+
+        // 找到数组中的最小值
+        int min = Integer.MAX_VALUE;
+        for (int i = 0; i < arr.length; i++) {
+            min = Math.min(min, arr[i]);
+        }
+
+        for (int i = min; i < Integer.MAX_VALUE; i++) {
+            if (!set.contains(i)) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    public static void process(int[] arr, int i, int sum, Set<Integer> set) {
+        if (i == arr.length) {
+            set.add(sum);
+            return;
+        }
+        process(arr, i + 1, sum, set);
+
+        process(arr, i + 1, sum + arr[i], set);
+    }
+
+    /**
+     * 正数数组中的最小不可组成和 - DP O(N * sum) + O(N)
+     * @param arr
+     * @return
+     */
+    public static int findMinCannotAddToSumByDp(int[] arr) {
+        if (null == arr || arr.length == 0) {
+            return 1;
+        }
+
+        int sum = 0;
+        int min = Integer.MAX_VALUE;
+        for (int i = 0; i < arr.length; i++) {
+            sum += arr[i];
+            min = Math.min(min, arr[i]);
+        }
+        boolean[] dp = new boolean[sum + 1]; // boolean 的index代表，该数字能被arr的子集相加得到
+        dp[0] = true;
+
+        // 如果arr[0 ~ i]的子集相加可以得到k
+        // 那么arr[0 ~ i]的子集必然可以得到k + arr[i+1]
+        // 可以这样解释，即每个元素对应的位置肯定是可以得到的，然后剩下的就是元素累加对应的index的赋值，
+        // 那么总和 - 当前对应的index就是剩下可以组成的另外半部分的和，可以一次求出来得到index
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = sum; j >= arr[i]; j--) {
+                dp[j] = dp[j - arr[i]] ? true : dp[j];
+            }
+        }
+
+        for (int i = min; i < dp.length; i++) {
+            if (!dp[i]) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * 正数数组中(肯定含有1)的最小不可组成和
+     * @param arr
+     * @return
+     */
+    public static int findMinCannotAddToSumByContainOneBest(int[] arr) {
+        // 思路，肯定含有1，代表每个间隔都能加上1，和上一个元素和的比较增加1，排好序后得到扩大到每个元素的有没有空缺
+        if (null == arr || arr.length == 0) {
+            return 1;
+        }
+        Arrays.sort(arr); // 排序
+
+        int range = 0;
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] <= range + 1) {
+                range += arr[i];
+            } else { // arr[i] > range + 1 说明缺了这个空隙
+                return range + 1;
+            }
+        }
+        return range + 1;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//    public static void main(String[] args) {
+//        int[] arr = {1, 2, 3, 7};
+//        System.out.println(needMinCountMakeupToRange(arr, 15));
+//
+//        int[] arrA = {1, 5, 7};
+//        System.out.println(needMinCountMakeupToRange(arrA, 15));
+//
+//        int[] arrB = {3, 17, 21, 78};
+//        System.out.println(needMinCountMakeupToRange(arrB, 67));
+//    }
+
+    /**
+     * 累加出整个范围的所有数最少还需要几个数
+     * @param arr
+     * @param range
+     * @return
+     */
+    public static int needMinCountMakeupToRange(int[] arr, int range) {
+        if (null == arr || arr.length == 0 || range < 0) {
+            return 0;
+        }
+
+        int touch = 0; // 初始值
+        int resCount = 0; // 所需要的数量
+
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] - touch <= 1) { // 说明累加值可以直接扩大, 之所以单独写这个if，就是想按类分析单个情况
+                touch += arr[i];
+            } else { // > 1的时候说明touch的值距离arr[i]还不够，那么开始处理
+                // 先拿到范围即(1 ~ arr[i] - 1)
+                int currentRange = arr[i] - 1;
+                while (touch < currentRange) {
+                    touch = touch + (touch + 1);
+                    resCount++;
+                    if (touch > range) {
+                        return resCount;
+                    }
+                }
+                touch += arr[i];
+            }
+        }
+
+        // 遍历完了数组，那么还是不到range
+        while (touch < range) {
+            touch = touch + (touch + 1);
+            resCount++;
+        }
+        return resCount;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//    public static void main(String[] args) {
+//        System.out.println(getOneAppearTimeNoramal(114));
+//
+//        System.out.println(getOneAppearTimeBest(211));
+//
+//    }
+
+    /**
+     * 1~N中1出现的次数
+     * @param num
+     * @return
+     */
+    public static int getOneAppearTimeNoramal(int num) {
+        if (num <= 0) {
+            return 0;
+        }
+        int count = 0;
+        for (int i = 1; i <= num; i++) {
+            count += getOneNumCount(i);
+        }
+        return count;
+    }
+
+    public static int getOneNumCount(int num) {
+        int res = 0;
+        while (num != 0) {
+            if (num % 10 == 1) {
+                res++;
+            }
+            num /= 10;
+        }
+        return res;
+    }
+
+    /**
+     * 1~N中1出现的次数 - Best
+     * @param num
+     * @return
+     */
+    public static int getOneAppearTimeBest(int num) {
+        if (num <= 0) {
+            return 0;
+        }
+        int length = getLengthOfNum(num);
+        if (length == 1) {
+            return 1;
+        }
+        int temp = powerOf10(length - 1);
+        int first = num / temp;
+
+        int firstOneCount = first == 1 ? num % temp + 1 : temp; // 首位是1的话，加上1
+        int otherOneCount = first * (length - 1) * (temp / 10);
+
+        return firstOneCount + otherOneCount + getOneAppearTimeBest(num % temp);
+    }
+
+    public static int getLengthOfNum(int num) {
+        int length = 0;
+        while (num != 0) {
+            length++;
+            num /= 10;
+        }
+        return length;
+    }
+
+    public static int powerOf10(int base) {
+        return (int) (Math.pow(10, base));
+    }
+
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//    public static void main(String[] args) {
+//        //System.out.println(Math.random() * 3 + 1); // (0 ~ 2) -> (1 ~ 3)
+//
+//        int[] arr = {1, 2, 3, 7};
+//
+//        for (int i = 0; i < 20; i++) {
+//            printMCountFromArrayOfNLength(arr, 3);
+//            System.out.println();
+//        }
+//    }
+
+    /**
+     * 等概率打印N长度的数组中的M个数
+     * @param arr
+     * @param m
+     */
+    public static void printMCountFromArrayOfNLength(int[] arr, int m) {
+        if (null == arr || arr.length == 0 || m > arr.length) {
+            return;
+        }
+        int length = arr.length;
+
+        while (m > 0) {
+            int index = (int) (Math.random() * length); // 随机找一个，然后打印
+
+            System.out.print(arr[index] + " ");
+
+            swapTwoEle(arr, index, length - 1);
+
+            m--;
+            length--;
+        }
+    }
+
+    public static void swapTwoEle(int[] arr, int indexA, int indexB) {
+        int temp = arr[indexA];
+        arr[indexA] = arr[indexB];
+        arr[indexB] = temp;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//    public static void main(String[] args) {
+//        System.out.println(judgeOneNumberPalindrome(12121));
+//        System.out.println(judgeOneNumberPalindrome(-145676541));
+//        System.out.println(judgeOneNumberPalindrome(-890198));
+//        System.out.println(judgeOneNumberPalindrome(8910198));
+//        System.out.println(judgeOneNumberPalindrome(-22));
+//
+//        System.out.println(judgeOneNumberPalindrome(2147483647));
+//    }
+
+    /**
+     * 判断一个数是否是回文数字
+     * @param n
+     * @return
+     */
+    public static boolean judgeOneNumberPalindrome(int n) {
+        if (n == Integer.MIN_VALUE) {
+            return false;
+        }
+        n = Math.abs(n); // 都变成正值
+        if (n <= 10) {
+            return false;
+        }
+        // 思路是次从这个数字的左右两侧拿出一个数，比对两个数字是否一致
+
+        int length = getLengthOfNum(n);
+
+        int left = 0;
+        int right = 0;
+
+        while (length > 1) { // 一位数直接跳过
+            int equal10Value = powerOf10(length - 1);
+
+            left = n / equal10Value;
+            right = n % 10;
+            if (left != right) { // 左侧 != 右侧
+                return false;
+            }
+            length = length - 2; // 两位数干掉
+
+            n = (n % equal10Value) / 10;
+        }
+        return true; // 到最后是回文数字
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//    public static void main(String[] args) {
+//        int[] middle = new int[]{7, 8, 1, 2, 3, 4, 5, 6};
+//        System.out.println(getMinOfRotateArray(middle));
+//
+//
+//        int[] having = new int[]{1, 2, 0, 1, 1, 1, 1, 1, 1, 1};
+//        System.out.println(getMinOfRotateArray(having));
+//
+//    }
+
+    /**
+     * 得到旋转数组中最小值，数组中可能有重复元素
+     * @param arr
+     * @return
+     */
+    public static int getMinOfRotateArray(int[] arr) {
+        int low = 0;
+        int high = arr.length - 1;
+
+        int middle = 0;
+
+        while (low < high) {
+            if (low == high - 1) {
+                break;
+            }
+            if (arr[low] < arr[high]) {
+                return arr[low];
+            }
+            middle = (low + high) / 2;
+
+            if (arr[low] > arr[middle]) { // 说明最小值在这个里面
+                high = middle;
+                continue;
+            }
+            if (arr[middle] > arr[high]) {
+                low = middle;
+                continue;
+            }
+
+            // 走到这里触发这个条件 arr[low] == arr[middle] == arr[high]
+            while (low < middle) { // 在low和middle中间找
+                if (arr[low] == arr[middle]) {
+                    low++;
+                } else if (arr[low] < arr[middle]) {
+                    return arr[low];
+                } else {
+                    high = middle;
+                    break;
+                }
+            }
+        }
+        return Math.min(arr[low], arr[high]);
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//    public static void main(String[] args) {
+//        int[] middle = new int[]{7, 8, 1, 2, 3, 4, 5, 6};
+//        System.out.println(judgeRotateArrayContainsNum(middle, 7));
+//
+//
+//        int[] having = new int[]{1, 2, 0, 1, 1, 1, 1, 1, 1, 1};
+//        System.out.println(judgeRotateArrayContainsNum(having, 0));
+//    }
+
+    /**
+     * 有序数组中(可能有重复)的旋转中判断是否含有值
+     * @param arr
+     * @param num
+     * @return
+     */
+    public static boolean judgeRotateArrayContainsNum(int[] arr, int num) {
+        int low = 0, high = arr.length - 1, middle = 0;
+        while (low <= high) {
+            middle = (low + high) / 2;
+            if (arr[middle] == num) {
+                return true;
+            }
+            if (arr[low] == arr[middle] && arr[middle] == arr[high]) { // 左中右都相等，那么二分法继续寻找
+                while (low != middle && arr[low] == arr[middle]) {
+                    low++; // 往右侧移动
+                }
+                if (low == middle) {
+                    low = middle + 1;
+                    continue;
+                }
+            }
+            if (arr[low] != arr[middle]) {
+                if (arr[middle] > arr[low]) {
+                    if (num >= arr[low] && num < arr[middle]) {
+                        high = middle - 1;
+                    } else {
+                        low = middle + 1;
+                    }
+                } else {
+                    if (num > arr[middle] && num <= arr[high]) {
+                        low = middle + 1;
+                    } else {
+                        high = middle - 1;
+                    }
+                }
+            } else { // === 说明arr[low] == arr[middle] != arr[high]
+                if (arr[middle] < arr[high]) {
+                    if (num > arr[middle] && num <= arr[high]) {
+                        low = middle + 1;
+                    } else {
+                        high = middle - 1;
+                    }
+                } else {
+                    if (num >= arr[low] && num < arr[middle]) {
+                        high = middle - 1;
+                    } else {
+                        low = middle + 1;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//    public static void main(String[] args) {
+//        int[] middle = new int[]{1, 4, 5, 9, 3, 2, 4, 5};
+//
+//        System.out.println(candyChild(middle));
+//    }
+
+    public static int candyChild(int[] arr) {
+        if (null == arr || arr.length == 0) {
+            return 0;
+        }
+        int index = nextMinCandyChild(arr, 0);
+        int res = rightCandsCandyChild(arr, 0, index++);
+
+        int lbase = 1; // 左侧的开始res数组，左侧坡顶
+        int next = 0;
+        int rcands = 0;
+        int rbase = 0; // 右侧坡顶
+
+        while (index < arr.length) {
+            if (arr[index] > arr[index - 1]) { // 递增爬坡
+                res += ++lbase; // 累加，lbase++，然后再计入
+                index++;
+            } else if (arr[index] < arr[index - 1]) {
+                next = nextMinCandyChild(arr, index - 1); // 找到下一个最小值index的位置
+                rcands = rightCandsCandyChild(arr, index - 1, next++);
+                rbase = next - index + 1; // 可以看成是从右往左数第几个元素，从1开始，不是下标
+                res += rcands + (rbase > lbase ? -lbase : -rbase); // 右侧候选值和 - Math.min(左侧坡顶，右侧坡顶), 也就是那个坡顶大要哪个，但是要减掉较小的坡顶值
+                lbase = 1; // 左侧坡顶恢复
+                index = next; // 下一个index下标
+            } else {
+                res += 1;
+                lbase = 1;
+                index++;
+            }
+        }
+        return res;
+    }
+
+    public static int nextMinCandyChild(int[] arr, int start) {
+        for (int i = start; i < arr.length - 1; i++) {
+            if (arr[i] <= arr[i + 1]) {
+                return i;
+            }
+        }
+        return arr.length - 1;
+    }
+
+    public static int rightCandsCandyChild(int[] arr, int left, int right) {
+        int n = right - left + 1;
+        return n + n * (n - 1) / 2;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//    public static void main(String[] args) {
+//
+//        int[] arr1 = {1, 2, 3, 4, 5};
+//        int[] arr2 = {0, 1, 2, 3, 4};
+//
+//        System.out.println(getTwoOrderArrayMiddleNumber(arr1, arr2));
+//
+//        int[] arrA = {2, 3, 4, 5};
+//        int[] arrB = {1, 2, 3, 4};
+//
+//        System.out.println(getTwoOrderArrayMiddleNumber(arrA, arrB));
+//
+//    }
+
+    /**
+     * 找到两个长度相等的排序数组中的上中位数
+     * @param arr1
+     * @param arr2
+     * @return
+     */
+    public static int getTwoOrderArrayMiddleNumber(int[] arr1, int[] arr2) {
+        if (null == arr1 || null == arr2 || arr1.length != arr2.length) {
+            return -1;
+        }
+        int start1 = 0;
+        int end1 = arr1.length - 1;
+        int middle1 = 0;
+
+        int start2 = 0;
+        int end2 = arr2.length - 1;
+        int middle2 = 0;
+
+        int offset = 0;
+
+        while (start1 < end1) {
+            middle1 = (start1 + end1) / 2;
+            middle2 = (start2 + end2) / 2;
+
+            offset = ((end1 - start1 + 1) & 1) ^ 1; // 0的话代表是奇数，1的话代表是偶数
+
+            if (arr1[middle1] == arr2[middle2]) {
+                return arr1[middle1];
+            } else if (arr1[middle1] > arr2[middle2]) { // 在(1~3) ~ (3'~5')中间 或者在(1~2) ~ (3~4)中间
+                end1 = middle1;
+                start2 = middle2 + offset; // 偶数的时候，会往后移动一位
+            } else {
+                start1 = middle1 + offset;
+                end2 = middle2;
+            }
+        }
+        return Math.min(arr1[start1], arr2[start2]);
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//    public static void main(String[] args) {
+//        int[] arr1 = new int[10];
+//        int[] arr2 = new int[27];
+//
+//        for (int i = 0; i < arr1.length; i++) {
+//            arr1[i] = i + 1;
+//        }
+//        for (int i = 0; i < arr2.length; i++) {
+//            arr2[i] = i + 3;
+//        }
+//        System.out.println(getMinKFromTwoOrderArray(arr1, arr2, 2));
+//
+//        System.out.println(getMinKFromTwoOrderArray(arr1, arr2, 33));
+//
+//        System.out.println(getMinKFromTwoOrderArray(arr1, arr2, 17));
+//    }
+
+    /**
+     * 从两个排序的数组中找到第K小的数(数组长度不一定相等)
+     * @param arr1
+     * @param arr2
+     * @param k
+     * @return
+     */
+    public static int getMinKFromTwoOrderArray(int[] arr1, int[] arr2, int k) {
+        if (null == arr1 || null == arr2) {
+            throw new IllegalArgumentException("invalid params");
+        }
+        if (k < 1 || k > arr1.length + arr2.length) {
+            throw new IllegalArgumentException("invalid params");
+        }
+        int[] longs = arr1.length >= arr2.length ? arr1 : arr2;
+        int[] shorts = arr1.length < arr2.length ? arr1 : arr2;
+        int l = longs.length;
+        int s = shorts.length;
+
+        if (k <= s) { // 小于长度较小的数组，那么第k小个数，就在(arr1 ~ k) 和 (arr2 ~ k)之间
+            return getUpMedia(
+                    shorts, 0, k - 1,
+                    longs, 0, k - 1);
+        }
+
+        //k > l
+        if (k > l) {
+            if (shorts[k - l - 1] >= longs[l - 1]) { // 判断s的中间位置和l数组的最后位置谁更大，谁大说明谁是最后一个，即第K个
+                return shorts[k - l - 1];
+            }
+            if (longs[k - s - 1] >= shorts[s - 1]) { // 判断l的中间位置和s数组的最后位置谁更大，谁大说明谁是最后一个，即第K个
+                return longs[k - s - 1];
+            }
+            // 剩下的需要从arr1里面(k - l, 到最后) 和 arr2的(k - s, 到最后)这个区间里面寻找
+            return getUpMedia(
+                    shorts, k - l, s - 1,
+                    longs, k - s, l - 1);
+        }
+
+        // s < k < l k在中间的位置，看下哪个大，哪个大哪个是第k个
+        if (longs[k - s - 1] >= shorts[s - 1]) {
+            return longs[k - s - 1];
+        }
+
+        return getUpMedia(shorts, 0, s - 1, longs, k - s, k - 1);
+    }
+
+    public static int getUpMedia(int[] arr1, int s1, int e1,
+                                 int[] arr2, int s2, int e2) {
+        int middle1 = 0;
+        int middle2 = 0;
+
+        int offset = 0; // 判断是奇数长度还是偶数长度
+
+        while (s1 < e1) {
+            middle1 = (s1 + e1) / 2;
+            middle2 = (s2 + e2) / 2;
+
+            offset = ((e1 - s1 + 1) & 1) ^ 1; // 奇数还是偶数
+
+            if (arr1[middle1] == arr2[middle2]) {
+                return arr1[middle1];
+            } else if (arr1[middle1] > arr2[middle2]) {
+                e1 = middle1;
+                s2 = middle2 + offset;
+            } else {
+                e2 = middle2;
+                s1 = middle1 + offset;
+            }
+        }
+        return Math.min(arr1[s1], arr2[s2]);
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+
+    }
+
 }

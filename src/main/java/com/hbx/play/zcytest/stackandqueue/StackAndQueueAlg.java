@@ -23,7 +23,6 @@ public class StackAndQueueAlg {
 
     /**
      * 反转栈中元素
-     *
      * @param stack
      */
     public static void reverseStack(Stack<Integer> stack) {
@@ -42,7 +41,6 @@ public class StackAndQueueAlg {
 
     /**
      * 得到栈中最后一个元素
-     *
      * @return
      */
     public static int getStackLastElement(Stack<Integer> stack) {
@@ -74,7 +72,6 @@ public class StackAndQueueAlg {
 
     /**
      * 实现栈的排序，不能使用其他的数据结构协助
-     *
      * @param stack
      */
     public static void orderStack(Stack<Integer> stack) {
@@ -115,19 +112,18 @@ public class StackAndQueueAlg {
 
     // ####################################################################### //
 
-    public static void main(String[] args) {
-        int[] arr = {4, 3, 5, 4, 3, 3, 6, 7};
-
-        int[] res = getWindowMaxMy(arr, 3);
-
-        for (Integer i : res) {
-            System.out.print(i + "\t");
-        }
-    }
+//    public static void main(String[] args) {
+//        int[] arr = {4, 3, 5, 4, 3, 3, 6, 7};
+//
+//        int[] res = getWindowMaxMy(arr, 3);
+//
+//        for (Integer i : res) {
+//            System.out.print(i + "\t");
+//        }
+//    }
 
     /**
      * 窗口最大元素
-     *
      * @param arr
      * @param w
      * @return
@@ -187,7 +183,6 @@ public class StackAndQueueAlg {
 
     /**
      * 第三次
-     *
      * @param arr
      * @param w
      * @return
@@ -221,6 +216,43 @@ public class StackAndQueueAlg {
     }
 
     // ####################################################################### //
+
+//    public static void main(String[] args) {
+//        int[] arr = {3, 4, 1, 5, 6, 2, 7};
+//
+//        int[][] res = getNearLessNoRepeatMy(arr);
+//
+//        for (int i = 0; i < res.length; i++) {
+//            for (int j = 0; j < res[0].length; j++) {
+//                System.out.print(res[i][j] + "\t");
+//            }
+//            System.out.println();
+//        }
+//    }
+
+    public static int[][] getNearLessNoRepeatMy(int[] arr) {
+        if (null == arr || arr.length == 0) {
+            return null;
+        }
+        int[][] res = new int[arr.length][2];
+
+        Stack<Integer> stack = new Stack<>(); // 单调递减栈
+        for (int i = 0; i < arr.length; i++) {
+            while (!stack.isEmpty() && arr[stack.peek()] > arr[i]) { // 开始出栈
+                int temp = stack.pop();
+                res[temp][1] = i; // 右侧的最近最小值
+                res[temp][0] = stack.isEmpty() ? -1 : stack.peek(); // 左侧的最近最小值
+            }
+            stack.push(i);
+        }
+        // 如果栈里还有其他元素
+        while (!stack.isEmpty()) { // 开始出栈
+            int temp = stack.pop();
+            res[temp][1] = -1; // 右侧的最近最小值
+            res[temp][0] = stack.isEmpty() ? -1 : stack.peek(); // 左侧的最近最小值
+        }
+        return res;
+    }
 
     public static int[][] getNearLessNoRepeat(int[] arr) {
         if (null == arr || arr.length == 0) {
@@ -256,10 +288,14 @@ public class StackAndQueueAlg {
 
     // ####################################################################### //
 
+    public static void main(String[] args) {
+        int[] arr = {3, 5, 1, 6, 2};
+
+        System.out.println(getNum(arr, 1));
+    }
+
     /**
-     * 该题目要求在数组中找到Max(arr[i ~ j]) - Min(arr[i ~ j]) <= num的符合条件子数组的数量
-     * 普通解法：O(N^3)
-     * 最优解法：O(N), 但是需要用到额外空间，需要用到双端链表
+     * 该题目要求在数组中找到Max(arr[i ~ j]) - Min(arr[i ~ j]) <= num的符合条件子数组的数量 普通解法：O(N^3) 最优解法：O(N), 但是需要用到额外空间，需要用到双端链表
      * @param arr
      * @param num
      * @return
@@ -281,11 +317,11 @@ public class StackAndQueueAlg {
                     while (!qmin.isEmpty() && arr[qmin.getLast()] >= arr[j]) {
                         qmin.pollLast(); // 扔掉
                     }
-                    qmin.addLast(i);
+                    qmin.addLast(j);
                     while (!qmax.isEmpty() && arr[qmax.getLast()] <= arr[j]) {
                         qmax.pollLast(); // 扔掉
                     }
-                    qmax.addLast(i);
+                    qmax.addLast(j);
                 }
                 if (arr[qmax.getFirst()] - arr[qmin.getFirst()] > num) {
                     break;
