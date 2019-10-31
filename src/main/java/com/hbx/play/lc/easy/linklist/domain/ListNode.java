@@ -1,4 +1,4 @@
-package com.hbx.play.lc.easy.domain;
+package com.hbx.play.lc.easy.linklist.domain;
 
 /**
  * @Auther: bingxin
