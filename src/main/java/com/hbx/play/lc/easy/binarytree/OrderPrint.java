@@ -1,7 +1,12 @@
 package com.hbx.play.lc.easy.binarytree;
 
+import com.sun.imageio.plugins.common.I18N;
+
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Stack;
 
 /**
@@ -127,6 +132,64 @@ public class OrderPrint {
             list.add(stack2.pop().val);
         }
         return list;
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void main(String[] args) {
+        TreeNode root = new TreeNode(3);
+        TreeNode n9 = new TreeNode(9);
+        TreeNode n20 = new TreeNode(20);
+        TreeNode n15 = new TreeNode(15);
+        TreeNode n7 = new TreeNode(7);
+
+        root.left = n9;
+        root.right = n20;
+
+        n20.left = n15;
+        n20.right = n7;
+
+        for (List<Integer> l : levelOrder(root)) {
+            for (Integer c : l) {
+                System.out.print(c + "\t");
+            }
+            System.out.println();
+        }
+    }
+
+    public static List<List<Integer>> levelOrder(TreeNode root) {
+        List<List<Integer>> res = new ArrayList<>();
+        if (null == root) {
+            return res;
+        }
+        Queue<TreeNode> queue = new LinkedList<TreeNode>();
+        queue.add(root);
+
+        int levelCount = 1;
+        int currentCount = 0;
+
+        List<Integer> list = new ArrayList<>();
+        while (!queue.isEmpty()) {
+            TreeNode temp = queue.poll();
+            list.add(temp.val);
+            currentCount++;
+
+            if (temp.left != null) {
+                queue.add(temp.left);
+            }
+            if (temp.right != null) {
+                queue.add(temp.right);
+            }
+
+            if (currentCount == levelCount) {
+                levelCount = queue.size();
+                currentCount = 0;
+                res.add(new ArrayList<>(list));
+                list.clear();
+            }
+        }
+        Collections.reverse(res);
+        return res;
     }
 
     public static class TreeNode {
