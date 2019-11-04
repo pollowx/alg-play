@@ -96,26 +96,25 @@ public class SerializeAndDeserialize297 {
 
     public static String serialize2(TreeNode root) {
         if (null == root) {
-            return "#";
+            return "#!";
         }
+        StringBuilder sb = new StringBuilder(String.valueOf(root.val)).append("!");
+
         Queue<TreeNode> queue = new LinkedList<TreeNode>();
         queue.offer(root);
-
-        StringBuilder sb = new StringBuilder(String.valueOf(root.val)).append("!");
         while (!queue.isEmpty()) {
-            TreeNode node = queue.poll();
-            if (node.left != null) {
-                sb.append(node.left.val).append("!");
-                queue.offer(node.left);
+            root = queue.poll();
+            if (root.left != null) {
+                sb.append(root.left.val).append("!");
+                queue.offer(root.left);
             } else {
-                sb.append("#").append("!");
+                sb.append("#!");
             }
-
-            if (node.right != null) {
-                sb.append(node.right.val).append("!");
-                queue.offer(node.right);
+            if (root.right != null) {
+                sb.append(root.right.val).append("!");
+                queue.offer(root.right);
             } else {
-                sb.append("#").append("!");
+                sb.append("#!");
             }
         }
         return sb.toString();
@@ -130,7 +129,9 @@ public class SerializeAndDeserialize297 {
 
         TreeNode root = generateNode2(strs[index++]);
         Queue<TreeNode> queue = new LinkedList<TreeNode>();
-        queue.offer(root);
+        if (null != root) {
+            queue.offer(root);
+        }
         while (!queue.isEmpty()) {
             TreeNode node = queue.poll();
             node.left = generateNode2(strs[index++]);
