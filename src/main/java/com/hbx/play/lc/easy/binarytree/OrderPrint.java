@@ -1,7 +1,5 @@
 package com.hbx.play.lc.easy.binarytree;
 
-import com.sun.imageio.plugins.common.I18N;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
